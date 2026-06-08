@@ -1,0 +1,585 @@
+Device: cuda
+Loading datasets...
+Loaded train: 640582 samples
+Loaded val: 80073 samples
+Loaded test: 80073 samples
+Train samples: 640582, Val samples: 80073, Test samples: 80073
+Train batches: 2503, Val batches: 157
+Model initialized with u_dim=374, hidden_dim=64, num_layers=4, p_dim=64
+
+============================================================
+PHASE 1: Adam Optimizer (DeepONet Parameter Groups)
+============================================================
+  Epoch 1 | Batch 100/2503 | Batch Loss: 0.053769
+  Epoch 1 | Batch 200/2503 | Batch Loss: 0.055707
+  Epoch 1 | Batch 300/2503 | Batch Loss: 0.025632
+  Epoch 1 | Batch 400/2503 | Batch Loss: 0.021083
+  Epoch 1 | Batch 500/2503 | Batch Loss: 0.009865
+  Epoch 1 | Batch 600/2503 | Batch Loss: 0.801915
+  Epoch 1 | Batch 700/2503 | Batch Loss: 0.055372
+  Epoch 1 | Batch 800/2503 | Batch Loss: 0.019268
+  Epoch 1 | Batch 900/2503 | Batch Loss: 0.007247
+  Epoch 1 | Batch 1000/2503 | Batch Loss: 0.569218
+  Epoch 1 | Batch 1100/2503 | Batch Loss: 0.011770
+  Epoch 1 | Batch 1200/2503 | Batch Loss: 0.007648
+  Epoch 1 | Batch 1300/2503 | Batch Loss: 0.305611
+  Epoch 1 | Batch 1400/2503 | Batch Loss: 0.347665
+  Epoch 1 | Batch 1500/2503 | Batch Loss: 0.498975
+  Epoch 1 | Batch 1600/2503 | Batch Loss: 0.006412
+  Epoch 1 | Batch 1700/2503 | Batch Loss: 0.010624
+  Epoch 1 | Batch 1800/2503 | Batch Loss: 0.001771
+  Epoch 1 | Batch 1900/2503 | Batch Loss: 0.003813
+  Epoch 1 | Batch 2000/2503 | Batch Loss: 0.003336
+  Epoch 1 | Batch 2100/2503 | Batch Loss: 0.037360
+  Epoch 1 | Batch 2200/2503 | Batch Loss: 0.002106
+  Epoch 1 | Batch 2300/2503 | Batch Loss: 0.001489
+  Epoch 1 | Batch 2400/2503 | Batch Loss: 0.063921
+  Epoch 1 | Batch 2500/2503 | Batch Loss: 0.001206
+
+Adam Epoch 1/100 | Time: 254.0s | Base LR: 1.00e-03
+  Train Loss: 0.148928 | Val MSE: 0.010907 *** New Best ***
+  Components - Data: 0.1230 | PDE: 0.0026 | Arb: 0.0051
+  Epochs without improvement: 0/3
+------------------------------------------------------------
+  Epoch 2 | Batch 100/2503 | Batch Loss: 0.011483
+  Epoch 2 | Batch 200/2503 | Batch Loss: 0.001136
+  Epoch 2 | Batch 300/2503 | Batch Loss: 0.003603
+  Epoch 2 | Batch 400/2503 | Batch Loss: 0.012278
+  Epoch 2 | Batch 500/2503 | Batch Loss: 0.001477
+  Epoch 2 | Batch 600/2503 | Batch Loss: 0.013834
+  Epoch 2 | Batch 700/2503 | Batch Loss: 0.005627
+  Epoch 2 | Batch 800/2503 | Batch Loss: 0.011435
+  Epoch 2 | Batch 900/2503 | Batch Loss: 0.002899
+  Epoch 2 | Batch 1000/2503 | Batch Loss: 0.002183
+  Epoch 2 | Batch 1100/2503 | Batch Loss: 0.001291
+  Epoch 2 | Batch 1200/2503 | Batch Loss: 0.001618
+  Epoch 2 | Batch 1300/2503 | Batch Loss: 0.001038
+  Epoch 2 | Batch 1400/2503 | Batch Loss: 0.001622
+  Epoch 2 | Batch 1500/2503 | Batch Loss: 0.002845
+  Epoch 2 | Batch 1600/2503 | Batch Loss: 0.017207
+  Epoch 2 | Batch 1700/2503 | Batch Loss: 0.001200
+  Epoch 2 | Batch 1800/2503 | Batch Loss: 0.021233
+  Epoch 2 | Batch 1900/2503 | Batch Loss: 0.001118
+  Epoch 2 | Batch 2000/2503 | Batch Loss: 0.000927
+  Epoch 2 | Batch 2100/2503 | Batch Loss: 0.022385
+  Epoch 2 | Batch 2200/2503 | Batch Loss: 0.000860
+  Epoch 2 | Batch 2300/2503 | Batch Loss: 0.004250
+  Epoch 2 | Batch 2400/2503 | Batch Loss: 0.010883
+  Epoch 2 | Batch 2500/2503 | Batch Loss: 0.001200
+
+Adam Epoch 2/100 | Time: 251.1s | Base LR: 1.00e-03
+  Train Loss: 0.010782 | Val MSE: 0.011300
+  Components - Data: 0.0067 | PDE: 0.0010 | Arb: 0.0004
+  Epochs without improvement: 1/3
+------------------------------------------------------------
+  Epoch 3 | Batch 100/2503 | Batch Loss: 0.001222
+  Epoch 3 | Batch 200/2503 | Batch Loss: 0.001764
+  Epoch 3 | Batch 300/2503 | Batch Loss: 0.000524
+  Epoch 3 | Batch 400/2503 | Batch Loss: 0.000798
+  Epoch 3 | Batch 500/2503 | Batch Loss: 0.000711
+  Epoch 3 | Batch 600/2503 | Batch Loss: 0.002335
+  Epoch 3 | Batch 700/2503 | Batch Loss: 0.002038
+  Epoch 3 | Batch 800/2503 | Batch Loss: 0.000897
+  Epoch 3 | Batch 900/2503 | Batch Loss: 0.002037
+  Epoch 3 | Batch 1000/2503 | Batch Loss: 0.002806
+  Epoch 3 | Batch 1100/2503 | Batch Loss: 0.001181
+  Epoch 3 | Batch 1200/2503 | Batch Loss: 0.001363
+  Epoch 3 | Batch 1300/2503 | Batch Loss: 0.002051
+  Epoch 3 | Batch 1400/2503 | Batch Loss: 0.000890
+  Epoch 3 | Batch 1500/2503 | Batch Loss: 0.000584
+  Epoch 3 | Batch 1600/2503 | Batch Loss: 0.001203
+  Epoch 3 | Batch 1700/2503 | Batch Loss: 0.000691
+  Epoch 3 | Batch 1800/2503 | Batch Loss: 0.000708
+  Epoch 3 | Batch 1900/2503 | Batch Loss: 0.000656
+  Epoch 3 | Batch 2000/2503 | Batch Loss: 0.001923
+  Epoch 3 | Batch 2100/2503 | Batch Loss: 0.049344
+  Epoch 3 | Batch 2200/2503 | Batch Loss: 0.000537
+  Epoch 3 | Batch 2300/2503 | Batch Loss: 0.000593
+  Epoch 3 | Batch 2400/2503 | Batch Loss: 0.000582
+  Epoch 3 | Batch 2500/2503 | Batch Loss: 0.000773
+
+Adam Epoch 3/100 | Time: 249.7s | Base LR: 1.00e-03
+  Train Loss: 0.008650 | Val MSE: 0.003260 *** New Best ***
+  Components - Data: 0.0065 | PDE: 0.0009 | Arb: 0.0003
+  Epochs without improvement: 0/3
+------------------------------------------------------------
+  Epoch 4 | Batch 100/2503 | Batch Loss: 0.007365
+  Epoch 4 | Batch 200/2503 | Batch Loss: 0.002687
+  Epoch 4 | Batch 300/2503 | Batch Loss: 0.000855
+  Epoch 4 | Batch 400/2503 | Batch Loss: 0.000720
+  Epoch 4 | Batch 500/2503 | Batch Loss: 0.000555
+  Epoch 4 | Batch 600/2503 | Batch Loss: 0.011943
+  Epoch 4 | Batch 700/2503 | Batch Loss: 0.001190
+  Epoch 4 | Batch 800/2503 | Batch Loss: 0.001094
+  Epoch 4 | Batch 900/2503 | Batch Loss: 0.003703
+  Epoch 4 | Batch 1000/2503 | Batch Loss: 0.001081
+  Epoch 4 | Batch 1100/2503 | Batch Loss: 0.007911
+  Epoch 4 | Batch 1200/2503 | Batch Loss: 0.000513
+  Epoch 4 | Batch 1300/2503 | Batch Loss: 0.003402
+  Epoch 4 | Batch 1400/2503 | Batch Loss: 0.002926
+  Epoch 4 | Batch 1500/2503 | Batch Loss: 0.000825
+  Epoch 4 | Batch 1600/2503 | Batch Loss: 0.014006
+  Epoch 4 | Batch 1700/2503 | Batch Loss: 0.000799
+  Epoch 4 | Batch 1800/2503 | Batch Loss: 0.001951
+  Epoch 4 | Batch 1900/2503 | Batch Loss: 0.017621
+  Epoch 4 | Batch 2000/2503 | Batch Loss: 0.000597
+  Epoch 4 | Batch 2100/2503 | Batch Loss: 0.001076
+  Epoch 4 | Batch 2200/2503 | Batch Loss: 0.000607
+  Epoch 4 | Batch 2300/2503 | Batch Loss: 0.000979
+  Epoch 4 | Batch 2400/2503 | Batch Loss: 0.000620
+  Epoch 4 | Batch 2500/2503 | Batch Loss: 0.000576
+
+Adam Epoch 4/100 | Time: 248.9s | Base LR: 1.00e-03
+  Train Loss: 0.006814 | Val MSE: 0.001457 *** New Best ***
+  Components - Data: 0.0052 | PDE: 0.0008 | Arb: 0.0003
+  Epochs without improvement: 0/3
+------------------------------------------------------------
+  Epoch 5 | Batch 100/2503 | Batch Loss: 0.021290
+  Epoch 5 | Batch 200/2503 | Batch Loss: 0.000771
+  Epoch 5 | Batch 300/2503 | Batch Loss: 0.000430
+  Epoch 5 | Batch 400/2503 | Batch Loss: 0.001066
+  Epoch 5 | Batch 500/2503 | Batch Loss: 0.007390
+  Epoch 5 | Batch 600/2503 | Batch Loss: 0.001111
+  Epoch 5 | Batch 700/2503 | Batch Loss: 0.000786
+  Epoch 5 | Batch 800/2503 | Batch Loss: 0.000398
+  Epoch 5 | Batch 900/2503 | Batch Loss: 0.002488
+  Epoch 5 | Batch 1000/2503 | Batch Loss: 0.000822
+  Epoch 5 | Batch 1100/2503 | Batch Loss: 0.236759
+  Epoch 5 | Batch 1200/2503 | Batch Loss: 0.003521
+  Epoch 5 | Batch 1300/2503 | Batch Loss: 0.001257
+  Epoch 5 | Batch 1400/2503 | Batch Loss: 0.001123
+  Epoch 5 | Batch 1500/2503 | Batch Loss: 0.000639
+  Epoch 5 | Batch 1600/2503 | Batch Loss: 0.000614
+  Epoch 5 | Batch 1700/2503 | Batch Loss: 0.000434
+  Epoch 5 | Batch 1800/2503 | Batch Loss: 0.001739
+  Epoch 5 | Batch 1900/2503 | Batch Loss: 0.007142
+  Epoch 5 | Batch 2000/2503 | Batch Loss: 0.000493
+  Epoch 5 | Batch 2100/2503 | Batch Loss: 0.001055
+  Epoch 5 | Batch 2200/2503 | Batch Loss: 0.001936
+  Epoch 5 | Batch 2300/2503 | Batch Loss: 0.000249
+  Epoch 5 | Batch 2400/2503 | Batch Loss: 0.000927
+  Epoch 5 | Batch 2500/2503 | Batch Loss: 0.000747
+
+Adam Epoch 5/100 | Time: 247.2s | Base LR: 1.00e-03
+  Train Loss: 0.004787 | Val MSE: 0.005362
+  Components - Data: 0.0035 | PDE: 0.0007 | Arb: 0.0002
+  Epochs without improvement: 1/3
+------------------------------------------------------------
+  Epoch 6 | Batch 100/2503 | Batch Loss: 0.000699
+  Epoch 6 | Batch 200/2503 | Batch Loss: 0.002147
+  Epoch 6 | Batch 300/2503 | Batch Loss: 0.000659
+  Epoch 6 | Batch 400/2503 | Batch Loss: 0.002360
+  Epoch 6 | Batch 500/2503 | Batch Loss: 0.008910
+  Epoch 6 | Batch 600/2503 | Batch Loss: 0.000417
+  Epoch 6 | Batch 700/2503 | Batch Loss: 0.000376
+  Epoch 6 | Batch 800/2503 | Batch Loss: 0.000320
+  Epoch 6 | Batch 900/2503 | Batch Loss: 0.000812
+  Epoch 6 | Batch 1000/2503 | Batch Loss: 0.000339
+  Epoch 6 | Batch 1100/2503 | Batch Loss: 0.000414
+  Epoch 6 | Batch 1200/2503 | Batch Loss: 0.000666
+  Epoch 6 | Batch 1300/2503 | Batch Loss: 0.000544
+  Epoch 6 | Batch 1400/2503 | Batch Loss: 0.000612
+  Epoch 6 | Batch 1500/2503 | Batch Loss: 0.002935
+  Epoch 6 | Batch 1600/2503 | Batch Loss: 0.001307
+  Epoch 6 | Batch 1700/2503 | Batch Loss: 0.000485
+  Epoch 6 | Batch 1800/2503 | Batch Loss: 0.000820
+  Epoch 6 | Batch 1900/2503 | Batch Loss: 0.000993
+  Epoch 6 | Batch 2000/2503 | Batch Loss: 0.000305
+  Epoch 6 | Batch 2100/2503 | Batch Loss: 0.000732
+  Epoch 6 | Batch 2200/2503 | Batch Loss: 0.000277
+  Epoch 6 | Batch 2300/2503 | Batch Loss: 0.005938
+  Epoch 6 | Batch 2400/2503 | Batch Loss: 0.000785
+  Epoch 6 | Batch 2500/2503 | Batch Loss: 0.000357
+
+Adam Epoch 6/100 | Time: 250.5s | Base LR: 1.00e-03
+  Train Loss: 0.004492 | Val MSE: 0.020977
+  Components - Data: 0.0030 | PDE: 0.0007 | Arb: 0.0002
+  Epochs without improvement: 2/3
+------------------------------------------------------------
+  Epoch 7 | Batch 100/2503 | Batch Loss: 0.004229
+  Epoch 7 | Batch 200/2503 | Batch Loss: 0.007560
+  Epoch 7 | Batch 300/2503 | Batch Loss: 0.000679
+  Epoch 7 | Batch 400/2503 | Batch Loss: 0.062909
+  Epoch 7 | Batch 500/2503 | Batch Loss: 0.010287
+  Epoch 7 | Batch 600/2503 | Batch Loss: 0.000679
+  Epoch 7 | Batch 700/2503 | Batch Loss: 0.001205
+  Epoch 7 | Batch 800/2503 | Batch Loss: 0.000626
+  Epoch 7 | Batch 900/2503 | Batch Loss: 0.002422
+  Epoch 7 | Batch 1000/2503 | Batch Loss: 0.000723
+  Epoch 7 | Batch 1100/2503 | Batch Loss: 0.000570
+  Epoch 7 | Batch 1200/2503 | Batch Loss: 0.006431
+  Epoch 7 | Batch 1300/2503 | Batch Loss: 0.000398
+  Epoch 7 | Batch 1400/2503 | Batch Loss: 0.002823
+  Epoch 7 | Batch 1500/2503 | Batch Loss: 0.000420
+  Epoch 7 | Batch 1600/2503 | Batch Loss: 0.000912
+  Epoch 7 | Batch 1700/2503 | Batch Loss: 0.001338
+  Epoch 7 | Batch 1800/2503 | Batch Loss: 0.000333
+  Epoch 7 | Batch 1900/2503 | Batch Loss: 0.000349
+  Epoch 7 | Batch 2000/2503 | Batch Loss: 0.001409
+  Epoch 7 | Batch 2100/2503 | Batch Loss: 0.000374
+  Epoch 7 | Batch 2200/2503 | Batch Loss: 0.000547
+  Epoch 7 | Batch 2300/2503 | Batch Loss: 0.000622
+  Epoch 7 | Batch 2400/2503 | Batch Loss: 0.000421
+  Epoch 7 | Batch 2500/2503 | Batch Loss: 0.000685
+
+Adam Epoch 7/100 | Time: 247.4s | Base LR: 5.00e-04
+  Train Loss: 0.003737 | Val MSE: 0.001877
+  Components - Data: 0.0024 | PDE: 0.0007 | Arb: 0.0002
+  Epochs without improvement: 3/3
+------------------------------------------------------------
+
+*** Early stopping triggered at epoch 7 ***
+
+*** Adam Phase Complete. Best Val MSE: 0.001457 ***
+Loading best model from Adam phase for fine-tuning...
+
+============================================================
+PHASE 2: Fine-tuning with Adam (Low LR, DeepONet Groups)
+============================================================
+  Epoch 1 | Batch 100/2503 | Batch Loss: 0.001300
+  Epoch 1 | Batch 200/2503 | Batch Loss: 0.016676
+  Epoch 1 | Batch 300/2503 | Batch Loss: 0.000234
+  Epoch 1 | Batch 400/2503 | Batch Loss: 0.000416
+  Epoch 1 | Batch 500/2503 | Batch Loss: 0.000244
+  Epoch 1 | Batch 600/2503 | Batch Loss: 0.000406
+  Epoch 1 | Batch 700/2503 | Batch Loss: 0.000362
+  Epoch 1 | Batch 800/2503 | Batch Loss: 0.000268
+  Epoch 1 | Batch 900/2503 | Batch Loss: 0.000337
+  Epoch 1 | Batch 1000/2503 | Batch Loss: 0.000227
+  Epoch 1 | Batch 1100/2503 | Batch Loss: 0.000339
+  Epoch 1 | Batch 1200/2503 | Batch Loss: 0.000367
+  Epoch 1 | Batch 1300/2503 | Batch Loss: 0.000295
+  Epoch 1 | Batch 1400/2503 | Batch Loss: 0.000267
+  Epoch 1 | Batch 1500/2503 | Batch Loss: 0.022482
+  Epoch 1 | Batch 1600/2503 | Batch Loss: 0.000438
+  Epoch 1 | Batch 1700/2503 | Batch Loss: 0.000268
+  Epoch 1 | Batch 1800/2503 | Batch Loss: 0.000379
+  Epoch 1 | Batch 1900/2503 | Batch Loss: 0.000356
+  Epoch 1 | Batch 2000/2503 | Batch Loss: 0.000282
+  Epoch 1 | Batch 2100/2503 | Batch Loss: 0.007756
+  Epoch 1 | Batch 2200/2503 | Batch Loss: 0.000201
+  Epoch 1 | Batch 2300/2503 | Batch Loss: 0.000241
+  Epoch 1 | Batch 2400/2503 | Batch Loss: 0.000283
+  Epoch 1 | Batch 2500/2503 | Batch Loss: 0.000288
+
+Fine-tune Epoch 1/50 | Time: 253.0s
+  Train Loss: 0.001791 | Val MSE: 0.002268
+------------------------------------------------------------
+  Epoch 2 | Batch 100/2503 | Batch Loss: 0.000209
+  Epoch 2 | Batch 200/2503 | Batch Loss: 0.000711
+  Epoch 2 | Batch 300/2503 | Batch Loss: 0.001538
+  Epoch 2 | Batch 400/2503 | Batch Loss: 0.000191
+  Epoch 2 | Batch 500/2503 | Batch Loss: 0.000398
+  Epoch 2 | Batch 600/2503 | Batch Loss: 0.000399
+  Epoch 2 | Batch 700/2503 | Batch Loss: 0.000570
+  Epoch 2 | Batch 800/2503 | Batch Loss: 0.000243
+  Epoch 2 | Batch 900/2503 | Batch Loss: 0.005669
+  Epoch 2 | Batch 1000/2503 | Batch Loss: 0.001295
+  Epoch 2 | Batch 1100/2503 | Batch Loss: 0.005572
+  Epoch 2 | Batch 1200/2503 | Batch Loss: 0.000296
+  Epoch 2 | Batch 1300/2503 | Batch Loss: 0.000405
+  Epoch 2 | Batch 1400/2503 | Batch Loss: 0.000420
+  Epoch 2 | Batch 1500/2503 | Batch Loss: 0.000480
+  Epoch 2 | Batch 1600/2503 | Batch Loss: 0.000294
+  Epoch 2 | Batch 1700/2503 | Batch Loss: 0.000254
+  Epoch 2 | Batch 1800/2503 | Batch Loss: 0.000208
+  Epoch 2 | Batch 1900/2503 | Batch Loss: 0.000245
+  Epoch 2 | Batch 2000/2503 | Batch Loss: 0.000440
+  Epoch 2 | Batch 2100/2503 | Batch Loss: 0.014263
+  Epoch 2 | Batch 2200/2503 | Batch Loss: 0.000671
+  Epoch 2 | Batch 2300/2503 | Batch Loss: 0.000345
+  Epoch 2 | Batch 2400/2503 | Batch Loss: 0.001600
+  Epoch 2 | Batch 2500/2503 | Batch Loss: 0.000800
+
+Fine-tune Epoch 2/50 | Time: 249.2s
+  Train Loss: 0.001297 | Val MSE: 0.002491
+------------------------------------------------------------
+  Epoch 3 | Batch 100/2503 | Batch Loss: 0.004166
+  Epoch 3 | Batch 200/2503 | Batch Loss: 0.000425
+  Epoch 3 | Batch 300/2503 | Batch Loss: 0.000218
+  Epoch 3 | Batch 400/2503 | Batch Loss: 0.000303
+  Epoch 3 | Batch 500/2503 | Batch Loss: 0.001581
+  Epoch 3 | Batch 600/2503 | Batch Loss: 0.000322
+  Epoch 3 | Batch 700/2503 | Batch Loss: 0.004683
+  Epoch 3 | Batch 800/2503 | Batch Loss: 0.000242
+  Epoch 3 | Batch 900/2503 | Batch Loss: 0.000319
+  Epoch 3 | Batch 1000/2503 | Batch Loss: 0.000353
+  Epoch 3 | Batch 1100/2503 | Batch Loss: 0.000231
+  Epoch 3 | Batch 1200/2503 | Batch Loss: 0.000363
+  Epoch 3 | Batch 1300/2503 | Batch Loss: 0.000231
+  Epoch 3 | Batch 1400/2503 | Batch Loss: 0.004033
+  Epoch 3 | Batch 1500/2503 | Batch Loss: 0.001229
+  Epoch 3 | Batch 1600/2503 | Batch Loss: 0.016786
+  Epoch 3 | Batch 1700/2503 | Batch Loss: 0.000219
+  Epoch 3 | Batch 1800/2503 | Batch Loss: 0.001712
+  Epoch 3 | Batch 1900/2503 | Batch Loss: 0.000250
+  Epoch 3 | Batch 2000/2503 | Batch Loss: 0.000434
+  Epoch 3 | Batch 2100/2503 | Batch Loss: 0.000277
+  Epoch 3 | Batch 2200/2503 | Batch Loss: 0.000584
+  Epoch 3 | Batch 2300/2503 | Batch Loss: 0.000373
+  Epoch 3 | Batch 2400/2503 | Batch Loss: 0.000545
+  Epoch 3 | Batch 2500/2503 | Batch Loss: 0.000269
+
+Fine-tune Epoch 3/50 | Time: 248.2s
+  Train Loss: 0.001221 | Val MSE: 0.002371
+------------------------------------------------------------
+  Epoch 4 | Batch 100/2503 | Batch Loss: 0.005586
+  Epoch 4 | Batch 200/2503 | Batch Loss: 0.000255
+  Epoch 4 | Batch 300/2503 | Batch Loss: 0.000270
+  Epoch 4 | Batch 400/2503 | Batch Loss: 0.000227
+  Epoch 4 | Batch 500/2503 | Batch Loss: 0.000256
+  Epoch 4 | Batch 600/2503 | Batch Loss: 0.000195
+  Epoch 4 | Batch 700/2503 | Batch Loss: 0.000259
+  Epoch 4 | Batch 800/2503 | Batch Loss: 0.000377
+  Epoch 4 | Batch 900/2503 | Batch Loss: 0.001380
+  Epoch 4 | Batch 1000/2503 | Batch Loss: 0.000383
+  Epoch 4 | Batch 1100/2503 | Batch Loss: 0.001584
+  Epoch 4 | Batch 1200/2503 | Batch Loss: 0.000572
+  Epoch 4 | Batch 1300/2503 | Batch Loss: 0.000231
+  Epoch 4 | Batch 1400/2503 | Batch Loss: 0.000234
+  Epoch 4 | Batch 1500/2503 | Batch Loss: 0.000267
+  Epoch 4 | Batch 1600/2503 | Batch Loss: 0.000391
+  Epoch 4 | Batch 1700/2503 | Batch Loss: 0.000309
+  Epoch 4 | Batch 1800/2503 | Batch Loss: 0.000275
+  Epoch 4 | Batch 1900/2503 | Batch Loss: 0.000443
+  Epoch 4 | Batch 2000/2503 | Batch Loss: 0.000400
+  Epoch 4 | Batch 2100/2503 | Batch Loss: 0.000299
+  Epoch 4 | Batch 2200/2503 | Batch Loss: 0.000214
+  Epoch 4 | Batch 2300/2503 | Batch Loss: 0.000203
+  Epoch 4 | Batch 2400/2503 | Batch Loss: 0.009155
+  Epoch 4 | Batch 2500/2503 | Batch Loss: 0.000436
+
+Fine-tune Epoch 4/50 | Time: 250.0s
+  Train Loss: 0.001198 | Val MSE: 0.002385
+------------------------------------------------------------
+  Epoch 5 | Batch 100/2503 | Batch Loss: 0.000435
+  Epoch 5 | Batch 200/2503 | Batch Loss: 0.000336
+  Epoch 5 | Batch 300/2503 | Batch Loss: 0.000622
+  Epoch 5 | Batch 400/2503 | Batch Loss: 0.000310
+  Epoch 5 | Batch 500/2503 | Batch Loss: 0.000214
+  Epoch 5 | Batch 600/2503 | Batch Loss: 0.010376
+  Epoch 5 | Batch 700/2503 | Batch Loss: 0.000338
+  Epoch 5 | Batch 800/2503 | Batch Loss: 0.000285
+  Epoch 5 | Batch 900/2503 | Batch Loss: 0.000492
+  Epoch 5 | Batch 1000/2503 | Batch Loss: 0.000253
+  Epoch 5 | Batch 1100/2503 | Batch Loss: 0.000260
+  Epoch 5 | Batch 1200/2503 | Batch Loss: 0.000343
+  Epoch 5 | Batch 1300/2503 | Batch Loss: 0.000215
+  Epoch 5 | Batch 1400/2503 | Batch Loss: 0.004035
+  Epoch 5 | Batch 1500/2503 | Batch Loss: 0.000290
+  Epoch 5 | Batch 1600/2503 | Batch Loss: 0.000288
+  Epoch 5 | Batch 1700/2503 | Batch Loss: 0.000237
+  Epoch 5 | Batch 1800/2503 | Batch Loss: 0.000337
+  Epoch 5 | Batch 1900/2503 | Batch Loss: 0.000300
+  Epoch 5 | Batch 2000/2503 | Batch Loss: 0.000456
+  Epoch 5 | Batch 2100/2503 | Batch Loss: 0.000461
+  Epoch 5 | Batch 2200/2503 | Batch Loss: 0.000195
+  Epoch 5 | Batch 2300/2503 | Batch Loss: 0.000327
+  Epoch 5 | Batch 2400/2503 | Batch Loss: 0.000343
+  Epoch 5 | Batch 2500/2503 | Batch Loss: 0.000219
+
+Fine-tune Epoch 5/50 | Time: 247.3s
+  Train Loss: 0.001168 | Val MSE: 0.002378
+------------------------------------------------------------
+  Epoch 6 | Batch 100/2503 | Batch Loss: 0.000276
+  Epoch 6 | Batch 200/2503 | Batch Loss: 0.000284
+  Epoch 6 | Batch 300/2503 | Batch Loss: 0.001378
+  Epoch 6 | Batch 400/2503 | Batch Loss: 0.005387
+  Epoch 6 | Batch 500/2503 | Batch Loss: 0.000314
+  Epoch 6 | Batch 600/2503 | Batch Loss: 0.000390
+  Epoch 6 | Batch 700/2503 | Batch Loss: 0.000405
+  Epoch 6 | Batch 800/2503 | Batch Loss: 0.004768
+  Epoch 6 | Batch 900/2503 | Batch Loss: 0.000339
+  Epoch 6 | Batch 1000/2503 | Batch Loss: 0.000300
+  Epoch 6 | Batch 1100/2503 | Batch Loss: 0.000230
+  Epoch 6 | Batch 1200/2503 | Batch Loss: 0.011879
+  Epoch 6 | Batch 1300/2503 | Batch Loss: 0.001484
+  Epoch 6 | Batch 1400/2503 | Batch Loss: 0.002493
+  Epoch 6 | Batch 1500/2503 | Batch Loss: 0.000221
+  Epoch 6 | Batch 1600/2503 | Batch Loss: 0.000517
+  Epoch 6 | Batch 1700/2503 | Batch Loss: 0.000253
+  Epoch 6 | Batch 1800/2503 | Batch Loss: 0.000221
+  Epoch 6 | Batch 1900/2503 | Batch Loss: 0.000340
+  Epoch 6 | Batch 2000/2503 | Batch Loss: 0.000198
+  Epoch 6 | Batch 2100/2503 | Batch Loss: 0.000386
+  Epoch 6 | Batch 2200/2503 | Batch Loss: 0.000344
+  Epoch 6 | Batch 2300/2503 | Batch Loss: 0.000305
+  Epoch 6 | Batch 2400/2503 | Batch Loss: 0.000279
+  Epoch 6 | Batch 2500/2503 | Batch Loss: 0.000292
+
+Fine-tune Epoch 6/50 | Time: 250.4s
+  Train Loss: 0.001153 | Val MSE: 0.002309
+------------------------------------------------------------
+  Epoch 7 | Batch 100/2503 | Batch Loss: 0.000253
+  Epoch 7 | Batch 200/2503 | Batch Loss: 0.000224
+  Epoch 7 | Batch 300/2503 | Batch Loss: 0.000251
+  Epoch 7 | Batch 400/2503 | Batch Loss: 0.000232
+  Epoch 7 | Batch 500/2503 | Batch Loss: 0.000410
+  Epoch 7 | Batch 600/2503 | Batch Loss: 0.000181
+  Epoch 7 | Batch 700/2503 | Batch Loss: 0.000288
+  Epoch 7 | Batch 800/2503 | Batch Loss: 0.000253
+  Epoch 7 | Batch 900/2503 | Batch Loss: 0.001718
+  Epoch 7 | Batch 1000/2503 | Batch Loss: 0.003827
+  Epoch 7 | Batch 1100/2503 | Batch Loss: 0.000304
+  Epoch 7 | Batch 1200/2503 | Batch Loss: 0.000384
+  Epoch 7 | Batch 1300/2503 | Batch Loss: 0.005207
+  Epoch 7 | Batch 1400/2503 | Batch Loss: 0.000292
+  Epoch 7 | Batch 1500/2503 | Batch Loss: 0.001089
+  Epoch 7 | Batch 1600/2503 | Batch Loss: 0.000427
+  Epoch 7 | Batch 1700/2503 | Batch Loss: 0.000243
+  Epoch 7 | Batch 1800/2503 | Batch Loss: 0.000186
+  Epoch 7 | Batch 1900/2503 | Batch Loss: 0.000202
+  Epoch 7 | Batch 2000/2503 | Batch Loss: 0.000357
+  Epoch 7 | Batch 2100/2503 | Batch Loss: 0.000292
+  Epoch 7 | Batch 2200/2503 | Batch Loss: 0.000256
+  Epoch 7 | Batch 2300/2503 | Batch Loss: 0.000249
+  Epoch 7 | Batch 2400/2503 | Batch Loss: 0.000371
+  Epoch 7 | Batch 2500/2503 | Batch Loss: 0.000254
+
+Fine-tune Epoch 7/50 | Time: 250.2s
+  Train Loss: 0.001144 | Val MSE: 0.002281
+------------------------------------------------------------
+  Epoch 8 | Batch 100/2503 | Batch Loss: 0.000245
+  Epoch 8 | Batch 200/2503 | Batch Loss: 0.000317
+  Epoch 8 | Batch 300/2503 | Batch Loss: 0.003019
+  Epoch 8 | Batch 400/2503 | Batch Loss: 0.000308
+  Epoch 8 | Batch 500/2503 | Batch Loss: 0.000370
+  Epoch 8 | Batch 600/2503 | Batch Loss: 0.000200
+  Epoch 8 | Batch 700/2503 | Batch Loss: 0.000300
+  Epoch 8 | Batch 800/2503 | Batch Loss: 0.000310
+  Epoch 8 | Batch 900/2503 | Batch Loss: 0.005728
+  Epoch 8 | Batch 1000/2503 | Batch Loss: 0.000245
+  Epoch 8 | Batch 1100/2503 | Batch Loss: 0.000312
+  Epoch 8 | Batch 1200/2503 | Batch Loss: 0.001724
+  Epoch 8 | Batch 1300/2503 | Batch Loss: 0.000257
+  Epoch 8 | Batch 1400/2503 | Batch Loss: 0.000183
+  Epoch 8 | Batch 1500/2503 | Batch Loss: 0.000326
+  Epoch 8 | Batch 1600/2503 | Batch Loss: 0.000235
+  Epoch 8 | Batch 1700/2503 | Batch Loss: 0.000380
+  Epoch 8 | Batch 1800/2503 | Batch Loss: 0.000267
+  Epoch 8 | Batch 1900/2503 | Batch Loss: 0.000193
+  Epoch 8 | Batch 2000/2503 | Batch Loss: 0.000367
+  Epoch 8 | Batch 2100/2503 | Batch Loss: 0.000538
+  Epoch 8 | Batch 2200/2503 | Batch Loss: 0.000279
+  Epoch 8 | Batch 2300/2503 | Batch Loss: 0.000361
+  Epoch 8 | Batch 2400/2503 | Batch Loss: 0.000236
+  Epoch 8 | Batch 2500/2503 | Batch Loss: 0.002032
+
+Fine-tune Epoch 8/50 | Time: 252.8s
+  Train Loss: 0.001126 | Val MSE: 0.002268
+------------------------------------------------------------
+  Epoch 9 | Batch 100/2503 | Batch Loss: 0.000241
+  Epoch 9 | Batch 200/2503 | Batch Loss: 0.000391
+  Epoch 9 | Batch 300/2503 | Batch Loss: 0.000263
+  Epoch 9 | Batch 400/2503 | Batch Loss: 0.000382
+  Epoch 9 | Batch 500/2503 | Batch Loss: 0.000330
+  Epoch 9 | Batch 600/2503 | Batch Loss: 0.000196
+  Epoch 9 | Batch 700/2503 | Batch Loss: 0.000431
+  Epoch 9 | Batch 800/2503 | Batch Loss: 0.000237
+  Epoch 9 | Batch 900/2503 | Batch Loss: 0.000286
+  Epoch 9 | Batch 1000/2503 | Batch Loss: 0.000338
+  Epoch 9 | Batch 1100/2503 | Batch Loss: 0.000199
+  Epoch 9 | Batch 1200/2503 | Batch Loss: 0.000314
+  Epoch 9 | Batch 1300/2503 | Batch Loss: 0.000371
+  Epoch 9 | Batch 1400/2503 | Batch Loss: 0.000282
+  Epoch 9 | Batch 1500/2503 | Batch Loss: 0.000326
+  Epoch 9 | Batch 1600/2503 | Batch Loss: 0.000269
+  Epoch 9 | Batch 1700/2503 | Batch Loss: 0.001966
+  Epoch 9 | Batch 1800/2503 | Batch Loss: 0.000521
+  Epoch 9 | Batch 1900/2503 | Batch Loss: 0.000747
+  Epoch 9 | Batch 2000/2503 | Batch Loss: 0.000228
+  Epoch 9 | Batch 2100/2503 | Batch Loss: 0.000310
+  Epoch 9 | Batch 2200/2503 | Batch Loss: 0.000211
+  Epoch 9 | Batch 2300/2503 | Batch Loss: 0.000268
+  Epoch 9 | Batch 2400/2503 | Batch Loss: 0.000371
+  Epoch 9 | Batch 2500/2503 | Batch Loss: 0.003639
+
+Fine-tune Epoch 9/50 | Time: 250.9s
+  Train Loss: 0.001125 | Val MSE: 0.002269
+------------------------------------------------------------
+  Epoch 10 | Batch 100/2503 | Batch Loss: 0.000308
+  Epoch 10 | Batch 200/2503 | Batch Loss: 0.000211
+  Epoch 10 | Batch 300/2503 | Batch Loss: 0.000259
+  Epoch 10 | Batch 400/2503 | Batch Loss: 0.006831
+  Epoch 10 | Batch 500/2503 | Batch Loss: 0.000209
+  Epoch 10 | Batch 600/2503 | Batch Loss: 0.003989
+  Epoch 10 | Batch 700/2503 | Batch Loss: 0.000240
+  Epoch 10 | Batch 800/2503 | Batch Loss: 0.000309
+  Epoch 10 | Batch 900/2503 | Batch Loss: 0.000975
+  Epoch 10 | Batch 1000/2503 | Batch Loss: 0.000250
+  Epoch 10 | Batch 1100/2503 | Batch Loss: 0.000343
+  Epoch 10 | Batch 1200/2503 | Batch Loss: 0.000214
+  Epoch 10 | Batch 1300/2503 | Batch Loss: 0.000238
+  Epoch 10 | Batch 1400/2503 | Batch Loss: 0.000281
+  Epoch 10 | Batch 1500/2503 | Batch Loss: 0.000278
+  Epoch 10 | Batch 1600/2503 | Batch Loss: 0.000263
+  Epoch 10 | Batch 1700/2503 | Batch Loss: 0.000274
+  Epoch 10 | Batch 1800/2503 | Batch Loss: 0.000187
+  Epoch 10 | Batch 1900/2503 | Batch Loss: 0.000285
+  Epoch 10 | Batch 2000/2503 | Batch Loss: 0.000204
+  Epoch 10 | Batch 2100/2503 | Batch Loss: 0.000201
+  Epoch 10 | Batch 2200/2503 | Batch Loss: 0.000459
+  Epoch 10 | Batch 2300/2503 | Batch Loss: 0.000230
+  Epoch 10 | Batch 2400/2503 | Batch Loss: 0.000454
+  Epoch 10 | Batch 2500/2503 | Batch Loss: 0.000286
+
+Fine-tune Epoch 10/50 | Time: 252.2s
+  Train Loss: 0.001117 | Val MSE: 0.002268
+------------------------------------------------------------
+  Epoch 11 | Batch 100/2503 | Batch Loss: 0.000208
+  Epoch 11 | Batch 200/2503 | Batch Loss: 0.000284
+  Epoch 11 | Batch 300/2503 | Batch Loss: 0.000202
+  Epoch 11 | Batch 400/2503 | Batch Loss: 0.000312
+  Epoch 11 | Batch 500/2503 | Batch Loss: 0.000243
+  Epoch 11 | Batch 600/2503 | Batch Loss: 0.000235
+  Epoch 11 | Batch 700/2503 | Batch Loss: 0.001265
+  Epoch 11 | Batch 800/2503 | Batch Loss: 0.000275
+  Epoch 11 | Batch 900/2503 | Batch Loss: 0.000227
+  Epoch 11 | Batch 1000/2503 | Batch Loss: 0.001723
+  Epoch 11 | Batch 1100/2503 | Batch Loss: 0.000357
+  Epoch 11 | Batch 1200/2503 | Batch Loss: 0.000269
+  Epoch 11 | Batch 1300/2503 | Batch Loss: 0.000310
+  Epoch 11 | Batch 1400/2503 | Batch Loss: 0.000275
+  Epoch 11 | Batch 1500/2503 | Batch Loss: 0.000310
+  Epoch 11 | Batch 1600/2503 | Batch Loss: 0.000212
+  Epoch 11 | Batch 1700/2503 | Batch Loss: 0.000290
+  Epoch 11 | Batch 1800/2503 | Batch Loss: 0.000493
+  Epoch 11 | Batch 1900/2503 | Batch Loss: 0.000183
+  Epoch 11 | Batch 2000/2503 | Batch Loss: 0.000313
+  Epoch 11 | Batch 2100/2503 | Batch Loss: 0.000468
+  Epoch 11 | Batch 2200/2503 | Batch Loss: 0.000235
+  Epoch 11 | Batch 2300/2503 | Batch Loss: 0.000177
+  Epoch 11 | Batch 2400/2503 | Batch Loss: 0.000227
+  Epoch 11 | Batch 2500/2503 | Batch Loss: 0.000254
+
+Fine-tune Epoch 11/50 | Time: 252.1s
+  Train Loss: 0.001111 | Val MSE: 0.002246
+------------------------------------------------------------
+
+*** Early stopping triggered at epoch 11 ***
+
+============================================================
+TRAINING COMPLETE!
+Best Validation MSE: 0.001457
+============================================================
+Models saved: 'best_model.pth' and 'final_model.pth'
+
+============================================================
+RUNNING FINAL TEST SET EVALUATION
+============================================================
+Traceback (most recent call last):
+  File "C:\Users\iamlz\Documents\__LZF_FILEs__\deep learning for physical systems\project\DeepONet_correctedTime\code_v3_deepONet_MLP_run_para3.py", line 705, in <module>
+    train_model()
+    ~~~~~~~~~~~^^
+  File "C:\Users\iamlz\Documents\__LZF_FILEs__\deep learning for physical systems\project\DeepONet_correctedTime\code_v3_deepONet_MLP_run_para3.py", line 658, in train_model
+    model.load_state_dict(torch.load('best_model.pth'))
+                          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iamlz\anaconda3\envs\dl\Lib\site-packages\torch\serialization.py", line 1500, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\iamlz\anaconda3\envs\dl\Lib\site-packages\torch\serialization.py", line 768, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "C:\Users\iamlz\anaconda3\envs\dl\Lib\site-packages\torch\serialization.py", line 749, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'best_model.pth'

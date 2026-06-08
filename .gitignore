@@ -1,0 +1,14 @@
+# Large data (obtain from WRDS; see wrds_data_2020-2025/README.txt)
+*.h5
+*.csv
+*.parquet
+
+# Trained model weights (reproducible from training scripts)
+*.pth
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local Claude Code settings
+.claude/
