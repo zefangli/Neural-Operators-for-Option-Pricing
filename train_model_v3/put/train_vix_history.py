@@ -1,12 +1,19 @@
 """
-Train FNO model on put options using VIX history (vix_history).
-V3: Network 2 removed; analytical Black-Scholes used directly.
+Train FNO model on put options using VIX OHLC history (vix_history).
+V3.1: Per-query implicit IV surface (was: single scalar sigma per market state).
 
 Architecture:
-  Network 1: 2D FNO on VIX history grid (21x4) -> sigma_hat (positive scalar)
-  Pricing:   bs_normalized_price([log_moneyness, T_years, r, q, sigma_hat]) -> V/K
+  Encoder: 2D FNO on VIX history grid (21x4) -> market-state latent vector
+  Head:    MLP([latent, log_moneyness, T_years]) -> sigma_hat (positive scalar)
+  Pricing: bs_normalized_price([log_moneyness, T_years, r, q, sigma_hat]) -> V/K
 
 Loss: Data MSE on log(V/K). No PDE / arbitrage / BS-anchor terms.
+
+Why the change: a single scalar sigma cannot price both ATM and deep-OTM
+contracts under the same market state (volatility smile). The conditional head
+lets the model emit a different sigma for each (log_m, T) query against the
+same market-state latent, recovering the smile/skew that constant-vol BS cannot
+capture.
 """
 
 import argparse
@@ -67,21 +74,23 @@ class SpectralConv2d(nn.Module):
 
 
 # ==========================================
-# NETWORK 1: FNO VOLATILITY ESTIMATOR (SiLU)
+# NETWORK 1: FNO MARKET-STATE ENCODER (SiLU)
 # ==========================================
 
-class FNO_VolEstimator(nn.Module):
-    """FNO-based market-state-only volatility estimator.
+class FNO_MarketEncoder(nn.Module):
+    """FNO-based encoder: 2D market-state grid -> latent vector.
 
     Takes a 2D grid, passes through 4 FNO blocks with residual connections,
-    then an MLP projection to a positive scalar sigma_hat.
+    then projects to a fixed-size latent. The latent is consumed downstream
+    by ConditionalVolHead together with the per-contract (log_m, T) query.
     Uses SiLU activation throughout.
     """
-    def __init__(self, grid_h, grid_w, modes1, modes2, width=32):
+    def __init__(self, grid_h, grid_w, modes1, modes2, width=32, latent_dim=64):
         super().__init__()
         self.grid_h = grid_h
         self.grid_w = grid_w
         self.width = width
+        self.latent_dim = latent_dim
 
         self.fc0 = nn.Conv2d(1, width, 1)
 
@@ -97,8 +106,7 @@ class FNO_VolEstimator(nn.Module):
 
         flat_dim = width * grid_h * grid_w
         self.fc1 = nn.Linear(flat_dim, 128)
-        self.fc2 = nn.Linear(128, 64)
-        self.fc3 = nn.Linear(64, 1)
+        self.fc2 = nn.Linear(128, latent_dim)
 
     def forward(self, x):
         x = x.view(-1, 1, self.grid_h, self.grid_w)
@@ -123,8 +131,33 @@ class FNO_VolEstimator(nn.Module):
         x = x.view(x.shape[0], -1)
         x = F.silu(self.fc1(x))
         x = F.silu(self.fc2(x))
-        x = self.fc3(x)
-        return F.softplus(x)
+        return x  # (batch, latent_dim)
+
+
+# ==========================================
+# CONDITIONAL VOL HEAD
+# ==========================================
+
+class ConditionalVolHead(nn.Module):
+    """MLP mapping (market_state_latent, log_moneyness, T_years) -> sigma_hat.
+
+    Lets the model emit a different sigma per contract query against the same
+    market-state latent, so it can fit the volatility smile/skew that a single
+    scalar sigma cannot represent. Output is softplus-positive.
+    """
+    def __init__(self, latent_dim=64, hidden=64):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(latent_dim + 2, hidden),
+            nn.SiLU(),
+            nn.Linear(hidden, hidden),
+            nn.SiLU(),
+            nn.Linear(hidden, 1),
+        )
+
+    def forward(self, latent, log_moneyness, T_years):
+        x = torch.cat([latent, log_moneyness, T_years], dim=-1)
+        return F.softplus(self.net(x))
 
 
 # ==========================================
@@ -151,20 +184,63 @@ def bs_normalized_price(log_moneyness, T_years, r, q, sigma, option_type="call")
     return price
 
 
+def bs_log_normalized_price(log_moneyness, T_years, r, q, sigma, option_type="call"):
+    """Numerically stable log(V/K) via log_ndtr, avoiding the fp32 catastrophic
+    cancellation in M*N(d1) - exp(-rT)*N(d2) for short-T / near-ATM contracts.
+
+    price/K = exp(log_a) - exp(log_b) with log_a >= log_b. Computed as
+    log_a + log(-expm1(diff)), diff = log_b - log_a <= 0. `expm1` keeps full
+    precision for tiny |diff| (where the naive `M*N - e^{-rT}*N` collapses).
+
+    NOTE: the gradient `1/(-expm1(diff))` explodes as diff -> 0 (near-ATM).
+    This is safe for evaluation (no grads). For training it needs a softer
+    `diff` clamp and/or per-sample grad clipping.
+    """
+    sqrt_T = torch.sqrt(torch.clamp(T_years, min=1e-10))
+    sigma_safe = torch.clamp(sigma, min=1e-10)
+
+    d1 = (log_moneyness + (r - q + 0.5 * sigma_safe ** 2) * T_years) / (sigma_safe * sqrt_T)
+    d2 = d1 - sigma_safe * sqrt_T
+
+    if option_type == "call":
+        log_a = log_moneyness - q * T_years + torch.special.log_ndtr(d1)
+        log_b = -r * T_years + torch.special.log_ndtr(d2)
+    else:
+        log_a = -r * T_years + torch.special.log_ndtr(-d2)
+        log_b = log_moneyness - q * T_years + torch.special.log_ndtr(-d1)
+
+    diff = torch.clamp(log_b - log_a, max=-1e-10)
+    return log_a + torch.log(-torch.expm1(diff))
+
+
 # ==========================================
 # COMBINED MODEL
 # ==========================================
 
 class VolEstimatorModel(nn.Module):
-    def __init__(self, grid_h, grid_w, modes1, modes2, width=32, option_type="call"):
+    def __init__(self, grid_h, grid_w, modes1, modes2, width=32,
+                 latent_dim=64, head_hidden=64, option_type="call",
+                 use_stable_log=False):
         super().__init__()
-        self.net1 = FNO_VolEstimator(grid_h, grid_w, modes1, modes2, width)
+        self.encoder = FNO_MarketEncoder(
+            grid_h, grid_w, modes1, modes2, width, latent_dim=latent_dim,
+        )
+        self.head = ConditionalVolHead(latent_dim=latent_dim, hidden=head_hidden)
+        # When True, price log(V/K) with the stable log_ndtr path instead of
+        # log(clamp(price, 1e-8)). Intended for eval; see bs_log_normalized_price.
+        self.use_stable_log = use_stable_log
         self.option_type = option_type
 
     def forward(self, branch, log_moneyness, T_years, r, q):
-        sigma_hat = self.net1(branch)
-        price = bs_normalized_price(log_moneyness, T_years, r, q, sigma_hat, self.option_type)
-        log_v_hat = torch.log(torch.clamp(price, min=1e-8))
+        latent = self.encoder(branch)
+        sigma_hat = self.head(latent, log_moneyness, T_years)
+        if self.use_stable_log:
+            log_v_hat = bs_log_normalized_price(
+                log_moneyness, T_years, r, q, sigma_hat, self.option_type,
+            )
+        else:
+            price = bs_normalized_price(log_moneyness, T_years, r, q, sigma_hat, self.option_type)
+            log_v_hat = torch.log(torch.clamp(price, min=1e-8))
         return sigma_hat, log_v_hat
 
 
@@ -174,6 +250,14 @@ class VolEstimatorModel(nn.Module):
 
 def compute_loss(model, branch, log_moneyness, T_years, r, q, target_v_log):
     sigma_hat, log_v_hat = model(branch, log_moneyness, T_years, r, q)
+    # Huber (smooth-L1) loss: quadratic for |residual| < delta, linear beyond.
+    # This caps the gradient contribution of the ~1.5% near-expiry / near-ATM
+    # tail (where log-price is ill-conditioned and residuals are huge), so the
+    # bulk of contracts is not drowned out. delta=1.0 keeps the bulk (residuals
+    # << 1) in the usual squared-error regime.
+    # loss_data = F.huber_loss(log_v_hat, target_v_log, delta=1.0)
+
+    # --- Old MSE loss (switch back by uncommenting this and removing Huber): ---
     loss_data = F.mse_loss(log_v_hat, target_v_log)
     return loss_data, {"data": loss_data.item(), "total": loss_data.item()}
 
@@ -269,6 +353,7 @@ def train_model(config):
     patience_finetune = config["patience_finetune"]
     min_finetune_epochs = config["min_finetune_epochs"]
     max_train_batches = config.get("max_train_batches", None)
+    eval_only = config.get("eval_only", False)
     fno_width = config["fno_width"]
 
     h5_path = config["h5_path"]
@@ -281,9 +366,10 @@ def train_model(config):
     results_dir = Path(config["results_dir"])
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    # Save config
-    with open(results_dir / "config.json", "w") as f:
-        json.dump(config, f, indent=2)
+    # Save config (skip in eval-only so we don't clobber the trained run's config)
+    if not eval_only:
+        with open(results_dir / "config.json", "w") as f:
+            json.dump(config, f, indent=2)
 
     print("Loading datasets...")
     train_ds = H5BranchDataset(h5_path, "train", branch_key)
@@ -298,10 +384,25 @@ def train_model(config):
     print(f"Train batches: {len(train_loader)}, Val batches: {len(val_loader)}")
     print(f"Test batches: {len(test_loader)}")
 
-    model = VolEstimatorModel(grid_h, grid_w, modes1, modes2, fno_width, option_type).to(device)
-    total_params = sum(p.numel() for p in model.parameters())
-    print(f"FNO_VolEstimator initialized with fno_width={fno_width}")
-    print(f"Total model parameters: {total_params:,}")
+    latent_dim = config.get("latent_dim", 64)
+    head_hidden = config.get("head_hidden", 64)
+    use_stable_log = config.get("use_stable_log", False)
+    model = VolEstimatorModel(
+        grid_h, grid_w, modes1, modes2, fno_width,
+        latent_dim=latent_dim, head_hidden=head_hidden,
+        option_type=option_type, use_stable_log=use_stable_log,
+    ).to(device)
+    if use_stable_log:
+        print("  [stable-log] pricing log(V/K) via log_ndtr (no 1e-8 clamp floor)")
+    enc_params = sum(p.numel() for p in model.encoder.parameters())
+    head_params = sum(p.numel() for p in model.head.parameters())
+    total_params = enc_params + head_params
+    print(
+        f"VolEstimatorModel initialized: fno_width={fno_width}, "
+        f"latent_dim={latent_dim}, head_hidden={head_hidden}"
+    )
+    print(f"  Encoder params: {enc_params:,}  Head params: {head_params:,}")
+    print(f"  Total model parameters: {total_params:,}")
 
     optimizer_adam = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-5)
     scheduler = ReduceLROnPlateau(optimizer_adam, mode="min", factor=0.5, patience=2)
@@ -318,7 +419,7 @@ def train_model(config):
     epochs_no_improve = 0
     phase1_epochs = 0
 
-    for epoch in range(epochs_adam):
+    for epoch in range(0 if eval_only else epochs_adam):
         model.train()
         epoch_start = time.time()
         total_loss = 0.0
@@ -385,10 +486,11 @@ def train_model(config):
 
     print(f"\n*** Adam Phase Complete. Best Val MSE: {best_val:.6f} ***")
 
-    print("Loading best model from Adam phase for fine-tuning...")
-    if (results_dir / "best_model_phase1.pth").exists():
-        model.load_state_dict(torch.load(str(results_dir / "best_model_phase1.pth")))
-    torch.save(model.state_dict(), str(results_dir / "best_model.pth"))
+    if not eval_only:
+        print("Loading best model from Adam phase for fine-tuning...")
+        if (results_dir / "best_model_phase1.pth").exists():
+            model.load_state_dict(torch.load(str(results_dir / "best_model_phase1.pth")))
+        torch.save(model.state_dict(), str(results_dir / "best_model.pth"))
 
     # ============ PHASE 2: FINE-TUNE ============
     print("\n" + "=" * 60)
@@ -398,7 +500,7 @@ def train_model(config):
     optimizer_ft = optim.Adam(model.parameters(), lr=finetune_lr, weight_decay=1e-6)
     epochs_no_improve = 0
 
-    for epoch in range(epochs_finetune):
+    for epoch in range(0 if eval_only else epochs_finetune):
         model.train()
         epoch_start = time.time()
         total_loss = 0.0
@@ -463,7 +565,8 @@ def train_model(config):
     print(f"Best Validation MSE: {best_val:.6f}")
     print("=" * 60)
 
-    torch.save(model.state_dict(), str(results_dir / "final_model.pth"))
+    if not eval_only:
+        torch.save(model.state_dict(), str(results_dir / "final_model.pth"))
 
     # ============ TEST EVALUATION ============
     print("\n" + "=" * 60)
@@ -480,6 +583,8 @@ def train_model(config):
     total_samples = 0
     all_log_targets = []
     all_log_preds = []
+    all_log_m = []
+    all_T = []
 
     with torch.no_grad():
         for branch, log_m, T, r, q, target in test_loader:
@@ -496,6 +601,8 @@ def train_model(config):
             total_samples += target.size(0)
             all_log_targets.append(target.cpu())
             all_log_preds.append(log_v_hat.cpu())
+            all_log_m.append(log_m.cpu())
+            all_T.append(T.cpu())
 
     test_mse_log /= total_samples
     test_rmse_log = np.sqrt(test_mse_log)
@@ -505,6 +612,8 @@ def train_model(config):
 
     all_log_targets = torch.cat(all_log_targets).numpy().ravel()
     all_log_preds = torch.cat(all_log_preds).numpy().ravel()
+    all_log_m = torch.cat(all_log_m).numpy().ravel()
+    all_T = torch.cat(all_T).numpy().ravel()
 
     ss_res = np.sum((all_log_targets - all_log_preds) ** 2)
     ss_tot = np.sum((all_log_targets - np.mean(all_log_targets)) ** 2)
@@ -516,12 +625,58 @@ def train_model(config):
     ss_tot_p = np.sum((all_price_targets - np.mean(all_price_targets)) ** 2)
     r2_price = 1.0 - ss_res_p / (ss_tot_p + 1e-10)
 
+    # Near-expiry-filtered R^2(log): log-price is ill-conditioned as T -> 0
+    # (a tiny sigma error blows up log-price), so near-expiry contracts dominate
+    # the log metric while being economically negligible (see R^2(price)). Report
+    # R^2(log) on contracts with more than ~1 trading day to expiry as the
+    # "meaningful-domain" number, alongside the full-domain one above.
+    T_MIN_YEARS = 1.0 / 365.0
+    keep = all_T.ravel() > T_MIN_YEARS
+    n_keep = int(keep.sum())
+    if n_keep > 0:
+        tgt_k = all_log_targets[keep]
+        prd_k = all_log_preds[keep]
+        ss_res_k = np.sum((tgt_k - prd_k) ** 2)
+        ss_tot_k = np.sum((tgt_k - np.mean(tgt_k)) ** 2)
+        r2_log_filtered = 1.0 - ss_res_k / (ss_tot_k + 1e-10)
+        mse_log_filtered = ss_res_k / n_keep
+    else:
+        r2_log_filtered = float("nan")
+        mse_log_filtered = float("nan")
+
     log_errs = (all_log_preds - all_log_targets) ** 2
     print(f"log-error percentiles (squared):")
     for p in [50, 90, 99, 99.9, 100]:
         print(f"  p{p}: {np.percentile(log_errs, p):.6f}")
     print(f"#samples with sq.err > 10: {(log_errs > 10.0).sum()} / {len(log_errs)}")
     print(f"clamp-hit count (pred <= log(1.0001e-8)): {(all_log_preds < -18.42).sum()}")
+
+    # ---- Tail diagnostic: characterize the large-error samples ----
+    CLAMP_LOG = -18.42  # log(1e-8)
+    mask = log_errs > 10.0
+    n_tail = int(mask.sum())
+    print("\n--- Tail diagnostic (samples with sq.err > 10) ---")
+    if n_tail == 0:
+        print("  (no samples with sq.err > 10)")
+    else:
+        tgt, prd = all_log_targets[mask], all_log_preds[mask]
+        print(f"  count: {n_tail} / {len(log_errs)} ({100.0 * n_tail / len(log_errs):.2f}%)")
+        print(f"  share of total log-SSE from this tail: {log_errs[mask].sum() / log_errs.sum():.3f}")
+        print(f"  target_v_log  [min / median / max]: {tgt.min():.3f} / {np.median(tgt):.3f} / {tgt.max():.3f}")
+        print(f"  pred_v_log    [min / median / max]: {prd.min():.3f} / {np.median(prd):.3f} / {prd.max():.3f}")
+        print(f"  frac of tail with TRUE target < {CLAMP_LOG:.2f} (price < 1e-8): {(tgt < CLAMP_LOG).mean():.3f}")
+        print(f"  frac of tail that are clamp-hit preds (pred <= {CLAMP_LOG:.2f}): {(prd < CLAMP_LOG).mean():.3f}")
+        print(f"  mean signed log-error (pred - target) on tail: {(prd - tgt).mean():.3f}")
+        print(f"  log_moneyness [min / median / max]: {all_log_m[mask].min():.3f} / {np.median(all_log_m[mask]):.3f} / {all_log_m[mask].max():.3f}")
+        print(f"  T_years       [min / median / max]: {all_T[mask].min():.4f} / {np.median(all_T[mask]):.4f} / {all_T[mask].max():.4f}")
+    # Reference: distribution of ALL targets and how many are below the clamp floor.
+    print(f"  [ref] all target_v_log percentiles [p0.1/p1/p50/p99/p99.9]: "
+          f"{np.percentile(all_log_targets, 0.1):.2f} / {np.percentile(all_log_targets, 1):.2f} / "
+          f"{np.percentile(all_log_targets, 50):.2f} / {np.percentile(all_log_targets, 99):.2f} / "
+          f"{np.percentile(all_log_targets, 99.9):.2f}")
+    print(f"  [ref] #samples with TRUE target < {CLAMP_LOG:.2f}: "
+          f"{(all_log_targets < CLAMP_LOG).sum()} / {len(all_log_targets)} "
+          f"({100.0 * (all_log_targets < CLAMP_LOG).mean():.2f}%)")
 
     print(f"Final Test MSE (log):  {test_mse_log:.6f}")
     print(f"Test MSE (log):        {test_mse_log:.8f}")
@@ -531,38 +686,46 @@ def train_model(config):
     print(f"Test MAE (price):      {test_mae_price:.6f}")
     print(f"Test R^2 (log):        {r2_log:.6f}")
     print(f"Test R^2 (price):      {r2_price:.6f}")
+    print(f"Test R^2 (log, T>1day): {r2_log_filtered:.6f}  "
+          f"[{n_keep}/{len(all_T)} kept, {len(all_T) - n_keep} near-expiry dropped]")
+    print(f"Test MSE (log, T>1day): {mse_log_filtered:.8f}")
 
     # ============ SAVE OUTPUTS ============
-    print("\nSaving loss history to 'loss_history.txt'...")
+    if eval_only:
+        print("\nEval-only mode: skipping loss-history/plot writes (preserving trained-run artifacts).")
+    else:
+        print("\nSaving loss history to 'loss_history.txt'...")
 
-    with open(results_dir / "loss_history.txt", "w") as f:
-        f.write("Epoch\tTrain_Loss\tVal_Loss\n")
-        for i, (tl, vl) in enumerate(zip(all_train_losses, all_val_losses)):
-            f.write(f"{i+1}\t{tl:.6f}\t{vl:.6f}\n")
-        f.write("\n--- Test Metrics ---\n")
-        f.write(f"Test MSE (log):     {test_mse_log:.8f}\n")
-        f.write(f"Test RMSE (log):    {test_rmse_log:.6f}\n")
-        f.write(f"Test MSE (price):   {test_mse_price:.8f}\n")
-        f.write(f"Test RMSE (price):  {test_rmse_price:.6f}\n")
-        f.write(f"Test MAE (price):   {test_mae_price:.6f}\n")
-        f.write(f"Test R^2 (log):     {r2_log:.6f}\n")
-        f.write(f"Test R^2 (price):   {r2_price:.6f}\n")
+        with open(results_dir / "loss_history.txt", "w") as f:
+            f.write("Epoch\tTrain_Loss\tVal_Loss\n")
+            for i, (tl, vl) in enumerate(zip(all_train_losses, all_val_losses)):
+                f.write(f"{i+1}\t{tl:.6f}\t{vl:.6f}\n")
+            f.write("\n--- Test Metrics ---\n")
+            f.write(f"Test MSE (log):     {test_mse_log:.8f}\n")
+            f.write(f"Test RMSE (log):    {test_rmse_log:.6f}\n")
+            f.write(f"Test MSE (price):   {test_mse_price:.8f}\n")
+            f.write(f"Test RMSE (price):  {test_rmse_price:.6f}\n")
+            f.write(f"Test MAE (price):   {test_mae_price:.6f}\n")
+            f.write(f"Test R^2 (log):     {r2_log:.6f}\n")
+            f.write(f"Test R^2 (price):   {r2_price:.6f}\n")
+            f.write(f"Test R^2 (log, T>1day): {r2_log_filtered:.6f}  ({n_keep}/{len(all_T)} kept)\n")
+            f.write(f"Test MSE (log, T>1day): {mse_log_filtered:.8f}\n")
 
-    print("Generating loss curve plot 'loss_plot.png'...")
-    plt.figure(figsize=(10, 6))
-    plt.plot(all_train_losses, label="Train Loss")
-    plt.plot(all_val_losses, label="Val Loss (MSE)")
-    if phase1_epochs < len(all_train_losses):
-        plt.axvline(x=phase1_epochs - 1, color="r", linestyle="--", label="Start Fine-tuning")
-    plt.yscale("log")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.title(f"Training & Validation Loss (Test RMSE log: {test_rmse_log:.6f})")
-    plt.legend()
-    plt.grid(True, which="both", ls="--", alpha=0.5)
-    plt.tight_layout()
-    plt.savefig(results_dir / "loss_plot.png")
-    plt.close()
+        print("Generating loss curve plot 'loss_plot.png'...")
+        plt.figure(figsize=(10, 6))
+        plt.plot(all_train_losses, label="Train Loss")
+        plt.plot(all_val_losses, label="Val Loss (MSE)")
+        if phase1_epochs < len(all_train_losses):
+            plt.axvline(x=phase1_epochs - 1, color="r", linestyle="--", label="Start Fine-tuning")
+        plt.yscale("log")
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.title(f"Training & Validation Loss (Test RMSE log: {test_rmse_log:.6f})")
+        plt.legend()
+        plt.grid(True, which="both", ls="--", alpha=0.5)
+        plt.tight_layout()
+        plt.savefig(results_dir / "loss_plot.png")
+        plt.close()
 
     print("Execution Finished.")
 
@@ -585,11 +748,13 @@ def get_config():
         "lr": 1e-3,
         "finetune_lr": 1e-5,
         "grad_clip": 1.0,
-        "patience_adam": 10,
-        "patience_finetune": 10,
+        "patience_adam": 5,
+        "patience_finetune": 5,
         "min_finetune_epochs": 10,
         "max_train_batches": None,
         "fno_width": 32,
+        "latent_dim": 128,
+        "head_hidden": 128,
         "h5_path": h5_path,
         "branch_key": "vix_history",
         "grid_h": 21,
@@ -602,7 +767,7 @@ def get_config():
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Train FNO on puts with VIX history input (V3, analytical BS)")
+    parser = argparse.ArgumentParser(description="Train FNO on puts with vix history input (V3, analytical BS)")
     parser.add_argument("--epochs-adam", type=int, default=None)
     parser.add_argument("--epochs-finetune", type=int, default=None)
     parser.add_argument("--max-train-batches", type=int, default=None)
@@ -610,6 +775,13 @@ def parse_args():
     parser.add_argument("--lr", type=float, default=None)
     parser.add_argument("--finetune-lr", type=float, default=None)
     parser.add_argument("--seed", type=int, default=None)
+    parser.add_argument("--latent-dim", type=int, default=None)
+    parser.add_argument("--head-hidden", type=int, default=None)
+    parser.add_argument("--eval-only", action="store_true",
+                        help="Skip training; load best_model.pth and run test eval + diagnostics only.")
+    parser.add_argument("--stable-log", action="store_true",
+                        help="Price log(V/K) via stable log_ndtr instead of log(clamp(price, 1e-8)). "
+                             "Safe for eval; for training the gradient near ATM explodes.")
     return parser.parse_args()
 
 
@@ -631,6 +803,14 @@ if __name__ == "__main__":
         cfg["finetune_lr"] = args.finetune_lr
     if args.seed is not None:
         cfg["seed"] = args.seed
+    if args.latent_dim is not None:
+        cfg["latent_dim"] = args.latent_dim
+    if args.head_hidden is not None:
+        cfg["head_hidden"] = args.head_hidden
+    if args.eval_only:
+        cfg["eval_only"] = True
+    if args.stable_log:
+        cfg["use_stable_log"] = True
 
     print("Config:", json.dumps(cfg, indent=2))
     train_model(cfg)

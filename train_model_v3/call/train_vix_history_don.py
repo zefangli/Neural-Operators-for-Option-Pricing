@@ -1,19 +1,19 @@
 """
-Train FNO model on put options using implied volatility surface (branch_u).
-V3.1: Per-query implicit IV surface (was: single scalar sigma per market state).
+Train FNO-DeepONet model on call options using VIX OHLC history (vix_history).
+V3.1: Per-query implicit IV surface via a branch/trunk DeepONet.
 
 Architecture:
-  Encoder: 2D FNO on IV surface grid (11x17) -> market-state latent vector
-  Head:    MLP([latent, log_moneyness, T_years]) -> sigma_hat (positive scalar)
+  Branch: 2D FNO on VIX history grid (21x4) -> volatility basis vector
+  Trunk:  MLP([log_moneyness, T_years]) -> query basis vector
+  Sigma:  softplus(dot(branch_basis, trunk_basis) + bias) -> sigma_hat
   Pricing: bs_normalized_price([log_moneyness, T_years, r, q, sigma_hat]) -> V/K
 
 Loss: Data MSE on log(V/K). No PDE / arbitrage / BS-anchor terms.
 
 Why the change: a single scalar sigma cannot price both ATM and deep-OTM
 contracts under the same market state (volatility smile). The conditional head
-lets the model emit a different sigma for each (log_m, T) query against the
-same market-state latent, recovering the smile/skew that constant-vol BS cannot
-capture.
+acts as the DeepONet trunk, letting the model emit a different sigma for each
+(log_m, T) query against the same branch market state.
 """
 
 import argparse
@@ -74,23 +74,23 @@ class SpectralConv2d(nn.Module):
 
 
 # ==========================================
-# NETWORK 1: FNO MARKET-STATE ENCODER (SiLU)
+# NETWORK 1: FNO DEEPONET BRANCH (SiLU)
 # ==========================================
 
 class FNO_MarketEncoder(nn.Module):
-    """FNO-based encoder: 2D market-state grid -> latent vector.
+    """FNO-based DeepONet branch: 2D market-state grid -> basis vector.
 
     Takes a 2D grid, passes through 4 FNO blocks with residual connections,
-    then projects to a fixed-size latent. The latent is consumed downstream
-    by ConditionalVolHead together with the per-contract (log_m, T) query.
+    then projects to a fixed-size basis vector. This basis is paired with the
+    trunk basis by a DeepONet dot product.
     Uses SiLU activation throughout.
     """
-    def __init__(self, grid_h, grid_w, modes1, modes2, width=32, latent_dim=64):
+    def __init__(self, grid_h, grid_w, modes1, modes2, width=32, p_dim=64):
         super().__init__()
         self.grid_h = grid_h
         self.grid_w = grid_w
         self.width = width
-        self.latent_dim = latent_dim
+        self.p_dim = p_dim
 
         self.fc0 = nn.Conv2d(1, width, 1)
 
@@ -106,7 +106,7 @@ class FNO_MarketEncoder(nn.Module):
 
         flat_dim = width * grid_h * grid_w
         self.fc1 = nn.Linear(flat_dim, 128)
-        self.fc2 = nn.Linear(128, latent_dim)
+        self.fc2 = nn.Linear(128, p_dim)
 
     def forward(self, x):
         x = x.view(-1, 1, self.grid_h, self.grid_w)
@@ -130,34 +130,35 @@ class FNO_MarketEncoder(nn.Module):
 
         x = x.view(x.shape[0], -1)
         x = F.silu(self.fc1(x))
-        x = F.silu(self.fc2(x))
-        return x  # (batch, latent_dim)
+        x = self.fc2(x)
+        return x  # (batch, p_dim)
 
 
 # ==========================================
-# CONDITIONAL VOL HEAD
+# DEEPONET TRUNK
 # ==========================================
 
 class ConditionalVolHead(nn.Module):
-    """MLP mapping (market_state_latent, log_moneyness, T_years) -> sigma_hat.
+    """DeepONet trunk mapping (log_moneyness, T_years) -> query basis.
 
-    Lets the model emit a different sigma per contract query against the same
-    market-state latent, so it can fit the volatility smile/skew that a single
-    scalar sigma cannot represent. Output is softplus-positive.
+    The positivity constraint belongs after the branch/trunk dot product, not
+    on the trunk basis itself.
     """
-    def __init__(self, latent_dim=64, hidden=64):
+    def __init__(self, p_dim=64, hidden=64):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(latent_dim + 2, hidden),
+            nn.Linear(2, hidden),
             nn.SiLU(),
             nn.Linear(hidden, hidden),
             nn.SiLU(),
-            nn.Linear(hidden, 1),
+            nn.Linear(hidden, hidden),
+            nn.SiLU(),
+            nn.Linear(hidden, p_dim),
         )
 
-    def forward(self, latent, log_moneyness, T_years):
-        x = torch.cat([latent, log_moneyness, T_years], dim=-1)
-        return F.softplus(self.net(x))
+    def forward(self, log_moneyness, T_years):
+        trunk_input = torch.cat([log_moneyness, T_years], dim=-1)
+        return self.net(trunk_input)
 
 
 # ==========================================
@@ -217,23 +218,32 @@ def bs_log_normalized_price(log_moneyness, T_years, r, q, sigma, option_type="ca
 # COMBINED MODEL
 # ==========================================
 
-class VolEstimatorModel(nn.Module):
+class VolDeepONetModel(nn.Module):
     def __init__(self, grid_h, grid_w, modes1, modes2, width=32,
-                 latent_dim=64, head_hidden=64, option_type="call",
+                 p_dim=64, trunk_hidden=64, sigma_floor=1e-6, option_type="call",
                  use_stable_log=False):
         super().__init__()
-        self.encoder = FNO_MarketEncoder(
-            grid_h, grid_w, modes1, modes2, width, latent_dim=latent_dim,
+        self.branch = FNO_MarketEncoder(
+            grid_h, grid_w, modes1, modes2, width, p_dim=p_dim,
         )
-        self.head = ConditionalVolHead(latent_dim=latent_dim, hidden=head_hidden)
+        self.trunk = ConditionalVolHead(p_dim=p_dim, hidden=trunk_hidden)
         # When True, price log(V/K) with the stable log_ndtr path instead of
         # log(clamp(price, 1e-8)). Intended for eval; see bs_log_normalized_price.
         self.use_stable_log = use_stable_log
+        # Initialize bias so softplus(raw_sigma + bias) ~ 0.2 at init
+        # (raw_sigma ~ 0 in expectation; log(exp(0.2) - 1) ~= -1.50).
+        # This places sigma_hat near typical equity-index IV levels from the
+        # start, avoiding wasted early epochs while the optimizer drags
+        # randomly-initialized sigmas down from ~8 or up from ~0.
+        self.sigma_bias = nn.Parameter(torch.tensor([-1.50]))
+        self.sigma_floor = sigma_floor
         self.option_type = option_type
 
     def forward(self, branch, log_moneyness, T_years, r, q):
-        latent = self.encoder(branch)
-        sigma_hat = self.head(latent, log_moneyness, T_years)
+        branch_basis = self.branch(branch)
+        trunk_basis = self.trunk(log_moneyness, T_years)
+        raw_sigma = torch.sum(branch_basis * trunk_basis, dim=1, keepdim=True) + self.sigma_bias
+        sigma_hat = F.softplus(raw_sigma) + self.sigma_floor
         if self.use_stable_log:
             log_v_hat = bs_log_normalized_price(
                 log_moneyness, T_years, r, q, sigma_hat, self.option_type,
@@ -256,7 +266,7 @@ def compute_loss(model, branch, log_moneyness, T_years, r, q, target_v_log):
     # bulk of contracts is not drowned out. delta=1.0 keeps the bulk (residuals
     # << 1) in the usual squared-error regime.
     # loss_data = F.huber_loss(log_v_hat, target_v_log, delta=1.0)
-
+    
     # --- Old MSE loss (switch back by uncommenting this and removing Huber): ---
     loss_data = F.mse_loss(log_v_hat, target_v_log)
     return loss_data, {"data": loss_data.item(), "total": loss_data.item()}
@@ -384,24 +394,26 @@ def train_model(config):
     print(f"Train batches: {len(train_loader)}, Val batches: {len(val_loader)}")
     print(f"Test batches: {len(test_loader)}")
 
-    latent_dim = config.get("latent_dim", 64)
-    head_hidden = config.get("head_hidden", 64)
+    p_dim = config.get("p_dim", 64)
+    trunk_hidden = config.get("trunk_hidden", 64)
+    sigma_floor = config.get("sigma_floor", 1e-6)
     use_stable_log = config.get("use_stable_log", False)
-    model = VolEstimatorModel(
+    model = VolDeepONetModel(
         grid_h, grid_w, modes1, modes2, fno_width,
-        latent_dim=latent_dim, head_hidden=head_hidden,
+        p_dim=p_dim, trunk_hidden=trunk_hidden, sigma_floor=sigma_floor,
         option_type=option_type, use_stable_log=use_stable_log,
     ).to(device)
     if use_stable_log:
         print("  [stable-log] pricing log(V/K) via log_ndtr (no 1e-8 clamp floor)")
-    enc_params = sum(p.numel() for p in model.encoder.parameters())
-    head_params = sum(p.numel() for p in model.head.parameters())
-    total_params = enc_params + head_params
+    branch_params = sum(p.numel() for p in model.branch.parameters())
+    trunk_params = sum(p.numel() for p in model.trunk.parameters())
+    bias_params = model.sigma_bias.numel()
+    total_params = branch_params + trunk_params + bias_params
     print(
-        f"VolEstimatorModel initialized: fno_width={fno_width}, "
-        f"latent_dim={latent_dim}, head_hidden={head_hidden}"
+        f"VolDeepONetModel initialized: fno_width={fno_width}, "
+        f"p_dim={p_dim}, trunk_hidden={trunk_hidden}, sigma_floor={sigma_floor:.1e}"
     )
-    print(f"  Encoder params: {enc_params:,}  Head params: {head_params:,}")
+    print(f"  Branch params: {branch_params:,}  Trunk params: {trunk_params:,}  Bias params: {bias_params:,}")
     print(f"  Total model parameters: {total_params:,}")
 
     optimizer_adam = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-5)
@@ -651,7 +663,7 @@ def train_model(config):
     print(f"#samples with sq.err > 10: {(log_errs > 10.0).sum()} / {len(log_errs)}")
     print(f"clamp-hit count (pred <= log(1.0001e-8)): {(all_log_preds < -18.42).sum()}")
 
-    # ---- Tail diagnostic: characterize the large-error samples ----
+    # ---- Tail diagnostic: characterize the large-error samples (step 1) ----
     CLAMP_LOG = -18.42  # log(1e-8)
     mask = log_errs > 10.0
     n_tail = int(mask.sum())
@@ -738,7 +750,7 @@ def get_config():
     """Return the default configuration for this script."""
     script_dir = Path(__file__).resolve().parent
     project_root = script_dir.parent.parent
-    h5_path = str(project_root / "wrds_data_2020-2025" / "deeponet_tensors_put.h5")
+    h5_path = str(project_root / "wrds_data_2020-2025" / "deeponet_tensors_call.h5")
 
     return {
         "seed": 42,
@@ -753,21 +765,22 @@ def get_config():
         "min_finetune_epochs": 10,
         "max_train_batches": None,
         "fno_width": 32,
-        "latent_dim": 128,
-        "head_hidden": 128,
+        "p_dim": 128,
+        "trunk_hidden": 128,
+        "sigma_floor": 1e-6,
         "h5_path": h5_path,
-        "branch_key": "branch_u",
-        "grid_h": 11,
-        "grid_w": 17,
-        "modes1": 4,
-        "modes2": 8,
-        "option_type": "put",
-        "results_dir": str(script_dir / "results_vol_surface"),
+        "branch_key": "vix_history",
+        "grid_h": 21,
+        "grid_w": 4,
+        "modes1": 6,
+        "modes2": 2,
+        "option_type": "call",
+        "results_dir": str(script_dir / "results_vix_history_don"),
     }
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Train FNO on puts with vol surface input (V3, analytical BS)")
+    parser = argparse.ArgumentParser(description="Train FNO-DeepONet on calls with vix history input (V3, analytical BS)")
     parser.add_argument("--epochs-adam", type=int, default=None)
     parser.add_argument("--epochs-finetune", type=int, default=None)
     parser.add_argument("--max-train-batches", type=int, default=None)
@@ -775,8 +788,9 @@ def parse_args():
     parser.add_argument("--lr", type=float, default=None)
     parser.add_argument("--finetune-lr", type=float, default=None)
     parser.add_argument("--seed", type=int, default=None)
-    parser.add_argument("--latent-dim", type=int, default=None)
-    parser.add_argument("--head-hidden", type=int, default=None)
+    parser.add_argument("--p-dim", type=int, default=None)
+    parser.add_argument("--trunk-hidden", type=int, default=None)
+    parser.add_argument("--sigma-floor", type=float, default=None)
     parser.add_argument("--eval-only", action="store_true",
                         help="Skip training; load best_model.pth and run test eval + diagnostics only.")
     parser.add_argument("--stable-log", action="store_true",
@@ -803,10 +817,12 @@ if __name__ == "__main__":
         cfg["finetune_lr"] = args.finetune_lr
     if args.seed is not None:
         cfg["seed"] = args.seed
-    if args.latent_dim is not None:
-        cfg["latent_dim"] = args.latent_dim
-    if args.head_hidden is not None:
-        cfg["head_hidden"] = args.head_hidden
+    if args.p_dim is not None:
+        cfg["p_dim"] = args.p_dim
+    if args.trunk_hidden is not None:
+        cfg["trunk_hidden"] = args.trunk_hidden
+    if args.sigma_floor is not None:
+        cfg["sigma_floor"] = args.sigma_floor
     if args.eval_only:
         cfg["eval_only"] = True
     if args.stable_log:

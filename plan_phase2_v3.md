@@ -10,6 +10,53 @@ The training problem becomes a clean implied-volatility estimation problem:
 
 Because BS pricing is exact, **all approximation error is attributable to Network 1's volatility estimate**. Any greek computed from the model (delta, gamma, vega, …) inherits BS's closed-form exactness for that estimated sigma.
 
+> **v3.1 supersedes the single-σ̂ design below.** Sections "## What Changes vs. v2" through
+> "## Required Changes per Training Script" describe the original v3, where Network 1 emits **one
+> scalar σ̂ per market state** (`FNO_VolEstimator` → softplus scalar). That cannot fit the
+> volatility smile/skew (a single σ̂ can't price ATM and deep-OTM under the same state), which
+> capped log accuracy. **v3.1 (current) replaces it with a per-contract-query σ̂.** Read the v3.1
+> section immediately below; treat the later sections as background on the analytical-BS choice,
+> which v3.1 keeps unchanged.
+
+## v3.1 — Per-Query σ̂ (current design)
+
+The forward pass becomes: encode the market state into a **latent/basis**, then condition σ̂ on the
+per-contract query `(log_moneyness, T_years)` so the model emits a *different* σ̂ for every contract
+against the same market state — recovering the smile/skew that constant-σ̂ BS cannot. BS pricing and
+the data-MSE-on-`log(V/K)` loss are unchanged from v3. The `1e-12` log clamp is tightened to
+`1e-8`.
+
+Two interchangeable readouts are implemented (same FNO encoder, same hyperparameters, same training
+loop — they differ only in how the latent + query make σ̂):
+
+**A — MLP-head** (`train_*.py`)
+- `FNO_MarketEncoder`: the v3 FNO body with the **final scalar head removed**, projecting to a
+  `latent_dim`-d latent (default 128).
+- `ConditionalVolHead`: MLP on `[latent, log_m, T]` → `head_hidden` → 1 (SiLU), `softplus` output.
+- `VolEstimatorModel.forward`: `latent = encoder(branch); σ̂ = head(latent, log_m, T);
+  price = BS(...); log_v_hat = log(clamp(price, 1e-8))`.
+
+**B — DeepONet** (`train_*_don.py`)
+- Branch = `FNO_MarketEncoder` projecting to a `p_dim`-d basis (linear final layer).
+- Trunk = MLP on `(log_m, T)` → `p_dim`-d basis (linear final layer).
+- Readout: `σ̂ = softplus(⟨branch, trunk⟩ + sigma_bias) + sigma_floor`, with `sigma_bias` init −1.50
+  so σ̂ ≈ 0.20 at init (near typical equity-index IV).
+- `VolDeepONetModel` exposes `p_dim`, `trunk_hidden`, `sigma_floor`.
+
+Both readouts are propagated to all 6 branch/option combos (12 scripts total: `train_*.py` +
+`train_*_don.py` under `call/` and `put/`). They are within seed noise on `call/vol_surface`
+(R²(price) 0.999851 vs 0.999854), so both are kept for comparison across the spot/vix branches.
+
+**Eval infrastructure added in v3.1** (in every script): near-expiry-filtered `R²(log, T > 1/365)`
+reported alongside full-domain R²(log) and R²(price); a tail diagnostic block characterizing the
+`sq.err > 10` cluster; an `--eval-only` flag (load `best_model.pth`, run test eval + diagnostic,
+write nothing); a `--stable-log` flag swapping in the numerically-stable `bs_log_normalized_price`
+(`log_ndtr`) — **eval-only**, since its near-ATM gradient explodes under the global grad-clip.
+`compute_loss` keeps MSE active with an `F.huber_loss(delta=1.0)` line commented for a one-line
+toggle.
+
+See `PROGRESS_phase2_v3.md` for the live snapshot (config values, param counts, results, next steps).
+
 ## What Changes vs. v2
 
 | Concern                        | v2                                                                  | v3                                                              |
