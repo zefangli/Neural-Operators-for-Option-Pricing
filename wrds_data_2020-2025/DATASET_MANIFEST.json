@@ -1,0 +1,153 @@
+{
+  "canonical": "v5",
+  "generated": "2026-08-13T12:40:12+00:00",
+  "datasets": {
+    "v4": {
+      "dataset_version": "v4",
+      "schema_version": "v4",
+      "status": "unfiltered robustness sample; noncanonical for training",
+      "quote_filter": null,
+      "quote_filter_tolerance": null,
+      "quote_filter_bounds": null,
+      "maturity_rule": {
+        "min_maturity_days": 1.0,
+        "t_basis": "settlement",
+        "description": "strictly more than 24 hours to settlement"
+      },
+      "files": {
+        "call": {
+          "path": "deeponet_tensors_call_v4.h5",
+          "sha256": "5f1c42aa2cc125fa0344b9e3d19fb374278aa629560c420c7ea4c76a6f910546",
+          "rows": 4955592,
+          "splits": {
+            "train": {
+              "rows": 3360823,
+              "n_dates": 2128,
+              "first": "2015-02-02",
+              "last": "2023-07-17"
+            },
+            "val": {
+              "rows": 754276,
+              "n_dates": 266,
+              "first": "2023-07-18",
+              "last": "2024-08-06"
+            },
+            "test": {
+              "rows": 840493,
+              "n_dates": 267,
+              "first": "2024-08-07",
+              "last": "2025-08-29"
+            }
+          }
+        },
+        "put": {
+          "path": "deeponet_tensors_put_v4.h5",
+          "sha256": "2ba5b13b0beb374d86790b6fc94799ea92dbd057454fca4af86f357a1bafbd29",
+          "rows": 7991054,
+          "splits": {
+            "train": {
+              "rows": 5370629,
+              "n_dates": 2128,
+              "first": "2015-02-02",
+              "last": "2023-07-17"
+            },
+            "val": {
+              "rows": 1229955,
+              "n_dates": 266,
+              "first": "2023-07-18",
+              "last": "2024-08-06"
+            },
+            "test": {
+              "rows": 1390470,
+              "n_dates": 267,
+              "first": "2024-08-07",
+              "last": "2025-08-29"
+            }
+          }
+        }
+      },
+      "source_hashes": {
+        "vix_csv": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301"
+      }
+    },
+    "v5": {
+      "dataset_version": "v5",
+      "schema_version": "v4",
+      "status": "canonical for training",
+      "quote_filter": "static_bounds_midpoint",
+      "quote_filter_tolerance": 0.0,
+      "quote_filter_bounds": "normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(-r*T); call midpoint must lie in [max(fwd - disc, 0), fwd], put midpoint in [max(disc - fwd, 0), disc]; inclusive, zero tolerance. Evaluated in float64 on the parquet AND on the float32-rounded values, so no row can flip sides in the export cast.",
+      "maturity_rule": {
+        "min_maturity_days": 1.0,
+        "t_basis": "settlement",
+        "description": "strictly more than 24 hours to settlement"
+      },
+      "files": {
+        "call": {
+          "path": "deeponet_tensors_call_v5.h5",
+          "sha256": "ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153",
+          "rows": 4846268,
+          "splits": {
+            "train": {
+              "rows": 3297722,
+              "n_dates": 2128,
+              "first": "2015-02-02",
+              "last": "2023-07-17"
+            },
+            "val": {
+              "rows": 729204,
+              "n_dates": 266,
+              "first": "2023-07-18",
+              "last": "2024-08-06"
+            },
+            "test": {
+              "rows": 819342,
+              "n_dates": 267,
+              "first": "2024-08-07",
+              "last": "2025-08-29"
+            }
+          }
+        },
+        "put": {
+          "path": "deeponet_tensors_put_v5.h5",
+          "sha256": "46f3ee9d03d3423c6330c2b35a4d09893b0f538bdc046bc1018ebab79861c756",
+          "rows": 7925349,
+          "splits": {
+            "train": {
+              "rows": 5323327,
+              "n_dates": 2128,
+              "first": "2015-02-02",
+              "last": "2023-07-17"
+            },
+            "val": {
+              "rows": 1221643,
+              "n_dates": 266,
+              "first": "2023-07-18",
+              "last": "2024-08-06"
+            },
+            "test": {
+              "rows": 1380379,
+              "n_dates": 267,
+              "first": "2024-08-07",
+              "last": "2025-08-29"
+            }
+          }
+        }
+      },
+      "source_hashes": {
+        "vix_csv": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301"
+      },
+      "lineage": {
+        "parquet_parts": "deeponet_training_data_parts_v4 (43 parts)",
+        "call": {
+          "derived_from_v4_h5": "deeponet_tensors_call_v4.h5",
+          "derived_from_v4_h5_sha256": "5f1c42aa2cc125fa0344b9e3d19fb374278aa629560c420c7ea4c76a6f910546"
+        },
+        "put": {
+          "derived_from_v4_h5": "deeponet_tensors_put_v4.h5",
+          "derived_from_v4_h5_sha256": "2ba5b13b0beb374d86790b6fc94799ea92dbd057454fca4af86f357a1bafbd29"
+        }
+      }
+    }
+  }
+}

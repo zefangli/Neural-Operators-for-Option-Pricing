@@ -1,0 +1,264 @@
+{
+  "vix_csv_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+  "files": [
+    {
+      "file": "deeponet_tensors_call_v4.h5",
+      "option_type": "call",
+      "rows": 4955592,
+      "min_maturity_days": 1.0,
+      "provenance": {
+        "schema_version": "v4",
+        "t_basis": "settlement",
+        "vix_source_series": "CBOE VIX (S&P 500 volatility index)",
+        "vix_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+        "vix_raw_row_count": "2709",
+        "vix_usable_row_count": "2706"
+      },
+      "nonfinite": {},
+      "min_T_days": 1.7291666311211884,
+      "max_T_days": 2198.7290811538696,
+      "splits": {
+        "train": {
+          "rows": 3360823,
+          "n_dates": 2128,
+          "first": "2015-02-02",
+          "last": "2023-07-17"
+        },
+        "val": {
+          "rows": 754276,
+          "n_dates": 266,
+          "first": "2023-07-18",
+          "last": "2024-08-06"
+        },
+        "test": {
+          "rows": 840493,
+          "n_dates": 267,
+          "first": "2024-08-07",
+          "last": "2025-08-29"
+        }
+      },
+      "duplicate_input_pct_test": 0.0,
+      "am_settlement_counts": {
+        "0": 608929,
+        "1": 231564
+      },
+      "vix_level": {
+        "min": 9.140000343322754,
+        "median": 17.90999984741211,
+        "max": 82.69000244140625
+      },
+      "parquet_rows_all_types": 13595211,
+      "parquet_parts": 43,
+      "sha256": "5f1c42aa2cc125fa0344b9e3d19fb374278aa629560c420c7ea4c76a6f910546"
+    },
+    {
+      "file": "deeponet_tensors_put_v4.h5",
+      "option_type": "put",
+      "rows": 7991054,
+      "min_maturity_days": 1.0,
+      "provenance": {
+        "schema_version": "v4",
+        "t_basis": "settlement",
+        "vix_source_series": "CBOE VIX (S&P 500 volatility index)",
+        "vix_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+        "vix_raw_row_count": "2709",
+        "vix_usable_row_count": "2706"
+      },
+      "nonfinite": {},
+      "min_T_days": 1.7291666311211884,
+      "max_T_days": 2198.7290811538696,
+      "splits": {
+        "train": {
+          "rows": 5370629,
+          "n_dates": 2128,
+          "first": "2015-02-02",
+          "last": "2023-07-17"
+        },
+        "val": {
+          "rows": 1229955,
+          "n_dates": 266,
+          "first": "2023-07-18",
+          "last": "2024-08-06"
+        },
+        "test": {
+          "rows": 1390470,
+          "n_dates": 267,
+          "first": "2024-08-07",
+          "last": "2025-08-29"
+        }
+      },
+      "duplicate_input_pct_test": 0.0,
+      "am_settlement_counts": {
+        "0": 981948,
+        "1": 408522
+      },
+      "vix_level": {
+        "min": 9.140000343322754,
+        "median": 17.5,
+        "max": 82.69000244140625
+      },
+      "parquet_rows_all_types": 13595211,
+      "parquet_parts": 43,
+      "sha256": "2ba5b13b0beb374d86790b6fc94799ea92dbd057454fca4af86f357a1bafbd29"
+    }
+  ],
+  "checks": [
+    {
+      "check": "VIX CSV sha256 matches reviewed file",
+      "pass": true,
+      "detail": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301"
+    },
+    {
+      "check": "call: schema_version == v4",
+      "pass": true,
+      "detail": "v4"
+    },
+    {
+      "check": "call: settlement basis recorded",
+      "pass": true,
+      "detail": "settlement"
+    },
+    {
+      "check": "call: maturity threshold recorded",
+      "pass": true,
+      "detail": "1.0"
+    },
+    {
+      "check": "call: VIX source is CBOE VIX",
+      "pass": true,
+      "detail": "CBOE VIX (S&P 500 volatility index)"
+    },
+    {
+      "check": "call: VIX CSV sha matches reviewed file",
+      "pass": true,
+      "detail": "e2f18c516c9d48fb..."
+    },
+    {
+      "check": "call: all required datasets present",
+      "pass": true,
+      "detail": "all present"
+    },
+    {
+      "check": "call: no NaN/Inf in float datasets",
+      "pass": true,
+      "detail": "clean"
+    },
+    {
+      "check": "call: every T > 1.0 days",
+      "pass": true,
+      "detail": "min = 1.7292 days"
+    },
+    {
+      "check": "call: no T <= 0 rows",
+      "pass": true,
+      "detail": "min = 1.729167"
+    },
+    {
+      "check": "call: split ids are exactly {0,1,2}",
+      "pass": true,
+      "detail": "[0, 1, 2]"
+    },
+    {
+      "check": "call: no date appears in two splits",
+      "pass": true,
+      "detail": "0 overlapping"
+    },
+    {
+      "check": "call: splits are time-ordered",
+      "pass": true,
+      "detail": "2023-07-17 < 2023-07-18 .. 2025-08-29"
+    },
+    {
+      "check": "call: duplicate-input rate ~0% (v3 was 17.8/19.8%)",
+      "pass": true,
+      "detail": "0.0000% (0 rows)"
+    },
+    {
+      "check": "call: vix_level in VIX range (not VVIX)",
+      "pass": true,
+      "detail": "min 9.14 / med 17.91 / max 82.69"
+    },
+    {
+      "check": "call: vix_level matches raw CSV (early/mid/late)",
+      "pass": true,
+      "detail": "max |diff| = 6.10e-07"
+    },
+    {
+      "check": "put: schema_version == v4",
+      "pass": true,
+      "detail": "v4"
+    },
+    {
+      "check": "put: settlement basis recorded",
+      "pass": true,
+      "detail": "settlement"
+    },
+    {
+      "check": "put: maturity threshold recorded",
+      "pass": true,
+      "detail": "1.0"
+    },
+    {
+      "check": "put: VIX source is CBOE VIX",
+      "pass": true,
+      "detail": "CBOE VIX (S&P 500 volatility index)"
+    },
+    {
+      "check": "put: VIX CSV sha matches reviewed file",
+      "pass": true,
+      "detail": "e2f18c516c9d48fb..."
+    },
+    {
+      "check": "put: all required datasets present",
+      "pass": true,
+      "detail": "all present"
+    },
+    {
+      "check": "put: no NaN/Inf in float datasets",
+      "pass": true,
+      "detail": "clean"
+    },
+    {
+      "check": "put: every T > 1.0 days",
+      "pass": true,
+      "detail": "min = 1.7292 days"
+    },
+    {
+      "check": "put: no T <= 0 rows",
+      "pass": true,
+      "detail": "min = 1.729167"
+    },
+    {
+      "check": "put: split ids are exactly {0,1,2}",
+      "pass": true,
+      "detail": "[0, 1, 2]"
+    },
+    {
+      "check": "put: no date appears in two splits",
+      "pass": true,
+      "detail": "0 overlapping"
+    },
+    {
+      "check": "put: splits are time-ordered",
+      "pass": true,
+      "detail": "2023-07-17 < 2023-07-18 .. 2025-08-29"
+    },
+    {
+      "check": "put: duplicate-input rate ~0% (v3 was 17.8/19.8%)",
+      "pass": true,
+      "detail": "0.0000% (0 rows)"
+    },
+    {
+      "check": "put: vix_level in VIX range (not VVIX)",
+      "pass": true,
+      "detail": "min 9.14 / med 17.50 / max 82.69"
+    },
+    {
+      "check": "put: vix_level matches raw CSV (early/mid/late)",
+      "pass": true,
+      "detail": "max |diff| = 6.10e-07"
+    }
+  ],
+  "n_checks": 31,
+  "n_failed": 0
+}

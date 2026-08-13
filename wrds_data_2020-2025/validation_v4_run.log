@@ -1,0 +1,58 @@
+C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\validate_v4.py:149: DeprecationWarning: numpy.core is deprecated and has been renamed to numpy._core. The numpy._core namespace contains private NumPy internals and its use is discouraged, as NumPy internals can change without warning in any release. In practice, most real-world usage of numpy.core is to access functionality in the public NumPy API. If that is the case, use the public NumPy API. If not, you are using NumPy internals. If you would still like to access an internal attribute, use numpy._core.records.
+  rec = np.core.records.fromarrays(
+C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\validate_v4.py:186: DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+  got = float(f["vix_level"][idx])
+=== raw VIX CSV ===
+  [PASS] VIX CSV sha256 matches reviewed file -- e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301
+
+=== deeponet_tensors_call_v4.h5 (call) ===
+  [PASS] call: schema_version == v4 -- v4
+  [PASS] call: settlement basis recorded -- settlement
+  [PASS] call: maturity threshold recorded -- 1.0
+  [PASS] call: VIX source is CBOE VIX -- CBOE VIX (S&P 500 volatility index)
+  [PASS] call: VIX CSV sha matches reviewed file -- e2f18c516c9d48fb...
+  [PASS] call: all required datasets present -- all present
+  [PASS] call: no NaN/Inf in float datasets -- clean
+  [PASS] call: every T > 1.0 days -- min = 1.7292 days
+  [PASS] call: no T <= 0 rows -- min = 1.729167
+  [PASS] call: split ids are exactly {0,1,2} -- [0, 1, 2]
+      train  3,360,823 rows  2128 dates  2015-02-02 .. 2023-07-17
+      val      754,276 rows   266 dates  2023-07-18 .. 2024-08-06
+      test     840,493 rows   267 dates  2024-08-07 .. 2025-08-29
+  [PASS] call: no date appears in two splits -- 0 overlapping
+  [PASS] call: splits are time-ordered -- 2023-07-17 < 2023-07-18 .. 2025-08-29
+  [PASS] call: duplicate-input rate ~0% (v3 was 17.8/19.8%) -- 0.0000% (0 rows)
+  [PASS] call: vix_level in VIX range (not VVIX) -- min 9.14 / med 17.91 / max 82.69
+      2015-02-02: hdf5 19.4300 vs csv 19.4300
+      2020-05-14: hdf5 32.6100 vs csv 32.6100
+      2025-08-29: hdf5 15.3600 vs csv 15.3600
+  [PASS] call: vix_level matches raw CSV (early/mid/late) -- max |diff| = 6.10e-07
+      parquet: 43 parts, 13,595,211 rows (both types, pre-maturity-cut)
+      sha256: 5f1c42aa2cc125fa0344b9e3d19fb374278aa629560c420c7ea4c76a6f910546
+
+=== deeponet_tensors_put_v4.h5 (put) ===
+  [PASS] put: schema_version == v4 -- v4
+  [PASS] put: settlement basis recorded -- settlement
+  [PASS] put: maturity threshold recorded -- 1.0
+  [PASS] put: VIX source is CBOE VIX -- CBOE VIX (S&P 500 volatility index)
+  [PASS] put: VIX CSV sha matches reviewed file -- e2f18c516c9d48fb...
+  [PASS] put: all required datasets present -- all present
+  [PASS] put: no NaN/Inf in float datasets -- clean
+  [PASS] put: every T > 1.0 days -- min = 1.7292 days
+  [PASS] put: no T <= 0 rows -- min = 1.729167
+  [PASS] put: split ids are exactly {0,1,2} -- [0, 1, 2]
+      train  5,370,629 rows  2128 dates  2015-02-02 .. 2023-07-17
+      val    1,229,955 rows   266 dates  2023-07-18 .. 2024-08-06
+      test   1,390,470 rows   267 dates  2024-08-07 .. 2025-08-29
+  [PASS] put: no date appears in two splits -- 0 overlapping
+  [PASS] put: splits are time-ordered -- 2023-07-17 < 2023-07-18 .. 2025-08-29
+  [PASS] put: duplicate-input rate ~0% (v3 was 17.8/19.8%) -- 0.0000% (0 rows)
+  [PASS] put: vix_level in VIX range (not VVIX) -- min 9.14 / med 17.50 / max 82.69
+      2015-02-02: hdf5 19.4300 vs csv 19.4300
+      2020-05-14: hdf5 32.6100 vs csv 32.6100
+      2025-08-29: hdf5 15.3600 vs csv 15.3600
+  [PASS] put: vix_level matches raw CSV (early/mid/late) -- max |diff| = 6.10e-07
+      parquet: 43 parts, 13,595,211 rows (both types, pre-maturity-cut)
+      sha256: 2ba5b13b0beb374d86790b6fc94799ea92dbd057454fca4af86f357a1bafbd29
+
+31/31 checks passed -> C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\VALIDATION_v4.json

@@ -19,6 +19,7 @@ and R2(log,T>1day)=0.992481 within rounding.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import h5py
@@ -322,17 +323,252 @@ def load_test_split(h5_path, branch_key, split="test", max_contracts=None, seed=
             "date": f["date"][idx],
             "indices": idx,
         }
+        # Quote-liquidity columns exist in v4/v5 only -- presence-checked so v3 runs.
+        for opt in ("best_bid", "best_offer", "spread_norm", "half_spread_norm"):
+            if opt in f:
+                out[opt] = f[opt][idx].astype(np.float64).ravel()
     return out
 
 
-def resolve_h5_path(config: dict) -> Path:
-    """config.json stores an absolute h5_path from the training machine; fall back
-    to the repo-relative path if it doesn't exist here."""
+# ==========================================================================
+# QUOTE-LIQUIDITY REPORTING STRATA  (NOT a filter -- nothing is ever dropped)
+# ==========================================================================
+#
+# These masks exist so the manuscript can show the headline numbers are not
+# carried by retained zero-bid or wide-spread quotes. They SUBSET the metric
+# report only: no caller removes rows from training, from a split, or from the
+# "all rows" metrics. Turning any of these into an actual sample filter is a
+# separate, explicit dataset decision that has NOT been made -- if you find
+# yourself writing `rows = rows[mask]` with one of these, stop.
+#
+# relative spread = (ask - bid) / mid, mid = (bid + ask)/2. With bid >= 0 this is
+# bounded above by 2, so a threshold > 2 selects everything and says nothing.
+LIQUIDITY_STRATA_DOC = {
+    "bid_pos": "best_bid > 0 (excludes zero-bid quotes from the REPORT only)",
+    "relspread_le1": "(ask - bid) / mid <= 1 (bounded by 2 when bid >= 0)",
+    "bid_pos_and_relspread_le1": "both of the above",
+    "_not_a_filter": "Reporting strata only. No row is dropped anywhere on liquidity.",
+}
+
+
+def liquidity_masks(best_bid, best_offer):
+    """-> {stratum: bool mask} for the quote-liquidity REPORTING strata.
+
+    Returns {} when either column is unavailable (v3 samples), so every caller
+    degrades to "no liquidity strata reported" instead of failing.
+    """
+    if best_bid is None or best_offer is None:
+        return {}
+    bid = np.asarray(best_bid, dtype=np.float64).ravel()
+    ask = np.asarray(best_offer, dtype=np.float64).ravel()
+    mid = 0.5 * (bid + ask)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        rel = np.where(mid > 0, (ask - bid) / mid, np.inf)
+    bid_pos = bid > 0
+    narrow = rel <= 1.0
+    return {"bid_pos": bid_pos, "relspread_le1": narrow,
+            "bid_pos_and_relspread_le1": bid_pos & narrow}
+
+
+# ==========================================================================
+# DATASET SELECTION  (manifest-driven -- never mix samples silently)
+# ==========================================================================
+#
+# TWO INDEPENDENT AXES, never inferred from one another:
+#   schema_version  = tensor structure of the HDF5 (v3 -> v4; v5 files are still
+#                     schema "v4", the layout did not change).
+#   dataset_version = which SAMPLE the rows are (v3 calendar-T; v4 settlement-T,
+#                     T > 1 day, unfiltered quotes; v5 = v4 plus the zero-tolerance
+#                     static-no-arbitrage midpoint quote filter).
+# `wrds_data_2020-2025/DATASET_MANIFEST.json` is the single source of truth for
+# which dataset versions exist, where their files are, what they hash to, and
+# which one is canonical. Nothing here hard-codes a hash or a canonical version.
+
+# $DL_DATASET_MANIFEST overrides the path (smoke tests / a relocated data dir).
+MANIFEST_PATH = Path(os.environ.get(
+    "DL_DATASET_MANIFEST", PROJECT_ROOT / "wrds_data_2020-2025" / "DATASET_MANIFEST.json"))
+
+# Smoke builds are deliberately NOT in the manifest (they are throwaway subsamples,
+# not samples anyone may publish). They keep a tiny local table: (subdir, template,
+# dataset_version, schema_version) -- both versions stated, neither inferred.
+SMOKE_VERSIONS = {
+    "v4smoke": ("wrds_data_2020-2025/smoke_v4", "deeponet_tensors_%s_v4_smoke.h5", "v4", "v4"),
+    "v5smoke": ("wrds_data_2020-2025/smoke_v5", "deeponet_tensors_%s_v5_smoke.h5", "v5", "v4"),
+}
+# Selectable on the command line. Presence here is NOT a claim that the version
+# exists -- resolution goes through the manifest and fails loudly if it doesn't.
+DATASET_VERSION_CHOICES = ("v3", "v4", "v5", "v4smoke", "v5smoke")
+
+_MANIFEST_CACHE = {}
+
+
+def load_manifest(path=None) -> dict:
+    """Read DATASET_MANIFEST.json (cached). Missing/corrupt manifest = hard error."""
+    p = Path(path or MANIFEST_PATH)
+    key = str(p)
+    if key not in _MANIFEST_CACHE:
+        if not p.exists():
+            raise SystemExit(
+                "MISSING DATASET MANIFEST: %s\n"
+                "  Every analysis resolves dataset identity, paths, hashes and which\n"
+                "  version is canonical from this file. There is deliberately no\n"
+                "  hard-coded fallback -- a stale built-in default is how a superseded\n"
+                "  sample reaches a manuscript table. Build/restore the manifest first."
+                % p)
+        try:
+            _MANIFEST_CACHE[key] = json.loads(p.read_text())
+        except json.JSONDecodeError as exc:
+            raise SystemExit("CORRUPT DATASET MANIFEST %s: %s" % (p, exc))
+    return _MANIFEST_CACHE[key]
+
+
+def manifest_entry(version: str, path=None) -> dict:
+    """The manifest's record for one dataset version; absent version = hard error."""
+    man = load_manifest(path)
+    datasets = man.get("datasets", {})
+    if version not in datasets:
+        raise SystemExit(
+            "UNKNOWN dataset-version %r: not in %s (known: %s).\n"
+            "  Refusing to guess a path or a hash for it."
+            % (version, Path(path or MANIFEST_PATH), ", ".join(sorted(datasets)) or "(none)"))
+    return datasets[version]
+
+
+def canonical_version(path=None) -> str:
+    """Which dataset version the manifest declares canonical for training/T1."""
+    man = load_manifest(path)
+    if not man.get("canonical"):
+        raise SystemExit("DATASET MANIFEST has no `canonical` key: %s"
+                         % Path(path or MANIFEST_PATH))
+    return str(man["canonical"])
+
+
+def dataset_versions(version: str, manifest_path=None):
+    """-> (dataset_version, schema_version) for a selector. Read, never inferred."""
+    if version in SMOKE_VERSIONS:
+        return SMOKE_VERSIONS[version][2], SMOKE_VERSIONS[version][3]
+    e = manifest_entry(version, manifest_path)
+    return str(e["dataset_version"]), str(e["schema_version"])
+
+
+def dataset_h5(version: str, option_type: str, data_dir=None, manifest_path=None) -> Path:
+    """Resolve the HDF5 path for a (dataset version, option type) pair."""
+    if version in SMOKE_VERSIONS:
+        sub, tmpl = SMOKE_VERSIONS[version][:2]
+        root = Path(data_dir) if data_dir else PROJECT_ROOT / sub
+        return root / (tmpl % option_type)
+    files = manifest_entry(version, manifest_path).get("files", {})
+    if option_type not in files:
+        raise SystemExit("DATASET MANIFEST: version %s has no %r file entry"
+                         % (version, option_type))
+    p = Path(files[option_type]["path"])
+    if data_dir:                       # --h5-dir relocates the same file
+        return Path(data_dir) / p.name
+    # Manifest paths are relative to the MANIFEST'S OWN directory, not the repo
+    # root: the manifest lives in wrds_data_2020-2025/ alongside the files it
+    # describes, and records them by bare filename. Resolving against
+    # PROJECT_ROOT instead sent every lookup to <repo>/deeponet_tensors_*.h5 and
+    # failed with FileNotFoundError. Manifest-relative also keeps the data
+    # directory relocatable -- move the pair together and paths still resolve.
+    base = (Path(manifest_path) if manifest_path else MANIFEST_PATH).parent
+    return p if p.is_absolute() else base / p
+
+
+def h5_attr(h5_path, name, default=None):
+    """One root attr as str (or `default` when absent / file missing)."""
+    p = Path(h5_path)
+    if not p.exists():
+        return default
+    with h5py.File(p, "r") as f:
+        v = f.attrs.get(name, None)
+    if v is None:
+        return default
+    return v.decode() if isinstance(v, bytes) else str(v)
+
+
+def dataset_provenance(version: str, option_type: str, data_dir=None,
+                       manifest_path=None) -> dict:
+    """Path + BOTH version axes + canonical status, for stamping into every output.
+
+    Cross-checks the on-file attrs against the manifest and refuses any
+    disagreement. v3 files predate both attrs, so an absent `schema_version` is
+    reported as "v3 (attr absent)" rather than guessed silently; an absent
+    `dataset_version` attr (every v4 file predates that attr too) is taken from
+    the manifest, never from the schema.
+    """
+    p = dataset_h5(version, option_type, data_dir, manifest_path)
+    want_ds, want_schema = dataset_versions(version, manifest_path)
+    schema = h5_attr(p, "schema_version")
+    on_file_ds = h5_attr(p, "dataset_version")
+
+    if schema is None:
+        schema = "v3 (attr absent)"
+    elif schema != want_schema:
+        raise SystemExit(
+            "dataset-version %s expects schema_version %r but %s carries %r -- "
+            "refusing to mix samples" % (version, want_schema, p, schema))
+    if on_file_ds is not None and on_file_ds != want_ds:
+        raise SystemExit(
+            "dataset-version %s expects dataset_version %r but %s carries %r -- "
+            "refusing to mix samples" % (version, want_ds, p, on_file_ds))
+
+    prov = {"dataset_version": want_ds, "h5_path": str(p), "schema_version": str(schema),
+            "selector": version}
+    if version not in SMOKE_VERSIONS:
+        e = manifest_entry(version, manifest_path)
+        prov["expected_sha256"] = e.get("files", {}).get(option_type, {}).get("sha256")
+        prov["quote_filter"] = e.get("quote_filter")
+        prov["quote_filter_tolerance"] = e.get("quote_filter_tolerance")
+        prov["dataset_status"] = e.get("status")
+        prov["is_canonical_version"] = (want_ds == canonical_version(manifest_path))
+    else:
+        prov["is_canonical_version"] = False
+        prov["dataset_status"] = "smoke subsample; never publishable"
+    return prov
+
+
+def output_tag(version: str) -> str:
+    """Filename suffix so a v5 run cannot overwrite the v3/v4-sample outputs."""
+    return "" if version == "v3" else "_" + version
+
+
+def add_dataset_arg(ap):
+    ap.add_argument("--dataset-version", required=True, choices=DATASET_VERSION_CHOICES,
+                    help="which sample to read (REQUIRED -- no default, because a silent "
+                         "default is how stale numbers reach a manuscript). Paths, hashes "
+                         "and canonical status come from wrds_data_2020-2025/"
+                         "DATASET_MANIFEST.json; v4smoke/v5smoke are the small smoke builds.")
+
+
+def resolve_h5_path(config: dict, manifest_path=None) -> Path:
+    """The HDF5 a trained run was fed, as reachable from THIS machine.
+
+    config.json stores an absolute path from the training machine. Fall backs, in
+    order: same basename in the data dir, then the manifest file whose sha256
+    equals the config's. There is deliberately no blind fall back to the v3 file
+    (that silently swapped the sample under the eval).
+    """
     p = Path(config["h5_path"])
     if p.exists():
         return p
-    name = "deeponet_tensors_%s.h5" % config["option_type"]
-    return PROJECT_ROOT / "wrds_data_2020-2025" / name
+    local = PROJECT_ROOT / "wrds_data_2020-2025" / p.name
+    if local.exists():
+        return local
+    sha = config.get("h5_sha256")
+    if sha:
+        for ver, e in load_manifest(manifest_path).get("datasets", {}).items():
+            for opt, rec in e.get("files", {}).items():
+                if rec.get("sha256") == sha:
+                    cand = Path(rec["path"])
+                    cand = cand if cand.is_absolute() else PROJECT_ROOT / cand
+                    if cand.exists():
+                        return cand
+    raise SystemExit(
+        "CANNOT LOCATE the HDF5 this run was trained on:\n"
+        "  config.json h5_path = %s (does not exist here)\n"
+        "  no %s in wrds_data_2020-2025/, and no manifest file matches sha256 %s.\n"
+        "  Refusing to substitute a different sample."
+        % (p, p.name, str(sha)[:12] + "..." if sha else "(none recorded)"))
 
 
 # ==========================================================================
@@ -340,8 +576,14 @@ def resolve_h5_path(config: dict) -> Path:
 # eval, baselines and ablations all emit the SAME json keys)
 # ==========================================================================
 
-def compute_metrics(log_pred, log_target, T, log_m=None, n_seconds=None):
-    """All inputs 1-D numpy. Mirrors train_vol_surface.py:613-691 exactly."""
+def compute_metrics(log_pred, log_target, T, log_m=None, n_seconds=None,
+                    best_bid=None, best_offer=None):
+    """All inputs 1-D numpy. Mirrors train_vol_surface.py:613-691 exactly.
+
+    `best_bid`/`best_offer` (v4/v5 only, optional) add the quote-liquidity
+    REPORTING strata under metrics["liquidity_strata"]. They never change the
+    headline numbers and never drop a row -- see LIQUIDITY_STRATA_DOC.
+    """
     log_pred = np.asarray(log_pred, dtype=np.float64).ravel()
     log_target = np.asarray(log_target, dtype=np.float64).ravel()
     T = np.asarray(T, dtype=np.float64).ravel()
@@ -394,6 +636,22 @@ def compute_metrics(log_pred, log_target, T, log_m=None, n_seconds=None):
     }
     if n_seconds is not None and n_seconds > 0:
         metrics["throughput_contracts_per_s"] = float(n / n_seconds)
+
+    strata = liquidity_masks(best_bid, best_offer)
+    if strata:
+        # Sub-REPORT only: recompute the same schema on the subset. The metrics
+        # above are computed on ALL rows and stay untouched -- no row is dropped.
+        keep_keys = ("n_test", "r2_price", "r2_log_filtered", "r2_log_full",
+                     "rmse_log", "rmse_price", "mae_price")
+        sub = {}
+        for name, m in strata.items():
+            if not m.any():
+                sub[name] = {"n_test": 0}
+                continue
+            s = compute_metrics(log_pred[m], log_target[m], T[m])
+            sub[name] = {k: s[k] for k in keep_keys}
+        metrics["liquidity_strata"] = sub
+        metrics["liquidity_strata_note"] = LIQUIDITY_STRATA_DOC
     return metrics
 
 

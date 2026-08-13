@@ -17,6 +17,7 @@ capture.
 """
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -738,7 +739,7 @@ def get_config():
     """Return the default configuration for this script."""
     script_dir = Path(__file__).resolve().parent
     project_root = script_dir.parent.parent
-    h5_path = str(project_root / "wrds_data_2020-2025" / "deeponet_tensors_put.h5")
+    h5_path = str(project_root / "wrds_data_2020-2025" / "deeponet_tensors_put_v5.h5")
 
     return {
         "seed": 42,
@@ -762,9 +763,168 @@ def get_config():
         "modes1": 6,
         "modes2": 2,
         "option_type": "put",
-        "results_dir": str(script_dir / "results_vix_history"),
+        # Fresh v5 dir: the old results_vix_history/ dirs were trained on VVIX
+        # (mislabeled input) and are quarantined under _vix_is_vvix_LEGACY/ — never
+        # write into them again.
+        "results_dir": str(script_dir / "results_vix_history_v5"),
     }
 
+
+def _sha256_of(path):
+    """SHA-256 of a file, read in chunks (works on multi-GB HDF5)."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+EXPECTED_VIX_SHA256 = "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301"
+
+
+def add_provenance(cfg):
+    """Validate the input HDF5 really is corrected-VIX v4, then record its provenance.
+
+    This is a hard gate, not a label. The previous version hard-coded
+    "source=CBOE SPX VIX" for whatever path it was handed, so a bare run (which
+    defaulted to the v3 HDF5) would train on VVIX and stamp the output "VIX" --
+    re-creating the exact mislabel this migration exists to undo. Provenance is
+    now READ from the file's own phase1_* attrs, and any mismatch aborts before
+    training starts. v3 files have no schema_version at all, so they fail here.
+    """
+    h5 = Path(cfg["h5_path"])
+    if not h5.exists():
+        raise SystemExit(
+            f"REFUSING TO TRAIN: h5_path does not exist: {h5}\n"
+            "  Build it with pre_process_1_data_v4.py + pre_process_2_hdf5_v4.py,\n"
+            "  or pass --h5-path to an existing v4 file."
+        )
+
+    with h5py.File(h5, "r") as f:
+        attrs = dict(f.attrs)
+        dsets = set(f.keys())
+
+    def _s(key):
+        v = attrs.get(key, "")
+        return v.decode() if isinstance(v, bytes) else str(v)
+
+    schema, series = _s("schema_version"), _s("phase1_vix_source_series")
+    sha = _s("phase1_vix_sha256").lower()
+
+    if schema != "v4":
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has schema_version={schema!r}, expected 'v4'.\n"
+            "  v3 HDF5 files carry VVIX (vol-of-VIX) in `vix_history` -- the mislabeled\n"
+            "  source CSV. Training on one and writing to a v5-named dir would silently\n"
+            "  re-create the VVIX-labeled-as-VIX error. Rebuild with the _v4 preprocessing\n"
+            "  scripts, or pass --h5-path to a genuine v4 file."
+        )
+    if "CBOE VIX" not in series:
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} vix source series is {series!r}, "
+            "expected it to name 'CBOE VIX'."
+        )
+    if sha != EXPECTED_VIX_SHA256:
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} was built from a VIX CSV whose sha256 is\n"
+            f"  {sha}\nbut the expected corrected-VIX CSV sha256 is\n"
+            f"  {EXPECTED_VIX_SHA256}\n"
+            "  The input data is not the reviewed CBOE VIX file."
+        )
+
+    # --- v5 sample gate (schema_version alone no longer identifies the sample) ---
+    # v4 and v5 share the tensor schema ("v4"); only `dataset_version` and the
+    # quote-filter attrs separate the unfiltered v4 sample from the canonical
+    # quote-filtered v5 one. A v4 file MUST fail here.
+    dataset_version = _s("dataset_version")
+    if dataset_version != "v5":
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has dataset_version={dataset_version!r}, expected 'v5'.\n"
+            "  v5 is the canonical sample: v4 rows whose mid/K violates the static\n"
+            "  no-arbitrage bounds (zero tolerance) are dropped -- the BS decoder cannot\n"
+            "  reach them at any sigma_hat. The unfiltered v4 files carry the same\n"
+            "  schema_version='v4' but are a DIFFERENT sample, retained as a robustness\n"
+            "  check only and noncanonical for training.\n"
+            "  Point --h5-path at deeponet_tensors_{call,put}_v5.h5."
+        )
+
+    quote_filter = _s("quote_filter")
+    if quote_filter != "static_bounds_midpoint":
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has quote_filter={quote_filter!r}, expected "
+            "'static_bounds_midpoint' -- the approved static no-arbitrage midpoint filter."
+        )
+
+    try:
+        quote_filter_tolerance = float(attrs.get("quote_filter_tolerance", float("nan")))
+    except (TypeError, ValueError):
+        quote_filter_tolerance = float("nan")
+    if quote_filter_tolerance != 0.0:
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has "
+            f"quote_filter_tolerance={quote_filter_tolerance!r}, expected 0.0 "
+            "(the approved zero-tolerance filter)."
+        )
+
+    # --- gates common to all 12 scripts (see tests/test_v5_gate_all_scripts.py) ---
+    want_cp = "C" if cfg["option_type"] == "call" else "P"
+    cp = _s("cp_flag")
+    if cp != want_cp:
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has cp_flag={cp!r} but this script prices "
+            f"{cfg['option_type']}s (expected {want_cp!r}).\n"
+            "  The call and put HDF5 files are structurally identical, so pointing a call\n"
+            "  script at the put file would otherwise train silently on the wrong side."
+        )
+
+    t_basis = _s("export_t_basis")
+    if t_basis != "settlement":
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has export_t_basis={t_basis!r}, expected "
+            "'settlement'. Maturities must be on the settlement-aware basis."
+        )
+
+    try:
+        min_mat = float(attrs.get("export_min_maturity_days", float("nan")))
+    except (TypeError, ValueError):
+        min_mat = float("nan")
+    if not abs(min_mat - 1.0) < 1e-6:
+        raise SystemExit(
+            f"REFUSING TO TRAIN: {h5.name} has export_min_maturity_days={min_mat!r}, "
+            "expected 1.0 -- the canonical paper rule (export filter T > 1 day)."
+        )
+
+    for name in ("split_id", cfg["branch_key"]):
+        if name not in dsets:
+            raise SystemExit(
+                f"REFUSING TO TRAIN: {h5.name} has no `{name}` dataset "
+                f"(present: {sorted(dsets)})."
+            )
+
+    cfg["h5_sha256"] = _sha256_of(h5)
+    cfg["dataset_version"] = dataset_version
+    cfg["quote_filter"] = quote_filter
+    cfg["quote_filter_tolerance"] = quote_filter_tolerance
+    cfg["quote_filter_bounds"] = _s("quote_filter_bounds")
+    cfg["vix_provenance"] = {
+        # Same four fields as the top-level cfg keys above, repeated here so a
+        # reader of either location sees the same sample identity (analysis/
+        # eval_to_json.py hard-fails if they ever disagree).
+        "dataset_version": dataset_version,
+        "quote_filter": quote_filter,
+        "quote_filter_tolerance": quote_filter_tolerance,
+        "quote_filter_bounds": cfg["quote_filter_bounds"],
+        "source_series": series,
+        "source_file": _s("phase1_vix_source_file"),
+        "source_columns": _s("phase1_vix_source_columns"),
+        "column_mapping": _s("phase1_vix_column_mapping"),
+        "vix_csv_sha256": sha,
+        "schema_version": schema,
+        "t_basis": _s("phase1_t_basis"),
+        "vix_raw_row_count": _s("phase1_vix_raw_row_count"),
+        "vix_usable_row_count": _s("phase1_vix_usable_row_count"),
+    }
+    return cfg
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Train FNO on puts with vix history input (V3, analytical BS)")
@@ -777,6 +937,14 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--latent-dim", type=int, default=None)
     parser.add_argument("--head-hidden", type=int, default=None)
+    parser.add_argument("--h5-path", type=str, default=None,
+                        help="Override the input HDF5 (default: deeponet_tensors_put_v5.h5). Must be a "
+                             "dataset_version=v5 (quote-filtered) file built from the corrected CBOE VIX CSV; "
+                             "a v4 (unfiltered) or v3 file is "
+                             "refused at startup (v4 = unfiltered sample, v3 = VVIX). See _vix_is_vvix_LEGACY/DEFERRED_GPU_COMMANDS.md.")
+    parser.add_argument("--results-dir", type=str, default=None,
+                        help="Override the output directory (default: results_vix_history_v5). "
+                             "Old results_vix_history/ dirs are VVIX-quarantined; do not reuse them.")
     parser.add_argument("--eval-only", action="store_true",
                         help="Skip training; load best_model.pth and run test eval + diagnostics only.")
     parser.add_argument("--stable-log", action="store_true",
@@ -807,10 +975,15 @@ if __name__ == "__main__":
         cfg["latent_dim"] = args.latent_dim
     if args.head_hidden is not None:
         cfg["head_hidden"] = args.head_hidden
+    if args.h5_path is not None:
+        cfg["h5_path"] = str(Path(args.h5_path))
+    if args.results_dir is not None:
+        cfg["results_dir"] = str(Path(args.results_dir))
     if args.eval_only:
         cfg["eval_only"] = True
     if args.stable_log:
         cfg["use_stable_log"] = True
+    add_provenance(cfg)
 
     print("Config:", json.dumps(cfg, indent=2))
     train_model(cfg)

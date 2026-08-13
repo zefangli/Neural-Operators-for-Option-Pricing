@@ -1,0 +1,2352 @@
+{
+  "call": {
+    "option_type": "call",
+    "n_rows": 4955592,
+    "n_file_rows": 4955592,
+    "subsampled": false,
+    "provenance": {
+      "dataset_version": "v4",
+      "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_call_v4.h5",
+      "schema_version": "v4"
+    },
+    "split_sizes": {
+      "train": 3360823,
+      "val": 754276,
+      "test": 840493
+    },
+    "rules": {
+      "bid_nonpos": {
+        "n_removed": 109954,
+        "pct_removed": 2.218786373050889,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 93286,
+            "pct_removed": 2.775689168992238
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 11341,
+            "pct_removed": 1.503561030710244
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 5327,
+            "pct_removed": 0.6337946895453026
+          }
+        },
+        "test_minus_train_pct": -2.1418944794469352
+      },
+      "crossed": {
+        "n_removed": 14,
+        "pct_removed": 0.0002825091331166892,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 14,
+            "pct_removed": 0.001665689065822083
+          }
+        },
+        "test_minus_train_pct": 0.001665689065822083
+      },
+      "iv_missing": {
+        "n_removed": 111614,
+        "pct_removed": 2.2522838845490103,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 65004,
+            "pct_removed": 1.934169100842264
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 25916,
+            "pct_removed": 3.435877583271906
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 20694,
+            "pct_removed": 2.4621263948658703
+          }
+        },
+        "test_minus_train_pct": 0.5279572940236064
+      },
+      "relspread_gt_0.5": {
+        "n_removed": 319960,
+        "pct_removed": 6.456544445143991,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 244980,
+            "pct_removed": 7.289285987390588
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 32305,
+            "pct_removed": 4.28291500723873
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 42675,
+            "pct_removed": 5.077377205996957
+          }
+        },
+        "test_minus_train_pct": -2.211908781393632
+      },
+      "relspread_gt_1": {
+        "n_removed": 190120,
+        "pct_removed": 3.8364740277246394,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 151274,
+            "pct_removed": 4.5010998794045385
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 19298,
+            "pct_removed": 2.5584799198171493
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 19548,
+            "pct_removed": 2.325777847049291
+          }
+        },
+        "test_minus_train_pct": -2.1753220323552473
+      },
+      "relspread_gt_2": {
+        "n_removed": 0,
+        "pct_removed": 0.0,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          }
+        },
+        "test_minus_train_pct": 0.0
+      },
+      "relspread_gt_5": {
+        "n_removed": 0,
+        "pct_removed": 0.0,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          }
+        },
+        "test_minus_train_pct": 0.0
+      },
+      "bound_violation": {
+        "n_removed": 109323,
+        "pct_removed": 2.2060532828368435,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 63100,
+            "pct_removed": 1.8775163107369832
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 25072,
+            "pct_removed": 3.323982202801097
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 21151,
+            "pct_removed": 2.5164992450859196
+          }
+        },
+        "test_minus_train_pct": 0.6389829343489364
+      },
+      "bound_violation_tol_0.0001": {
+        "n_removed": 93995,
+        "pct_removed": 1.896746140521657,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 54028,
+            "pct_removed": 1.6075824284706455
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 21958,
+            "pct_removed": 2.9111359767512157
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 18009,
+            "pct_removed": 2.142671027599278
+          }
+        },
+        "test_minus_train_pct": 0.5350885991286325
+      },
+      "bound_violation_tol_0.001": {
+        "n_removed": 21643,
+        "pct_removed": 0.4367389405746074,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 13889,
+            "pct_removed": 0.41326187067869985
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 4088,
+            "pct_removed": 0.541976676972355
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 3666,
+            "pct_removed": 0.436172579664554
+          }
+        },
+        "test_minus_train_pct": 0.022910708985854178
+      },
+      "bound_violation_tol_0.01": {
+        "n_removed": 4158,
+        "pct_removed": 0.08390521253565669,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 2839,
+            "pct_removed": 0.08447335667483828
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 879,
+            "pct_removed": 0.11653559174625734
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 440,
+            "pct_removed": 0.05235022778297975
+          }
+        },
+        "test_minus_train_pct": -0.03212312889185853
+      },
+      "combo_bid_or_crossed": {
+        "n_removed": 109968,
+        "pct_removed": 2.2190688821840054,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 93286,
+            "pct_removed": 2.775689168992238
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 11341,
+            "pct_removed": 1.503561030710244
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 5341,
+            "pct_removed": 0.6354603786111247
+          }
+        },
+        "test_minus_train_pct": -2.140228790381113
+      },
+      "combo_bid_or_crossed_or_iv": {
+        "n_removed": 220357,
+        "pct_removed": 4.446633217585306,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 157069,
+            "pct_removed": 4.6735278829024915
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 37253,
+            "pct_removed": 4.938908304122099
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 26035,
+            "pct_removed": 3.097586773476995
+          }
+        },
+        "test_minus_train_pct": -1.5759411094254965
+      },
+      "combo_bid_or_crossed_or_rs1": {
+        "n_removed": 190134,
+        "pct_removed": 3.836756536857756,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 151274,
+            "pct_removed": 4.5010998794045385
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 19298,
+            "pct_removed": 2.5584799198171493
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 19562,
+            "pct_removed": 2.3274435361151133
+          }
+        },
+        "test_minus_train_pct": -2.173656343289425
+      },
+      "combo_bid_or_crossed_or_rs0.5": {
+        "n_removed": 319974,
+        "pct_removed": 6.4568269542771075,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 244980,
+            "pct_removed": 7.289285987390588
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 32305,
+            "pct_removed": 4.28291500723873
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 42689,
+            "pct_removed": 5.079042895062779
+          }
+        },
+        "test_minus_train_pct": -2.2102430923278096
+      },
+      "combo_bid_or_crossed_or_rs1_or_iv": {
+        "n_removed": 300191,
+        "pct_removed": 6.057621369959431,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 214735,
+            "pct_removed": 6.38935760675287
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 45209,
+            "pct_removed": 5.9936946157639905
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 40247,
+            "pct_removed": 4.788499130867241
+          }
+        },
+        "test_minus_train_pct": -1.6008584758856284
+      },
+      "combo_bid_or_crossed_or_rs1_or_bound": {
+        "n_removed": 299441,
+        "pct_removed": 6.042486952113895,
+        "by_split": {
+          "train": {
+            "n": 3360823,
+            "n_removed": 214369,
+            "pct_removed": 6.378467417058262
+          },
+          "val": {
+            "n": 754276,
+            "n_removed": 44368,
+            "pct_removed": 5.882196967688221
+          },
+          "test": {
+            "n": 840493,
+            "n_removed": 40704,
+            "pct_removed": 4.84287198108729
+          }
+        },
+        "test_minus_train_pct": -1.535595435970972
+      }
+    },
+    "top20_violations": [
+      {
+        "h5_row": 2959272,
+        "date": "2022-12-12",
+        "optionid": 143930667,
+        "symbol": "SPX 241220C200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 200.0,
+        "moneyness": 19.952800750732422,
+        "log_moneyness": 2.9933695793151855,
+        "T_years": 2.0239155292510986,
+        "days_calendar": 739,
+        "r": 0.04911351948976517,
+        "q": 0.018152419477701187,
+        "best_bid": 0.0,
+        "best_offer": 3717.60009765625,
+        "mid": 1858.800048828125,
+        "normalized_price": 9.293999671936035,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 18.327678766987184,
+        "upper_bound": 19.23305778837774,
+        "bound_broken": "lower",
+        "depth": 9.033679095051149,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ],
+        "raw_csv_record": {
+          "date": "2022-12-12",
+          "symbol": "SPX 241220C200000",
+          "exdate": "2024-12-20",
+          "cp_flag": "C",
+          "strike_price": 200000,
+          "best_bid": 0.0,
+          "best_offer": 3717.6,
+          "volume": 100,
+          "open_interest": 6,
+          "impl_volatility": null,
+          "delta": null,
+          "optionid": 143930667,
+          "am_settlement": 1,
+          "exercise_style": "E",
+          "index_flag": 1,
+          "contract_size": 100,
+          "cfadj": 1,
+          "ss_flag": 0
+        }
+      },
+      {
+        "h5_row": 4735877,
+        "date": "2025-05-15",
+        "optionid": 166920819,
+        "symbol": "SPX 301220C400000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 400.0,
+        "moneyness": 14.792325019836426,
+        "log_moneyness": 2.694108486175537,
+        "T_years": 5.6019978523254395,
+        "days_calendar": 2045,
+        "r": 0.041037771850824356,
+        "q": 0.008639340288937092,
+        "best_bid": 13.0,
+        "best_offer": 5433.7001953125,
+        "mid": 2723.35009765625,
+        "normalized_price": 6.808374881744385,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "test",
+        "lower_bound": 13.298842357681183,
+        "upper_bound": 14.093460574753806,
+        "bound_broken": "lower",
+        "depth": 6.490467475936798,
+        "relative_spread": 1.9904529351469076,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 4537994,
+        "date": "2025-03-05",
+        "optionid": 155270223,
+        "symbol": "SPX 281215C400000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 400.0,
+        "moneyness": 14.606575012207031,
+        "log_moneyness": 2.681471824645996,
+        "T_years": 3.7828197479248047,
+        "days_calendar": 1381,
+        "r": 0.04534180834889412,
+        "q": 0.013826150447130203,
+        "best_bid": 0.5,
+        "best_offer": 5348.60009765625,
+        "mid": 2674.550048828125,
+        "normalized_price": 6.686375141143799,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "test",
+        "lower_bound": 13.019875044661106,
+        "upper_bound": 13.862258559166921,
+        "bound_broken": "lower",
+        "depth": 6.333499903517307,
+        "relative_spread": 1.9996261053329556,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2336079,
+        "date": "2022-01-25",
+        "optionid": 143930699,
+        "symbol": "SPX 261218C200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 200.0,
+        "moneyness": 21.782249450683594,
+        "log_moneyness": 3.0810954570770264,
+        "T_years": 4.89788818359375,
+        "days_calendar": 1788,
+        "r": 0.011385059915482998,
+        "q": 0.0064075300469994545,
+        "best_bid": 3802.5,
+        "best_offer": 3994.5,
+        "mid": 3898.5,
+        "normalized_price": 19.49250030517578,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 20.16350115833751,
+        "upper_bound": 21.109264649594795,
+        "bound_broken": "lower",
+        "depth": 0.6710008531617291,
+        "relative_spread": 0.04924971142747211,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 3898787,
+        "date": "2024-04-17",
+        "optionid": 148122067,
+        "symbol": "SPX 271217C2200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 2200.0,
+        "moneyness": 2.282822608947754,
+        "log_moneyness": 0.8254126906394958,
+        "T_years": 3.6677510738372803,
+        "days_calendar": 1339,
+        "r": 0.05114131048321724,
+        "q": 0.015310529619455338,
+        "best_bid": 0.0,
+        "best_offer": 3069.199951171875,
+        "mid": 1534.5999755859375,
+        "normalized_price": 0.6975454688072205,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "val",
+        "lower_bound": 1.329195012593462,
+        "upper_bound": 2.158163119425366,
+        "bound_broken": "lower",
+        "depth": 0.6316495437862415,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2325328,
+        "date": "2022-01-20",
+        "optionid": 143930683,
+        "symbol": "SPX 251219C200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 200.0,
+        "moneyness": 22.413650512695312,
+        "log_moneyness": 3.1096701622009277,
+        "T_years": 3.9143264293670654,
+        "days_calendar": 1429,
+        "r": 0.011084949597716331,
+        "q": 0.006100660189986229,
+        "best_bid": 3967.0,
+        "best_offer": 4159.0,
+        "mid": 4063.0,
+        "normalized_price": 20.315000534057617,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 20.92721547877255,
+        "upper_bound": 21.884753249779486,
+        "bound_broken": "lower",
+        "depth": 0.6122149447149319,
+        "relative_spread": 0.04725572237263106,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 2348443,
+        "date": "2022-01-31",
+        "optionid": 143930699,
+        "symbol": "SPX 261218C200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 200.0,
+        "moneyness": 22.577749252319336,
+        "log_moneyness": 3.116964817047119,
+        "T_years": 4.8814496994018555,
+        "days_calendar": 1782,
+        "r": 0.014108709990978241,
+        "q": 0.007775680162012577,
+        "best_bid": 3689.300048828125,
+        "best_offer": 4388.7001953125,
+        "mid": 4039.0001220703125,
+        "normalized_price": 20.19499969482422,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 20.803387796322735,
+        "upper_bound": 21.736834922378726,
+        "bound_broken": "lower",
+        "depth": 0.608388101498516,
+        "relative_spread": 0.1731617047156404,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1775420,
+        "date": "2020-12-30",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 37.32040023803711,
+        "log_moneyness": 3.619539976119995,
+        "T_years": 2.9581620693206787,
+        "days_calendar": 1080,
+        "r": 0.00235688011161983,
+        "q": 0.011411639861762524,
+        "best_bid": 3436.89990234375,
+        "best_offer": 3461.5,
+        "mid": 3449.199951171875,
+        "normalized_price": 34.492000579833984,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 35.08853263504527,
+        "upper_bound": 36.08158484993574,
+        "bound_broken": "lower",
+        "depth": 0.5965320552112843,
+        "relative_spread": 0.007132117013944654,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1828588,
+        "date": "2021-02-09",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 39.112300872802734,
+        "log_moneyness": 3.6664369106292725,
+        "T_years": 2.8458333015441895,
+        "days_calendar": 1039,
+        "r": 0.00261080008931458,
+        "q": 0.011801909655332565,
+        "best_bid": 3603.699951171875,
+        "best_offer": 3647.5,
+        "mid": 3625.5999755859375,
+        "normalized_price": 36.25600051879883,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 36.82788219725751,
+        "upper_bound": 37.82047982890775,
+        "bound_broken": "lower",
+        "depth": 0.5718816784586807,
+        "relative_spread": 0.012080772595726428,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 2371002,
+        "date": "2022-02-11",
+        "optionid": 143930699,
+        "symbol": "SPX 261218C200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 200.0,
+        "moneyness": 22.09320068359375,
+        "log_moneyness": 3.0952699184417725,
+        "T_years": 4.851312637329102,
+        "days_calendar": 1771,
+        "r": 0.015388529747724533,
+        "q": 0.007286330219358206,
+        "best_bid": 3877.39990234375,
+        "best_offer": 4069.39990234375,
+        "mid": 3973.39990234375,
+        "normalized_price": 19.867000579833984,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 20.397821857637076,
+        "upper_bound": 21.325885870835684,
+        "bound_broken": "lower",
+        "depth": 0.5308212778030921,
+        "relative_spread": 0.04832133807793846,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 2477517,
+        "date": "2022-04-11",
+        "optionid": 143930699,
+        "symbol": "SPX 261218C200000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 200.0,
+        "moneyness": 22.062650680541992,
+        "log_moneyness": 3.093886137008667,
+        "T_years": 4.689669132232666,
+        "days_calendar": 1712,
+        "r": 0.023220330476760864,
+        "q": 0.006106220185756683,
+        "best_bid": 3906.5,
+        "best_offer": 4098.5,
+        "mid": 4002.5,
+        "normalized_price": 20.012500762939453,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 20.542997550313487,
+        "upper_bound": 21.439821531198014,
+        "bound_broken": "lower",
+        "depth": 0.5304967873740338,
+        "relative_spread": 0.04797001873828857,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1853763,
+        "date": "2021-03-01",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 39.0181999206543,
+        "log_moneyness": 3.6640281677246094,
+        "T_years": 2.791038751602173,
+        "days_calendar": 1019,
+        "r": 0.0034443701151758432,
+        "q": 0.0120253199711442,
+        "best_bid": 3606.60009765625,
+        "best_offer": 3639.5,
+        "mid": 3623.050048828125,
+        "normalized_price": 36.230499267578125,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 36.73992702518435,
+        "upper_bound": 37.73035971544611,
+        "bound_broken": "lower",
+        "depth": 0.5094277576062254,
+        "relative_spread": 0.009080719807994778,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1845530,
+        "date": "2021-02-23",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 38.81370162963867,
+        "log_moneyness": 3.658773183822632,
+        "T_years": 2.8074772357940674,
+        "days_calendar": 1025,
+        "r": 0.0029069900047034025,
+        "q": 0.011739829555153847,
+        "best_bid": 3593.800048828125,
+        "best_offer": 3622.5,
+        "mid": 3608.1500244140625,
+        "normalized_price": 36.08150100708008,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 36.56340937231987,
+        "upper_bound": 37.555281277117835,
+        "bound_broken": "lower",
+        "depth": 0.4819083652397893,
+        "relative_spread": 0.007954201177246134,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1779495,
+        "date": "2021-01-04",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 37.006500244140625,
+        "log_moneyness": 3.611093521118164,
+        "T_years": 2.9444634914398193,
+        "days_calendar": 1075,
+        "r": 0.0022350300569087267,
+        "q": 0.01167391985654831,
+        "best_bid": 3404.5,
+        "best_offer": 3452.5,
+        "mid": 3428.5,
+        "normalized_price": 34.28499984741211,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 34.76263306630661,
+        "upper_bound": 35.756073709023475,
+        "bound_broken": "lower",
+        "depth": 0.4776332188945034,
+        "relative_spread": 0.014000291672743182,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1773790,
+        "date": "2020-12-29",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 37.27040100097656,
+        "log_moneyness": 3.618199348449707,
+        "T_years": 2.9609017372131348,
+        "days_calendar": 1081,
+        "r": 0.0024170500691980124,
+        "q": 0.011828980408608913,
+        "best_bid": 3427.89990234375,
+        "best_offer": 3475.89990234375,
+        "mid": 3451.89990234375,
+        "normalized_price": 34.51900100708008,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 34.994752313363335,
+        "upper_bound": 35.9876212134361,
+        "bound_broken": "lower",
+        "depth": 0.47575130628325724,
+        "relative_spread": 0.01390538583329408,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1892849,
+        "date": "2021-03-29",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 39.710899353027344,
+        "log_moneyness": 3.6816256046295166,
+        "T_years": 2.7143263816833496,
+        "days_calendar": 991,
+        "r": 0.0040496401488780975,
+        "q": 0.012109450064599514,
+        "best_bid": 3683.0,
+        "best_offer": 3709.5,
+        "mid": 3696.25,
+        "normalized_price": 36.962501525878906,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 37.43779181079938,
+        "upper_bound": 38.42685995748915,
+        "bound_broken": "lower",
+        "depth": 0.47529028492047587,
+        "relative_spread": 0.007169428474805546,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1885125,
+        "date": "2021-03-23",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 39.105201721191406,
+        "log_moneyness": 3.666255474090576,
+        "T_years": 2.730764865875244,
+        "days_calendar": 997,
+        "r": 0.0037950100377202034,
+        "q": 0.011958600021898746,
+        "best_bid": 3622.699951171875,
+        "best_offer": 3656.0,
+        "mid": 3639.3499755859375,
+        "normalized_price": 36.39350128173828,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 36.85911333998339,
+        "upper_bound": 37.848803573674786,
+        "bound_broken": "lower",
+        "depth": 0.46561205824510665,
+        "relative_spread": 0.009149999052444433,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1921869,
+        "date": "2021-04-19",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 41.632598876953125,
+        "log_moneyness": 3.7288835048675537,
+        "T_years": 2.656792163848877,
+        "days_calendar": 970,
+        "r": 0.003809859976172447,
+        "q": 0.010965550318360329,
+        "best_bid": 3885.800048828125,
+        "best_offer": 3911.0,
+        "mid": 3898.4000244140625,
+        "normalized_price": 38.98400115966797,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 39.44727684299004,
+        "upper_bound": 40.437205891958826,
+        "bound_broken": "lower",
+        "depth": 0.4632756833220739,
+        "relative_spread": 0.0064641778714493526,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1816954,
+        "date": "2021-02-01",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 37.73860168457031,
+        "log_moneyness": 3.630683422088623,
+        "T_years": 2.867751121520996,
+        "days_calendar": 1047,
+        "r": 0.0024015901144593954,
+        "q": 0.011724909767508507,
+        "best_bid": 3481.10009765625,
+        "best_offer": 3529.10009765625,
+        "mid": 3505.10009765625,
+        "normalized_price": 35.05099868774414,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 35.49763397270301,
+        "upper_bound": 36.4907704721113,
+        "bound_broken": "lower",
+        "depth": 0.44663528495886595,
+        "relative_spread": 0.013694330735974156,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 1938653,
+        "date": "2021-04-30",
+        "optionid": 137718293,
+        "symbol": "SPX 231215C100000",
+        "root": "SPX",
+        "option_type": "call",
+        "strike": 100.0,
+        "moneyness": 41.81169891357422,
+        "log_moneyness": 3.7331762313842773,
+        "T_years": 2.626655340194702,
+        "days_calendar": 959,
+        "r": 0.0038972999900579453,
+        "q": 0.011040870100259781,
+        "best_bid": 3904.10009765625,
+        "best_offer": 3932.0,
+        "mid": 3918.050048828125,
+        "normalized_price": 39.18050003051758,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 39.626734615546674,
+        "upper_bound": 40.61654997007003,
+        "bound_broken": "lower",
+        "depth": 0.44623458502909585,
+        "relative_spread": 0.007120864204400544,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      }
+    ],
+    "incremental_base": {
+      "bid_nonpos": {
+        "alone": 109954,
+        "unique_to_this_rule": 0
+      },
+      "crossed": {
+        "alone": 14,
+        "unique_to_this_rule": 14
+      },
+      "iv_missing": {
+        "alone": 111614,
+        "unique_to_this_rule": 2276
+      },
+      "relspread_gt_1": {
+        "alone": 190120,
+        "unique_to_this_rule": 79834
+      },
+      "bound_violation": {
+        "alone": 109323,
+        "unique_to_this_rule": 1526
+      },
+      "_union": {
+        "alone": 301717,
+        "unique_to_this_rule": 301717
+      }
+    },
+    "incremental_recommended": {
+      "bid_nonpos": {
+        "alone": 109954,
+        "unique_to_this_rule": 0
+      },
+      "crossed": {
+        "alone": 14,
+        "unique_to_this_rule": 14
+      },
+      "relspread_gt_1": {
+        "alone": 190120,
+        "unique_to_this_rule": 80166
+      },
+      "_union": {
+        "alone": 190134,
+        "unique_to_this_rule": 190134
+      }
+    },
+    "pairwise_overlap": {
+      "bid_nonpos & crossed": 0,
+      "bid_nonpos & iv_missing": 1225,
+      "bid_nonpos & relspread_gt_1": 109954,
+      "bid_nonpos & bound_violation": 7,
+      "crossed & iv_missing": 0,
+      "crossed & relspread_gt_1": 0,
+      "crossed & bound_violation": 0,
+      "iv_missing & relspread_gt_1": 1557,
+      "iv_missing & bound_violation": 107797,
+      "relspread_gt_1 & bound_violation": 16
+    }
+  },
+  "put": {
+    "option_type": "put",
+    "n_rows": 7991054,
+    "n_file_rows": 7991054,
+    "subsampled": false,
+    "provenance": {
+      "dataset_version": "v4",
+      "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_put_v4.h5",
+      "schema_version": "v4"
+    },
+    "split_sizes": {
+      "train": 5370629,
+      "val": 1229955,
+      "test": 1390470
+    },
+    "rules": {
+      "bid_nonpos": {
+        "n_removed": 122452,
+        "pct_removed": 1.5323635655571843,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 103355,
+            "pct_removed": 1.9244487005153401
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 13484,
+            "pct_removed": 1.0963002711481313
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 5613,
+            "pct_removed": 0.40367645472394226
+          }
+        },
+        "test_minus_train_pct": -1.520772245791398
+      },
+      "crossed": {
+        "n_removed": 17,
+        "pct_removed": 0.00021273789415013336,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 1,
+            "pct_removed": 1.8619792951626336e-05
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 16,
+            "pct_removed": 0.0011506900544420232
+          }
+        },
+        "test_minus_train_pct": 0.0011320702614903968
+      },
+      "iv_missing": {
+        "n_removed": 67442,
+        "pct_removed": 0.8439687680748998,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 48186,
+            "pct_removed": 0.8972133431670667
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 8550,
+            "pct_removed": 0.6951473834408576
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 10706,
+            "pct_removed": 0.7699554826785188
+          }
+        },
+        "test_minus_train_pct": -0.12725786048854792
+      },
+      "relspread_gt_0.5": {
+        "n_removed": 384265,
+        "pct_removed": 4.808689817388294,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 305967,
+            "pct_removed": 5.697042190030255
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 39432,
+            "pct_removed": 3.205970950156713
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 38866,
+            "pct_removed": 2.7951699784964794
+          }
+        },
+        "test_minus_train_pct": -2.901872211533776
+      },
+      "relspread_gt_1": {
+        "n_removed": 210417,
+        "pct_removed": 2.6331570278463894,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 172826,
+            "pct_removed": 3.217984336657773
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 21418,
+            "pct_removed": 1.7413645214662326
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 16173,
+            "pct_removed": 1.1631318906556776
+          }
+        },
+        "test_minus_train_pct": -2.0548524460020956
+      },
+      "relspread_gt_2": {
+        "n_removed": 0,
+        "pct_removed": 0.0,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          }
+        },
+        "test_minus_train_pct": 0.0
+      },
+      "relspread_gt_5": {
+        "n_removed": 0,
+        "pct_removed": 0.0,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          }
+        },
+        "test_minus_train_pct": 0.0
+      },
+      "bound_violation": {
+        "n_removed": 65705,
+        "pct_removed": 0.8222319608902656,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 47302,
+            "pct_removed": 0.8807534461978289
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 8312,
+            "pct_removed": 0.6757970820070653
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 10091,
+            "pct_removed": 0.7257258337109035
+          }
+        },
+        "test_minus_train_pct": -0.15502761248692543
+      },
+      "bound_violation_tol_0.0001": {
+        "n_removed": 51252,
+        "pct_removed": 0.6413672088813316,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 36481,
+            "pct_removed": 0.6792686666682803
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 6637,
+            "pct_removed": 0.5396132378826868
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 8134,
+            "pct_removed": 0.5849820564269635
+          }
+        },
+        "test_minus_train_pct": -0.09428661024131679
+      },
+      "bound_violation_tol_0.001": {
+        "n_removed": 7999,
+        "pct_removed": 0.10009943619452454,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 6718,
+            "pct_removed": 0.12508776904902572
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 455,
+            "pct_removed": 0.036993223329308794
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 826,
+            "pct_removed": 0.05940437406056945
+          }
+        },
+        "test_minus_train_pct": -0.06568339498845627
+      },
+      "bound_violation_tol_0.01": {
+        "n_removed": 25,
+        "pct_removed": 0.00031284984433843145,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 22,
+            "pct_removed": 0.0004096354449357794
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 0,
+            "pct_removed": 0.0
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 3,
+            "pct_removed": 0.00021575438520787934
+          }
+        },
+        "test_minus_train_pct": -0.00019388105972790006
+      },
+      "combo_bid_or_crossed": {
+        "n_removed": 122469,
+        "pct_removed": 1.5325763034513344,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 103356,
+            "pct_removed": 1.9244673203082916
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 13484,
+            "pct_removed": 1.0963002711481313
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 5629,
+            "pct_removed": 0.4048271447783843
+          }
+        },
+        "test_minus_train_pct": -1.5196401755299074
+      },
+      "combo_bid_or_crossed_or_iv": {
+        "n_removed": 189284,
+        "pct_removed": 2.3686987974302265,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 150933,
+            "pct_removed": 2.810341209567818
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 22023,
+            "pct_removed": 1.7905533129260827
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 16328,
+            "pct_removed": 1.1742792005580847
+          }
+        },
+        "test_minus_train_pct": -1.6360620090097333
+      },
+      "combo_bid_or_crossed_or_rs1": {
+        "n_removed": 210434,
+        "pct_removed": 2.6333697657405395,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 172827,
+            "pct_removed": 3.2180029564507246
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 21418,
+            "pct_removed": 1.7413645214662326
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 16189,
+            "pct_removed": 1.1642825807101196
+          }
+        },
+        "test_minus_train_pct": -2.053720375740605
+      },
+      "combo_bid_or_crossed_or_rs0.5": {
+        "n_removed": 384282,
+        "pct_removed": 4.808902555282445,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 305968,
+            "pct_removed": 5.697060809823207
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 39432,
+            "pct_removed": 3.205970950156713
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 38882,
+            "pct_removed": 2.7963206685509214
+          }
+        },
+        "test_minus_train_pct": -2.9007401412722857
+      },
+      "combo_bid_or_crossed_or_rs1_or_iv": {
+        "n_removed": 277012,
+        "pct_removed": 3.4665264431951033,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 220171,
+            "pct_removed": 4.099538433952522
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 29955,
+            "pct_removed": 2.4354549556691096
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 26886,
+            "pct_removed": 1.9335908002330147
+          }
+        },
+        "test_minus_train_pct": -2.165947633719507
+      },
+      "combo_bid_or_crossed_or_rs1_or_bound": {
+        "n_removed": 276124,
+        "pct_removed": 3.455414016724202,
+        "by_split": {
+          "train": {
+            "n": 5370629,
+            "n_removed": 220116,
+            "pct_removed": 4.098514345340183
+          },
+          "val": {
+            "n": 1229955,
+            "n_removed": 29730,
+            "pct_removed": 2.4171616034732977
+          },
+          "test": {
+            "n": 1390470,
+            "n_removed": 26278,
+            "pct_removed": 1.8898645781642178
+          }
+        },
+        "test_minus_train_pct": -2.208649767175965
+      }
+    },
+    "top20_violations": [
+      {
+        "h5_row": 7473859,
+        "date": "2025-04-09",
+        "optionid": 166920868,
+        "symbol": "SPX 301220P12000000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 12000.0,
+        "moneyness": 0.4547416567802429,
+        "log_moneyness": -0.7880257964134216,
+        "T_years": 5.70062780380249,
+        "days_calendar": 2081,
+        "r": 0.042918749153614044,
+        "q": 0.017910150811076164,
+        "best_bid": 2.049999952316284,
+        "best_offer": 4872.2998046875,
+        "mid": 2437.174902319908,
+        "normalized_price": 0.20309790968894958,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "test",
+        "lower_bound": 0.3723632561982116,
+        "upper_bound": 0.7829677162145657,
+        "bound_broken": "lower",
+        "depth": 0.169265346509262,
+        "relative_spread": 1.9983177243862433,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ],
+        "raw_csv_record": {
+          "date": "2025-04-09",
+          "symbol": "SPX 301220P12000000",
+          "exdate": "2030-12-20",
+          "cp_flag": "P",
+          "strike_price": 12000000,
+          "best_bid": 2.05,
+          "best_offer": 4872.3,
+          "volume": 1,
+          "open_interest": 3,
+          "impl_volatility": null,
+          "delta": null,
+          "optionid": 166920868,
+          "am_settlement": 1,
+          "exercise_style": "E",
+          "index_flag": 1,
+          "contract_size": 100,
+          "cfadj": 1,
+          "ss_flag": 0
+        }
+      },
+      {
+        "h5_row": 7452419,
+        "date": "2025-04-04",
+        "optionid": 160903844,
+        "symbol": "SPX 291221P10000000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 10000.0,
+        "moneyness": 0.5074080228805542,
+        "log_moneyness": -0.6784398555755615,
+        "T_years": 4.717066287994385,
+        "days_calendar": 1722,
+        "r": 0.04310029000043869,
+        "q": 0.017761999741196632,
+        "best_bid": 0.05000000074505806,
+        "best_offer": 3623.5,
+        "mid": 1811.7750000003725,
+        "normalized_price": 0.18117749691009521,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "test",
+        "lower_bound": 0.34940041459781135,
+        "upper_bound": 0.8160277436998373,
+        "bound_broken": "lower",
+        "depth": 0.16822291768771613,
+        "relative_spread": 1.999944805507588,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 4755358,
+        "date": "2022-12-12",
+        "optionid": 148122149,
+        "symbol": "SPX 271217P6800000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 6800.0,
+        "moneyness": 0.5868470668792725,
+        "log_moneyness": -0.5329910516738892,
+        "T_years": 5.0156965255737305,
+        "days_calendar": 1831,
+        "r": 0.04911351948976517,
+        "q": 0.027209259569644928,
+        "best_bid": 0.0,
+        "best_offer": 2047.800048828125,
+        "mid": 1023.9000244140625,
+        "normalized_price": 0.15057353675365448,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.2696748674375925,
+        "upper_bound": 0.7816575819599262,
+        "bound_broken": "lower",
+        "depth": 0.11910133068393802,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2308620,
+        "date": "2020-02-28",
+        "optionid": 131820415,
+        "symbol": "SPX 221216P3500000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 3500.0,
+        "moneyness": 0.844062864780426,
+        "log_moneyness": -0.1695283055305481,
+        "T_years": 2.79925799369812,
+        "days_calendar": 1022,
+        "r": 0.009107979945838451,
+        "q": 0.020172810181975365,
+        "best_bid": 0.0,
+        "best_offer": 735.0999755859375,
+        "mid": 367.54998779296875,
+        "normalized_price": 0.10501428693532944,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.1771063492609981,
+        "upper_bound": 0.9748266821630763,
+        "bound_broken": "lower",
+        "depth": 0.07209206232566867,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2308619,
+        "date": "2020-02-28",
+        "optionid": 131820413,
+        "symbol": "SPX 221216P3450000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 3450.0,
+        "moneyness": 0.856295645236969,
+        "log_moneyness": -0.15513958036899567,
+        "T_years": 2.79925799369812,
+        "days_calendar": 1022,
+        "r": 0.009107979945838451,
+        "q": 0.020172810181975365,
+        "best_bid": 0.0,
+        "best_offer": 699.7999877929688,
+        "mid": 349.8999938964844,
+        "normalized_price": 0.10142029076814651,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.16554519889496455,
+        "upper_bound": 0.9748266821630763,
+        "bound_broken": "lower",
+        "depth": 0.06412490812681804,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 5160167,
+        "date": "2023-05-04",
+        "optionid": 143404755,
+        "symbol": "SPX 241220P5000000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 5000.0,
+        "moneyness": 0.8122439980506897,
+        "log_moneyness": -0.2079544961452484,
+        "T_years": 1.6321346759796143,
+        "days_calendar": 596,
+        "r": 0.04904136061668396,
+        "q": 0.022050950676202774,
+        "best_bid": 0.0,
+        "best_offer": 812.7000122070312,
+        "mid": 406.3500061035156,
+        "normalized_price": 0.0812700018286705,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.13954645024964407,
+        "upper_bound": 0.9230774791883142,
+        "bound_broken": "lower",
+        "depth": 0.05827644842097357,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2308618,
+        "date": "2020-02-28",
+        "optionid": 131820411,
+        "symbol": "SPX 221216P3400000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 3400.0,
+        "moneyness": 0.868888258934021,
+        "log_moneyness": -0.14054077863693237,
+        "T_years": 2.79925799369812,
+        "days_calendar": 1022,
+        "r": 0.009107979945838451,
+        "q": 0.020172810181975365,
+        "best_bid": 0.0,
+        "best_offer": 665.7000122070312,
+        "mid": 332.8500061035156,
+        "normalized_price": 0.09789706021547318,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.15364397161714471,
+        "upper_bound": 0.9748266821630763,
+        "bound_broken": "lower",
+        "depth": 0.05574691140167154,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2308617,
+        "date": "2020-02-28",
+        "optionid": 131820410,
+        "symbol": "SPX 221216P3375000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 3375.0,
+        "moneyness": 0.8753244280815125,
+        "log_moneyness": -0.13316066563129425,
+        "T_years": 2.79925799369812,
+        "days_calendar": 1022,
+        "r": 0.009107979945838451,
+        "q": 0.020172810181975365,
+        "best_bid": 0.0,
+        "best_offer": 649.0999755859375,
+        "mid": 324.54998779296875,
+        "normalized_price": 0.09616295993328094,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.14756117469622265,
+        "upper_bound": 0.9748266821630763,
+        "bound_broken": "lower",
+        "depth": 0.05139821476294171,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 3871584,
+        "date": "2022-01-26",
+        "optionid": 139806830,
+        "symbol": "SPX 220520P4800000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 4800.0,
+        "moneyness": 0.90623539686203,
+        "log_moneyness": -0.09845616668462753,
+        "T_years": 0.31158676743507385,
+        "days_calendar": 114,
+        "r": 0.005627119913697243,
+        "q": 0.017430419102311134,
+        "best_bid": 0.0,
+        "best_offer": 500.29998779296875,
+        "mid": 250.14999389648438,
+        "normalized_price": 0.0521145835518837,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.0969213060467965,
+        "upper_bound": 0.9982482000919144,
+        "bound_broken": "lower",
+        "depth": 0.0448067224949128,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 3871580,
+        "date": "2022-01-26",
+        "optionid": 139806828,
+        "symbol": "SPX 220520P4725000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 4725.0,
+        "moneyness": 0.9206200838088989,
+        "log_moneyness": -0.08270780742168427,
+        "T_years": 0.31158676743507385,
+        "days_calendar": 114,
+        "r": 0.005627119913697243,
+        "q": 0.017430419102311134,
+        "best_bid": 0.0,
+        "best_offer": 441.20001220703125,
+        "mid": 220.60000610351562,
+        "normalized_price": 0.04668783023953438,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.0826145318328042,
+        "upper_bound": 0.9982482000919144,
+        "bound_broken": "lower",
+        "depth": 0.03592670159326983,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 2308616,
+        "date": "2020-02-28",
+        "optionid": 131820406,
+        "symbol": "SPX 221216P3275000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 3275.0,
+        "moneyness": 0.9020519256591797,
+        "log_moneyness": -0.10308321565389633,
+        "T_years": 2.79925799369812,
+        "days_calendar": 1022,
+        "r": 0.009107979945838451,
+        "q": 0.020172810181975365,
+        "best_bid": 0.0,
+        "best_offer": 585.5,
+        "mid": 292.75,
+        "normalized_price": 0.08938930928707123,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.12230112694984707,
+        "upper_bound": 0.9748266821630763,
+        "bound_broken": "lower",
+        "depth": 0.032911817662775844,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 3871578,
+        "date": "2022-01-26",
+        "optionid": 139806827,
+        "symbol": "SPX 220520P4700000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 4700.0,
+        "moneyness": 0.9255170226097107,
+        "log_moneyness": -0.0774027556180954,
+        "T_years": 0.31158676743507385,
+        "days_calendar": 114,
+        "r": 0.005627119913697243,
+        "q": 0.017430419102311134,
+        "best_bid": 0.0,
+        "best_offer": 422.79998779296875,
+        "mid": 211.39999389648438,
+        "normalized_price": 0.04497872292995453,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.07774411664603498,
+        "upper_bound": 0.9982482000919144,
+        "bound_broken": "lower",
+        "depth": 0.03276539371608045,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 1069300,
+        "date": "2018-02-05",
+        "optionid": 118703087,
+        "symbol": "SPXW 180309P2775000",
+        "root": "SPXW",
+        "option_type": "put",
+        "strike": 2775.0,
+        "moneyness": 0.9545729756355286,
+        "log_moneyness": -0.04649118706583977,
+        "T_years": 0.08767123520374298,
+        "days_calendar": 32,
+        "r": 0.017339419573545456,
+        "q": 0.20249149203300476,
+        "best_bid": 0.0,
+        "best_offer": 183.89999389648438,
+        "mid": 91.94999694824219,
+        "normalized_price": 0.03313513472676277,
+        "impl_volatility": null,
+        "am_settlement": 0,
+        "split": "train",
+        "lower_bound": 0.06070470444866527,
+        "upper_bound": 0.9984809865388763,
+        "bound_broken": "lower",
+        "depth": 0.027569569721902498,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 3871966,
+        "date": "2022-01-26",
+        "optionid": 140958529,
+        "symbol": "SPX 220715P4675000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 4675.0,
+        "moneyness": 0.9304662942886353,
+        "log_moneyness": -0.07206940650939941,
+        "T_years": 0.4650114178657532,
+        "days_calendar": 170,
+        "r": 0.006030819844454527,
+        "q": 0.014735789969563484,
+        "best_bid": 0.0,
+        "best_offer": 444.8999938964844,
+        "mid": 222.4499969482422,
+        "normalized_price": 0.04758288711309433,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.07308728349870675,
+        "upper_bound": 0.9971995285697942,
+        "bound_broken": "lower",
+        "depth": 0.025504396385612416,
+        "relative_spread": 2.0,
+        "caught_by": [
+          "bid_nonpos",
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing",
+          "relspread_gt_0.5",
+          "relspread_gt_1"
+        ]
+      },
+      {
+        "h5_row": 7759037,
+        "date": "2025-06-27",
+        "optionid": 166920930,
+        "symbol": "SPX 301220P9200000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 9200.0,
+        "moneyness": 0.6709858775138855,
+        "log_moneyness": -0.3990072011947632,
+        "T_years": 5.484189510345459,
+        "days_calendar": 2002,
+        "r": 0.041100941598415375,
+        "q": 0.019300639629364014,
+        "best_bid": 1260.0999755859375,
+        "best_offer": 1955.300048828125,
+        "mid": 1607.7000122070312,
+        "normalized_price": 0.17475000023841858,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "test",
+        "lower_bound": 0.19459984822932264,
+        "upper_bound": 0.7981926035843326,
+        "bound_broken": "lower",
+        "depth": 0.019849847990904057,
+        "relative_spread": 0.43241902591505565,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 3867912,
+        "date": "2022-01-25",
+        "optionid": 143493910,
+        "symbol": "SPX 261218P9200000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 9200.0,
+        "moneyness": 0.4735271632671356,
+        "log_moneyness": -0.7475459575653076,
+        "T_years": 4.89788818359375,
+        "days_calendar": 1788,
+        "r": 0.011385059915482998,
+        "q": 0.0064075300469994545,
+        "best_bid": 4255.7998046875,
+        "best_offer": 4447.7998046875,
+        "mid": 4351.7998046875,
+        "normalized_price": 0.4730217456817627,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.48686643240167743,
+        "upper_bound": 0.9457634912572838,
+        "bound_broken": "lower",
+        "depth": 0.013844686719914734,
+        "relative_spread": 0.044119676597528454,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 4086506,
+        "date": "2022-04-11",
+        "optionid": 145091552,
+        "symbol": "SPX 261218P10000000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 10000.0,
+        "moneyness": 0.44125300645828247,
+        "log_moneyness": -0.8181368708610535,
+        "T_years": 4.689669132232666,
+        "days_calendar": 1712,
+        "r": 0.023220330476760864,
+        "q": 0.006106220185756683,
+        "best_bid": 4448.7001953125,
+        "best_offer": 4640.7001953125,
+        "mid": 4544.7001953125,
+        "normalized_price": 0.4544700086116791,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.4680275572112064,
+        "upper_bound": 0.8968239808845262,
+        "bound_broken": "lower",
+        "depth": 0.013557548599527347,
+        "relative_spread": 0.04224701118855604,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 3810804,
+        "date": "2022-01-05",
+        "optionid": 143493910,
+        "symbol": "SPX 261218P9200000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 9200.0,
+        "moneyness": 0.5109326243400574,
+        "log_moneyness": -0.671517550945282,
+        "T_years": 4.9526824951171875,
+        "days_calendar": 1808,
+        "r": 0.010126889683306217,
+        "q": 0.004173479974269867,
+        "best_bid": 3614.60009765625,
+        "best_offer": 4433.39990234375,
+        "mid": 4024.0,
+        "normalized_price": 0.4373913109302521,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.450601653303469,
+        "upper_bound": 0.9510817392733922,
+        "bound_broken": "lower",
+        "depth": 0.013210342373216943,
+        "relative_spread": 0.20347907671160537,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 3818626,
+        "date": "2022-01-07",
+        "optionid": 143493910,
+        "symbol": "SPX 261218P9200000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 9200.0,
+        "moneyness": 0.5083728432655334,
+        "log_moneyness": -0.676540195941925,
+        "T_years": 4.947203159332275,
+        "days_calendar": 1806,
+        "r": 0.010299439541995525,
+        "q": 0.004298550076782703,
+        "best_bid": 3948.39990234375,
+        "best_offer": 4140.39990234375,
+        "mid": 4044.39990234375,
+        "normalized_price": 0.43960869312286377,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.4526469066261946,
+        "upper_bound": 0.9503229356944392,
+        "bound_broken": "lower",
+        "depth": 0.013038213503330842,
+        "relative_spread": 0.04747305030067255,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      },
+      {
+        "h5_row": 3921210,
+        "date": "2022-02-11",
+        "optionid": 145091552,
+        "symbol": "SPX 261218P10000000",
+        "root": "SPX",
+        "option_type": "put",
+        "strike": 10000.0,
+        "moneyness": 0.441864013671875,
+        "log_moneyness": -0.8167531490325928,
+        "T_years": 4.851312637329102,
+        "days_calendar": 1771,
+        "r": 0.015388529747724533,
+        "q": 0.007286330219358206,
+        "best_bid": 4804.10009765625,
+        "best_offer": 4996.10009765625,
+        "mid": 4900.10009765625,
+        "normalized_price": 0.49000999331474304,
+        "impl_volatility": null,
+        "am_settlement": 1,
+        "split": "train",
+        "lower_bound": 0.5015462957818935,
+        "upper_bound": 0.9280640131986072,
+        "bound_broken": "lower",
+        "depth": 0.011536302467150428,
+        "relative_spread": 0.03918287303800893,
+        "caught_by": [
+          "bound_violation",
+          "bound_violation_tol_0.0001",
+          "bound_violation_tol_0.001",
+          "bound_violation_tol_0.01",
+          "iv_missing"
+        ]
+      }
+    ],
+    "incremental_base": {
+      "bid_nonpos": {
+        "alone": 122452,
+        "unique_to_this_rule": 0
+      },
+      "crossed": {
+        "alone": 17,
+        "unique_to_this_rule": 17
+      },
+      "iv_missing": {
+        "alone": 67442,
+        "unique_to_this_rule": 2377
+      },
+      "relspread_gt_1": {
+        "alone": 210417,
+        "unique_to_this_rule": 87728
+      },
+      "bound_violation": {
+        "alone": 65705,
+        "unique_to_this_rule": 1489
+      },
+      "_union": {
+        "alone": 278501,
+        "unique_to_this_rule": 278501
+      }
+    },
+    "incremental_recommended": {
+      "bid_nonpos": {
+        "alone": 122452,
+        "unique_to_this_rule": 0
+      },
+      "crossed": {
+        "alone": 17,
+        "unique_to_this_rule": 17
+      },
+      "relspread_gt_1": {
+        "alone": 210417,
+        "unique_to_this_rule": 87965
+      },
+      "_union": {
+        "alone": 210434,
+        "unique_to_this_rule": 210434
+      }
+    },
+    "pairwise_overlap": {
+      "bid_nonpos & crossed": 0,
+      "bid_nonpos & iv_missing": 627,
+      "bid_nonpos & relspread_gt_1": 122452,
+      "bid_nonpos & bound_violation": 13,
+      "crossed & iv_missing": 0,
+      "crossed & relspread_gt_1": 0,
+      "crossed & bound_violation": 0,
+      "iv_missing & relspread_gt_1": 864,
+      "iv_missing & bound_violation": 64216,
+      "relspread_gt_1 & bound_violation": 15
+    }
+  }
+}

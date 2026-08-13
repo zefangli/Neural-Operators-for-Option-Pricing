@@ -1,0 +1,373 @@
+[2026-08-12 16:25:47] === data_quality (v4) ===
+====================================================================================
+CALL  test split: 840493 rows, 267 dates
+  sample: v4  schema_version=v4
+  C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_call_v4.h5
+====================================================================================
+
+(a) SETTLEMENT-DUPLICATE PAIRS  (key = date, log_m, T, r, q)
+    groups                     : 840493   max group size: 1
+    group size histogram       : {'1': 840493}
+    rows in duplicate groups   : 0.0000%  (0 groups)
+    dup groups disagreeing     : 0.0000%
+    within-group target spread : med=0.00000 p90=0.00000 p99=0.00000 max=0.00000
+    IRREDUCIBLE SSE share      : 0.000000% of total variance
+    stratum             n      %dup rows     irred.SSE%
+    d=2-7          125282         0.000%       0.00000%
+    d=8-30         298542         0.000%       0.00000%
+    d=31-90        217913         0.000%       0.00000%
+    d=91-365       169642         0.000%       0.00000%
+    d>365           29114         0.000%       0.00000%
+
+(a') SAME, KEY + am_settlement  (what retaining AM/PM separates)
+    groups                     : 840493   max group size: 1
+    group size histogram       : {'1': 840493}
+    rows in duplicate groups   : 0.0000%  (0 groups)
+    dup groups disagreeing     : 0.0000%
+    within-group target spread : med=0.00000 p90=0.00000 p99=0.00000 max=0.00000
+    IRREDUCIBLE SSE share      : 0.000000% of total variance
+    stratum             n      %dup rows     irred.SSE%
+    d=2-7          125282         0.000%       0.00000%
+    d=8-30         298542         0.000%       0.00000%
+    d=31-90        217913         0.000%       0.00000%
+    d=91-365       169642         0.000%       0.00000%
+    d>365           29114         0.000%       0.00000%
+
+    contrast: 0.0000% of rows collide on the model-input key alone, 0.0000% still collide once am_settlement is part of the key.
+
+(b) BS STATIC-BOUND VIOLATIONS
+    violations                 : 21151  (2.5165%)   lower=100.0% upper=0.0%
+    depth (V/K units)          : p25=1.795e-04  p50=4.029e-04  p75=7.886e-04  p90=1.329e-03  p99=2.034e-02  p100=6.490e+00
+    n violations deeper than           : gt_0.001=3666  gt_0.01=440  gt_0.1=5  gt_1=2
+    share of violations at T==0        : 0.00%
+    share of violations at days<=1     : 0.00%
+    bucket                          n     n_viol        %viol    med depth
+    d=2-7                      125282      13607      10.861%    3.615e-04
+    d=8-30                     298542       5143       1.723%    3.942e-04
+    d=31-90                    217913       1659       0.761%    8.491e-04
+    d=91-365                   169642        713       0.420%    3.027e-03
+    d>365                       29114         29       0.100%    3.244e-02
+    deep OTM/ITM  M<0.8         17053          0       0.000%    0.000e+00
+    0.8-0.95                   201593          0       0.000%    0.000e+00
+    near ATM 0.95-1.05         545786       6283       1.151%    2.990e-04
+    1.05-1.2                    57999       8761      15.105%    3.705e-04
+    M>1.2                       18062       6107      33.811%    7.032e-04
+
+    top 20 violations by depth:
+      row=4735877  2025-05-15 M= 14.79233 d=2045 r=0.04104 q=0.00864  V/K=6.808375  bound[13.298842,14.093461] lower depth=6.49047
+      row=4537994  2025-03-05 M= 14.60658 d=1381 r=0.04534 q=0.01383  V/K=6.686375  bound[13.019875,13.862259] lower depth=6.33350
+      row=4494936  2025-02-14 M=  1.52866 d=1771 r=0.04638 q=0.01116  V/K=0.356912  bound[0.649536,1.448067] lower depth=0.29262
+      row=4537998  2025-03-05 M=  1.46066 d=1752 r=0.04534 q=0.01365  V/K=0.319650  bound[0.563607,1.368048] lower depth=0.24396
+      row=4561419  2025-03-12 M=  1.39982 d=1745 r=0.04461 q=0.01341  V/K=0.291200  bound[0.504921,1.312882] lower depth=0.21372
+      row=4503183  2025-02-20 M=  1.52938 d=1030 r=0.04606 q=0.01067  V/K=0.510400  bound[0.605894,1.484029] lower depth=0.09549
+      row=4729267  2025-05-13 M= 29.43275 d= 248 r=0.04092 q=0.00493  V/K=28.290751  bound[28.361739,29.334351] lower depth=0.07099
+      row=4707261  2025-05-02 M=  1.13733 d=1694 r=0.03974 q=0.01236  V/K=0.173090  bound[0.242361,1.073942] lower depth=0.06927
+      row=4686711  2025-04-24 M=  1.09695 d=2066 r=0.03978 q=0.00927  V/K=0.175965  bound[0.242477,1.040872] lower depth=0.06651
+      row=4732727  2025-05-14 M= 29.46290 d= 400 r=0.04036 q=0.00656  V/K=28.235250  bound[28.295151,29.251911] lower depth=0.05990
+      row=4754648  2025-05-23 M= 29.01410 d= 238 r=0.04196 q=0.00452  V/K=27.899500  bound[27.955718,28.928760] lower depth=0.05622
+      row=4136968  2024-08-15 M= 27.71610 d=  36 r=0.05296 q=0.00924  V/K=26.644251  bound[26.696213,27.691042] lower depth=0.05196
+      row=4312169  2024-11-12 M= 29.91995 d= 129 r=0.04781 q=0.00268  V/K=28.857500  bound[28.908403,29.891682] lower depth=0.05090
+      row=4735498  2025-05-15 M= 29.58465 d= 218 r=0.04236 q=0.00789  V/K=28.420000  bound[28.470686,29.445737] lower depth=0.05069
+      row=4390017  2024-12-24 M= 30.20020 d=  24 r=0.04870 q=0.00281  V/K=29.148001  bound[29.197852,30.194691] lower depth=0.04985
+      row=4529201  2025-03-03 M=  1.46243 d=1019 r=0.04561 q=0.01478  V/K=0.474000  bound[0.522861,1.403333] lower depth=0.04886
+      row=4710165  2025-05-05 M= 28.25190 d= 256 r=0.04057 q=0.00770  V/K=27.079500  bound[27.127871,28.099845] lower depth=0.04837
+      row=4476848  2025-02-06 M= 30.41785 d=  15 r=0.04364 q=0.00381  V/K=29.367500  bound[29.414886,30.413094] lower depth=0.04739
+      row=4384789  2024-12-20 M= 29.65425 d=  91 r=0.04878 q=0.00476  V/K=28.584749  bound[28.631150,29.619062] lower depth=0.04640
+      row=4703723  2025-05-01 M=  1.12083 d=1695 r=0.03958 q=0.01451  V/K=0.169920  bound[0.215671,1.047784] lower depth=0.04575
+====================================================================================
+PUT  test split: 1390470 rows, 267 dates
+  sample: v4  schema_version=v4
+  C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_put_v4.h5
+====================================================================================
+
+(a) SETTLEMENT-DUPLICATE PAIRS  (key = date, log_m, T, r, q)
+    groups                     : 1390470   max group size: 1
+    group size histogram       : {'1': 1390470}
+    rows in duplicate groups   : 0.0000%  (0 groups)
+    dup groups disagreeing     : 0.0000%
+    within-group target spread : med=0.00000 p90=0.00000 p99=0.00000 max=0.00000
+    IRREDUCIBLE SSE share      : 0.000000% of total variance
+    stratum             n      %dup rows     irred.SSE%
+    d=2-7          189594         0.000%       0.00000%
+    d=8-30         479375         0.000%       0.00000%
+    d=31-90        374260         0.000%       0.00000%
+    d=91-365       306245         0.000%       0.00000%
+    d>365           40996         0.000%       0.00000%
+
+(a') SAME, KEY + am_settlement  (what retaining AM/PM separates)
+    groups                     : 1390470   max group size: 1
+    group size histogram       : {'1': 1390470}
+    rows in duplicate groups   : 0.0000%  (0 groups)
+    dup groups disagreeing     : 0.0000%
+    within-group target spread : med=0.00000 p90=0.00000 p99=0.00000 max=0.00000
+    IRREDUCIBLE SSE share      : 0.000000% of total variance
+    stratum             n      %dup rows     irred.SSE%
+    d=2-7          189594         0.000%       0.00000%
+    d=8-30         479375         0.000%       0.00000%
+    d=31-90        374260         0.000%       0.00000%
+    d=91-365       306245         0.000%       0.00000%
+    d>365           40996         0.000%       0.00000%
+
+    contrast: 0.0000% of rows collide on the model-input key alone, 0.0000% still collide once am_settlement is part of the key.
+
+(b) BS STATIC-BOUND VIOLATIONS
+    violations                 : 10091  (0.7257%)   lower=100.0% upper=0.0%
+    depth (V/K units)          : p25=1.324e-04  p50=3.135e-04  p75=6.085e-04  p90=9.252e-04  p99=2.537e-03  p100=1.693e-01
+    n violations deeper than           : gt_0.001=826  gt_0.01=3  gt_0.1=2  gt_1=0
+    share of violations at T==0        : 0.00%
+    share of violations at days<=1     : 0.00%
+    bucket                          n     n_viol        %viol    med depth
+    d=2-7                      189594       6689       3.528%    3.372e-04
+    d=8-30                     479375       2656       0.554%    3.021e-04
+    d=31-90                    374260        523       0.140%    1.444e-04
+    d=91-365                   306245        172       0.056%    1.113e-04
+    d>365                       40996         51       0.124%    5.482e-04
+    deep OTM/ITM  M<0.8          2905        688      23.683%    1.454e-04
+    0.8-0.95                    44938       4809      10.701%    3.349e-04
+    near ATM 0.95-1.05         583978       4594       0.787%    3.232e-04
+    1.05-1.2                   458245          0       0.000%    0.000e+00
+    M>1.2                      300404          0       0.000%    0.000e+00
+
+    top 20 violations by depth:
+      row=7473859  2025-04-09 M=  0.45474 d=2081 r=0.04292 q=0.01791  V/K=0.203098  bound[0.372363,0.782968] lower depth=0.16927
+      row=7452419  2025-04-04 M=  0.50741 d=1722 r=0.04310 q=0.01776  V/K=0.181177  bound[0.349400,0.816028] lower depth=0.16822
+      row=7759037  2025-06-27 M=  0.67099 d=2002 r=0.04110 q=0.01930  V/K=0.174750  bound[0.194600,0.798193] lower depth=0.01985
+      row=7056444  2024-12-18 M=  0.90690 d=  16 r=0.04888 q=0.00000  V/K=0.087660  bound[0.090962,0.997859] lower depth=0.00330
+      row=7056442  2024-12-18 M=  0.93955 d=  16 r=0.04888 q=0.00000  V/K=0.055080  bound[0.058314,0.997859] lower depth=0.00323
+      row=7057782  2024-12-18 M=  0.88703 d=  30 r=0.04890 q=0.00000  V/K=0.105785  bound[0.108992,0.996025] lower depth=0.00321
+      row=7057781  2024-12-18 M=  0.88838 d=  30 r=0.04890 q=0.00000  V/K=0.104463  bound[0.107650,0.996025] lower depth=0.00319
+      row=7057779  2024-12-18 M=  0.89788 d=  30 r=0.04890 q=0.00000  V/K=0.094931  bound[0.098105,0.995989] lower depth=0.00317
+      row=7056443  2024-12-18 M=  0.90900 d=  16 r=0.04888 q=0.00000  V/K=0.085689  bound[0.088856,0.997859] lower depth=0.00317
+      row=7057778  2024-12-18 M=  0.89995 d=  30 r=0.04890 q=0.00000  V/K=0.092889  bound[0.096041,0.995989] lower depth=0.00315
+      row=7057780  2024-12-18 M=  0.88972 d=  30 r=0.04890 q=0.00000  V/K=0.103121  bound[0.106268,0.995989] lower depth=0.00315
+      row=7057776  2024-12-18 M=  0.90620 d=  30 r=0.04890 q=0.00000  V/K=0.086651  bound[0.089791,0.995989] lower depth=0.00314
+      row=7057775  2024-12-18 M=  0.91752 d=  30 r=0.04890 q=0.00000  V/K=0.075367  bound[0.078464,0.995989] lower depth=0.00310
+      row=7056441  2024-12-18 M=  0.94712 d=  16 r=0.04888 q=0.00000  V/K=0.047653  bound[0.050737,0.997859] lower depth=0.00308
+      row=7057774  2024-12-18 M=  0.91896 d=  30 r=0.04890 q=0.00000  V/K=0.073951  bound[0.077028,0.995989] lower depth=0.00308
+      row=7057784  2024-12-18 M=  0.87972 d=  30 r=0.04890 q=0.00000  V/K=0.113288  bound[0.116301,0.996025] lower depth=0.00301
+      row=7057773  2024-12-18 M=  0.92330 d=  30 r=0.04890 q=0.00000  V/K=0.069686  bound[0.072693,0.995989] lower depth=0.00301
+      row=7057772  2024-12-18 M=  0.92475 d=  30 r=0.04890 q=0.00000  V/K=0.068244  bound[0.071239,0.995989] lower depth=0.00300
+      row=7057777  2024-12-18 M=  0.90341 d=  30 r=0.04890 q=0.00000  V/K=0.089638  bound[0.092616,0.996025] lower depth=0.00298
+      row=7058323  2024-12-18 M=  0.87383 d=  44 r=0.04890 q=0.00000  V/K=0.117336  bound[0.120289,0.994122] lower depth=0.00295
+
+wrote C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\results/{data_quality_v4.json,data_quality_duplicates_v4.csv,data_quality_bounds_v4.csv}
+[2026-08-12 16:26:04] data_quality exit=0
+[2026-08-12 16:26:04] === diagnostics (v4) ===
+==============================================================================
+CALL  test split: 840493 rows, 267 dates
+  sample: v4  schema_version=v4
+  C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_call_v4.h5
+==============================================================================
+
+-- A. T==0 decoder degeneracy -> hard R2(log,full) ceiling
+   T==0 rows            : 0  (0.0000% of split)
+   CEILING NOT BINDING  : no T==0 rows in this sample (v4 filters T <= 1 day at export): the decoder-degeneracy ceiling does not bind
+   irreducible SSE      : 0  (0.0000% of SST)
+   R2(log, full) CEILING: 1.000000
+   OTM subset           : n=0  0.000% of the T==0 SSE  median|err|=nan
+   ITM subset           : n=0  0.000% of the T==0 SSE
+
+-- B. strata (never conflate T==0 with 0<T<=1day)
+   basis stratum     cause                                    n   %split      %SST   irred.SSE%
+   T     T==0        decoder-degenerate (unfittable)          0   0.000%    0.000%      0.0000%
+   T     0<T<=1day   ill-conditioned (hard)                   0   0.000%    0.000%      0.0000%
+   T     T>1day      well-conditioned                    840493 100.000%  100.000%      0.0000%
+   days  d=2-3       well-conditioned                     40496   4.818%   11.038%      0.0000%
+   days  d=4-7       well-conditioned                     84786  10.088%   18.859%      0.0000%
+   days  d=8-30      well-conditioned                    298542  35.520%   32.827%      0.0000%
+   days  d=31-90     well-conditioned                    217913  25.927%   17.398%      0.0000%
+   days  d=91-365    well-conditioned                    169642  20.184%   15.486%      0.0000%
+   days  d>365       well-conditioned                     29114   3.464%    4.391%      0.0000%
+
+-- C. conditioning (vega, dlogP/dsigma) -- percentiles at the market-implied sigma
+   basis stratum             n  %solved   sigma~   vega@.20~  vega                             dlogP/dsigma
+   T     T==0                0     nan%      nan         nan  p5=nan  p50=nan  p95=nan         p5=nan  p50=nan  p95=nan
+   T     0<T<=1day           0     nan%      nan         nan  p5=nan  p50=nan  p95=nan         p5=nan  p50=nan  p95=nan
+   T     T>1day         840493   97.48%   0.1421   8.928e-02  p5=0.00213  p50=0.078  p95=0.306 p5=0.576  p50=10.4  p95=65.6
+   days  d=2-3           40496   86.00%   0.1949   7.870e-03  p5=0.000372  p50=0.00827  p95=0.0341 p5=0.0406  p50=10.9  p95=76.1
+   days  d=4-7           84786   90.59%   0.1452   2.965e-02  p5=0.000719  p50=0.0214  p95=0.0527 p5=0.158  p50=12.8  p95=88.9
+   days  d=8-30         298542   98.27%   0.1387   6.756e-02  p5=0.0025  p50=0.0598  p95=0.104 p5=0.66  p50=10.6  p95=66.4
+   days  d=31-90        217913   99.24%   0.1374   1.224e-01  p5=0.0101  p50=0.115  p95=0.177  p5=0.984  p50=10.4  p95=58.6
+   days  d=91-365       169642   99.58%   0.1442   2.199e-01  p5=0.0228  p50=0.207  p95=0.343  p5=1.42  p50=10.1  p95=56.5
+   days  d>365           29114   99.90%   0.1597   3.841e-01  p5=0.031  p50=0.381  p95=0.647   p5=1.06  p50=7.28  p95=57.2
+
+-- D. decoder degeneracy, direct check (price spread over sigma in [0.01,3])
+   T=0       max spread over sigma = 1.193e-05   max |p - intrinsic| = 1.197e-05
+   T=1/365   max spread over sigma = 6.237e-02   max |p - intrinsic| = 6.258e-02
+   T=30/365  max spread over sigma = 3.317e-01   max |p - intrinsic| = 3.328e-01
+
+==============================================================================
+PUT  test split: 1390470 rows, 267 dates
+  sample: v4  schema_version=v4
+  C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_put_v4.h5
+==============================================================================
+
+-- A. T==0 decoder degeneracy -> hard R2(log,full) ceiling
+   T==0 rows            : 0  (0.0000% of split)
+   CEILING NOT BINDING  : no T==0 rows in this sample (v4 filters T <= 1 day at export): the decoder-degeneracy ceiling does not bind
+   irreducible SSE      : 0  (0.0000% of SST)
+   R2(log, full) CEILING: 1.000000
+   OTM subset           : n=0  0.000% of the T==0 SSE  median|err|=nan
+   ITM subset           : n=0  0.000% of the T==0 SSE
+
+-- B. strata (never conflate T==0 with 0<T<=1day)
+   basis stratum     cause                                    n   %split      %SST   irred.SSE%
+   T     T==0        decoder-degenerate (unfittable)          0   0.000%    0.000%      0.0000%
+   T     0<T<=1day   ill-conditioned (hard)                   0   0.000%    0.000%      0.0000%
+   T     T>1day      well-conditioned                   1390470 100.000%  100.000%      0.0000%
+   days  d=2-3       well-conditioned                     59139   4.253%   14.348%      0.0000%
+   days  d=4-7       well-conditioned                    130455   9.382%   20.916%      0.0000%
+   days  d=8-30      well-conditioned                    479375  34.476%   29.887%      0.0000%
+   days  d=31-90     well-conditioned                    374260  26.916%   14.312%      0.0000%
+   days  d=91-365    well-conditioned                    306245  22.025%   16.435%      0.0000%
+   days  d>365       well-conditioned                     40996   2.948%    4.102%      0.0000%
+
+-- C. conditioning (vega, dlogP/dsigma) -- percentiles at the market-implied sigma
+   basis stratum             n  %solved   sigma~   vega@.20~  vega                             dlogP/dsigma
+   T     T==0                0     nan%      nan         nan  p5=nan  p50=nan  p95=nan         p5=nan  p50=nan  p95=nan
+   T     0<T<=1day           0     nan%      nan         nan  p5=nan  p50=nan  p95=nan         p5=nan  p50=nan  p95=nan
+   T     T>1day        1390470   99.27%   0.2172   5.262e-02  p5=0.00162  p50=0.0629  p95=0.281 p5=2.66  p50=13.6  p95=27.2
+   days  d=2-3           59139   94.47%   0.2973   3.354e-04  p5=0.000215  p50=0.00285  p95=0.0316 p5=0.301  p50=18.3  p95=40.3
+   days  d=4-7          130455   97.36%   0.2242   8.144e-03  p5=0.000435  p50=0.00933  p95=0.0508 p5=0.675  p50=20.1  p95=39.7
+   days  d=8-30         479375   99.45%   0.2093   4.164e-02  p5=0.00181  p50=0.0418  p95=0.1  p5=2.37  p50=15.1  p95=26.6
+   days  d=31-90        374260   99.86%   0.2132   8.711e-02  p5=0.00738  p50=0.0906  p95=0.171 p5=3.64  p50=13.5  p95=20.2
+   days  d=91-365       306245   99.94%   0.2223   1.701e-01  p5=0.0215  p50=0.182  p95=0.328  p5=4.05  p50=11.6  p95=16.5
+   days  d>365           40996   99.88%   0.2133   3.602e-01  p5=0.0749  p50=0.37  p95=0.626   p5=4.27  p50=10  p95=15.9
+
+-- D. decoder degeneracy, direct check (price spread over sigma in [0.01,3])
+   T=0       max spread over sigma = 1.193e-05   max |p - intrinsic| = 1.197e-05
+   T=1/365   max spread over sigma = 6.237e-02   max |p - intrinsic| = 6.258e-02
+   T=30/365  max spread over sigma = 3.317e-01   max |p - intrinsic| = 3.328e-01
+
+wrote C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\results/diagnostics_{tail_v4.json,strata_v4.csv,conditioning_v4.csv}
+[2026-08-12 16:26:23] diagnostics exit=0
+[2026-08-12 16:26:23] === baselines (v4) ===
+[call] test rows=840493 dates=267 2024-08-07..2025-08-29
+[call] sample=v4 schema=v4 C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_call_v4.h5
+[call] IV inversion: 2.5642% failed (7s)
+  intrinsic_zero_vol           R2(price)=0.999449 R2(log,T>1d)=-15.886622
+  const_sigma                  R2(price)=0.999772 R2(log,T>1d)=0.640497
+  const_sigma_pxfit            R2(price)=0.999799 R2(log,T>1d)=0.659045
+  surface_nearest              R2(price)=0.999851 R2(log,T>1d)=0.775087
+  surface_bilinear             R2(price)=0.999852 R2(log,T>1d)=0.776308
+  surface_spline               R2(price)=0.999852 R2(log,T>1d)=0.776355
+  prev_day_surface_bilinear    R2(price)=0.999846 R2(log,T>1d)=0.739518
+  realized_vol_21d             R2(price)=0.999533 R2(log,T>1d)=0.658381
+  realized_vol_21d_scaled      R2(price)=0.999327 R2(log,T>1d)=0.664469
+  realized_vol_21d_scaled_pxfit R2(price)=0.999688 R2(log,T>1d)=0.284912
+  ewma_vol                     R2(price)=0.999541 R2(log,T>1d)=0.665308
+  ewma_vol_scaled              R2(price)=0.999348 R2(log,T>1d)=0.667937
+  ewma_vol_scaled_pxfit        R2(price)=0.999693 R2(log,T>1d)=0.308901
+  vix_level_over_100           R2(price)=0.999734 R2(log,T>1d)=0.735714
+  vix_level_scaled             R2(price)=0.999796 R2(log,T>1d)=0.797450
+  vix_level_scaled_pxfit       R2(price)=0.999802 R2(log,T>1d)=0.801143
+[put] test rows=1390470 dates=267 2024-08-07..2025-08-29
+[put] sample=v4 schema=v4 C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_put_v4.h5
+[put] IV inversion: 0.8163% failed (6s)
+  intrinsic_zero_vol           R2(price)=0.602701 R2(log,T>1d)=-33.705253
+  const_sigma                  R2(price)=-1.920967 R2(log,T>1d)=-0.366490
+  const_sigma_pxfit            R2(price)=0.935913 R2(log,T>1d)=-3.282317
+  surface_nearest              R2(price)=0.996512 R2(log,T>1d)=-2.495218
+  surface_bilinear             R2(price)=0.996998 R2(log,T>1d)=-2.486455
+  surface_spline               R2(price)=0.997004 R2(log,T>1d)=-2.468796
+  prev_day_surface_bilinear    R2(price)=0.992318 R2(log,T>1d)=-2.481806
+  realized_vol_21d             R2(price)=0.746195 R2(log,T>1d)=-6.553066
+  realized_vol_21d_scaled      R2(price)=-12.420163 R2(log,T>1d)=-0.701548
+  realized_vol_21d_scaled_pxfit R2(price)=0.826040 R2(log,T>1d)=-8.716384
+  ewma_vol                     R2(price)=0.749455 R2(log,T>1d)=-6.618807
+  ewma_vol_scaled              R2(price)=-12.387216 R2(log,T>1d)=-0.690784
+  ewma_vol_scaled_pxfit        R2(price)=0.830578 R2(log,T>1d)=-8.892814
+  vix_level_over_100           R2(price)=0.916291 R2(log,T>1d)=-4.110030
+  vix_level_scaled             R2(price)=-3.245063 R2(log,T>1d)=-0.333645
+  vix_level_scaled_pxfit       R2(price)=0.935159 R2(log,T>1d)=-4.940858
+
+type  baseline                       branch                      R2(px)  RMSE(px)   MAE(px)  R2(log,T>1d)  RMSE(log,T>1d)   IVrmse   IVmed
+------------------------------------------------------------------------------------------------------------------------------------------
+call  intrinsic_zero_vol             all                       0.999449  1.95e-02  1.01e-02    -15.886622          9.7687      n/a     n/a
+call  const_sigma                    all                       0.999772  1.25e-02  5.58e-03      0.640497          1.4253   0.1173  0.0596
+call  const_sigma_pxfit              all                       0.999799  1.18e-02  4.36e-03      0.659045          1.3881   0.1147  0.0463
+call  surface_nearest                vol_surface               0.999851  1.01e-02  5.71e-04      0.775087          1.1274   0.0914  0.0043
+call  surface_bilinear               vol_surface               0.999852  1.01e-02  4.87e-04      0.776308          1.1243   0.0912  0.0035
+call  surface_spline                 vol_surface               0.999852  1.01e-02  4.71e-04      0.776355          1.1242   0.0912  0.0033
+call  prev_day_surface_bilinear      spot_history|vix_history    0.999846  1.03e-02  1.15e-03      0.739518          1.2133   0.0971  0.0087
+call  realized_vol_21d               spot_history              0.999533  1.79e-02  6.67e-03      0.658381          1.3894   0.1337  0.0367
+call  realized_vol_21d_scaled        spot_history              0.999327  2.15e-02  8.54e-03      0.664469          1.3770   0.1504  0.0465
+call  realized_vol_21d_scaled_pxfit  spot_history              0.999688  1.46e-02  5.80e-03      0.284912          2.0102   0.1254  0.0473
+call  ewma_vol                       spot_history              0.999541  1.78e-02  6.57e-03      0.665308          1.3753   0.1320  0.0366
+call  ewma_vol_scaled                spot_history              0.999348  2.12e-02  8.36e-03      0.667937          1.3699   0.1481  0.0458
+call  ewma_vol_scaled_pxfit          spot_history              0.999693  1.45e-02  5.66e-03      0.308901          1.9762   0.1236  0.0463
+call  vix_level_over_100             vix_history               0.999734  1.35e-02  5.21e-03      0.735714          1.2221   0.1115  0.0465
+call  vix_level_scaled               vix_history               0.999796  1.18e-02  3.09e-03      0.797450          1.0699   0.1055  0.0255
+call  vix_level_scaled_pxfit         vix_history               0.999802  1.17e-02  2.83e-03      0.801143          1.0601   0.1057  0.0214
+put   intrinsic_zero_vol             all                       0.602701  1.51e-02  9.08e-03    -33.705253         11.6961      n/a     n/a
+put   const_sigma                    all                      -1.920967  4.11e-02  2.89e-02     -0.366490          2.3209   0.2723  0.2672
+put   const_sigma_pxfit              all                       0.935913  6.08e-03  3.96e-03     -3.282317          4.1085   0.1918  0.0590
+put   surface_nearest                vol_surface               0.996512  1.42e-03  7.97e-04     -2.495218          3.7118   0.1701  0.0092
+put   surface_bilinear               vol_surface               0.996998  1.32e-03  7.10e-04     -2.486455          3.7071   0.1700  0.0071
+put   surface_spline                 vol_surface               0.997004  1.31e-03  7.02e-04     -2.468796          3.6977   0.1698  0.0070
+put   prev_day_surface_bilinear      spot_history|vix_history    0.992318  2.11e-03  1.20e-03     -2.481806          3.7047   0.1716  0.0165
+put   realized_vol_21d               spot_history              0.746195  1.21e-02  5.62e-03     -6.553066          5.4564   0.2189  0.0825
+put   realized_vol_21d_scaled        spot_history            -12.420163  8.80e-02  4.97e-02     -0.701548          2.5898   0.5409  0.3123
+put   realized_vol_21d_scaled_pxfit  spot_history              0.826040  1.00e-02  5.57e-03     -8.716384          6.1887   0.2312  0.1004
+put   ewma_vol                       spot_history              0.749455  1.20e-02  5.51e-03     -6.618807          5.4801   0.2178  0.0817
+put   ewma_vol_scaled                spot_history            -12.387216  8.79e-02  4.95e-02     -0.690784          2.5816   0.5380  0.3048
+put   ewma_vol_scaled_pxfit          spot_history              0.830578  9.89e-03  5.47e-03     -8.892814          6.2446   0.2310  0.0993
+put   vix_level_over_100             vix_history               0.916291  6.95e-03  3.35e-03     -4.110030          4.4880   0.1934  0.0472
+put   vix_level_scaled               vix_history              -3.245063  4.95e-02  3.19e-02     -0.333645          2.2928   0.3045  0.2592
+put   vix_level_scaled_pxfit         vix_history               0.935159  6.12e-03  3.12e-03     -4.940858          4.8392   0.2016  0.0511
+
+per-stratum  n / R2(price) / R2(log,full):
+  call  intrinsic_zero_vol             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999449 R2log=-15.8866 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  const_sigma                    T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999772 R2log=0.6405 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  const_sigma_pxfit              T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999799 R2log=0.6590 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  surface_nearest                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999851 R2log=0.7751 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  surface_bilinear               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999852 R2log=0.7763 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  surface_spline                 T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999852 R2log=0.7764 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  prev_day_surface_bilinear      T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999846 R2log=0.7395 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  realized_vol_21d               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999533 R2log=0.6584 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  realized_vol_21d_scaled        T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999327 R2log=0.6645 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  realized_vol_21d_scaled_pxfit  T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999688 R2log=0.2849 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  ewma_vol                       T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999541 R2log=0.6653 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  ewma_vol_scaled                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999348 R2log=0.6679 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  ewma_vol_scaled_pxfit          T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999693 R2log=0.3089 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  vix_level_over_100             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999734 R2log=0.7357 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  vix_level_scaled               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999796 R2log=0.7974 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  vix_level_scaled_pxfit         T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999802 R2log=0.8011 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   intrinsic_zero_vol             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.602701 R2log=-33.7053 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   const_sigma                    T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-1.920967 R2log=-0.3665 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   const_sigma_pxfit              T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.935913 R2log=-3.2823 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   surface_nearest                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.996512 R2log=-2.4952 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   surface_bilinear               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.996998 R2log=-2.4865 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   surface_spline                 T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.997004 R2log=-2.4688 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   prev_day_surface_bilinear      T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.992318 R2log=-2.4818 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   realized_vol_21d               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.746195 R2log=-6.5531 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   realized_vol_21d_scaled        T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-12.420163 R2log=-0.7015 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   realized_vol_21d_scaled_pxfit  T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.826040 R2log=-8.7164 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   ewma_vol                       T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.749455 R2log=-6.6188 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   ewma_vol_scaled                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-12.387216 R2log=-0.6908 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   ewma_vol_scaled_pxfit          T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.830578 R2log=-8.8928 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   vix_level_over_100             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.916291 R2log=-4.1100 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   vix_level_scaled               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-3.245063 R2log=-0.3336 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   vix_level_scaled_pxfit         T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.935159 R2log=-4.9409 | T_eq_1d: n=0 R2px=nan R2log=nan
+
+surface fixed-point diagnostics (T>0 rows):
+  call  surface_nearest                nonconv=3.3064% (27790) out-of-grid=40.4059% (delta 248187, tenor 186168) of 840493
+  call  surface_bilinear               nonconv=0.0001% (1) out-of-grid=40.3889% (delta 248042, tenor 186168) of 840493
+  call  surface_spline                 nonconv=0.0000% (0) out-of-grid=40.4252% (delta 248347, tenor 186168) of 840493
+  call  prev_day_surface_bilinear      nonconv=0.0004% (3) out-of-grid=40.5442% (delta 248452, tenor 186168) of 840493
+  put   surface_nearest                nonconv=7.6778% (106758) out-of-grid=51.8431% (delta 614288, tenor 282325) of 1390470
+  put   surface_bilinear               nonconv=0.0000% (0) out-of-grid=51.7913% (delta 613557, tenor 282325) of 1390470
+  put   surface_spline                 nonconv=0.0000% (0) out-of-grid=51.7264% (delta 612654, tenor 282325) of 1390470
+  put   prev_day_surface_bilinear      nonconv=0.0000% (0) out-of-grid=51.7211% (delta 611845, tenor 282325) of 1390470
+
+wrote C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\results\baselines_v4.json and C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\results\baselines_v4.csv
+[2026-08-12 16:27:45] baselines exit=0
+[2026-08-12 16:27:45] === ALL v4 ANALYSES DONE (rc=0) ===
+-rw-r--r-- 1 iamlz 197609  38094 Aug 12 16:27 results/baselines_v4.csv
+-rw-r--r-- 1 iamlz 197609 106490 Aug 12 16:27 results/baselines_v4.json
+-rw-r--r-- 1 iamlz 197609  10567 Aug 12 16:26 results/data_quality_bounds_v4.csv
+-rw-r--r-- 1 iamlz 197609   3282 Aug 12 16:26 results/data_quality_duplicates_v4.csv
+-rw-r--r-- 1 iamlz 197609  35078 Aug 12 16:26 results/data_quality_v4.json
+-rw-r--r-- 1 iamlz 197609   7881 Aug 12 16:26 results/diagnostics_conditioning_v4.csv
+-rw-r--r-- 1 iamlz 197609   3878 Aug 12 16:26 results/diagnostics_strata_v4.csv
+-rw-r--r-- 1 iamlz 197609  26126 Aug 12 16:26 results/diagnostics_tail_v4.json

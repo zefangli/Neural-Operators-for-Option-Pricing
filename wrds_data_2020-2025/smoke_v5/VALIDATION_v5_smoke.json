@@ -1,0 +1,375 @@
+{
+  "dataset_version": "v5",
+  "vix_csv_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+  "files": [
+    {
+      "file": "deeponet_tensors_call_v5_smoke.h5",
+      "option_type": "call",
+      "rows": 96028,
+      "min_maturity_days": 1.0,
+      "provenance": {
+        "schema_version": "v4",
+        "t_basis": "settlement",
+        "vix_source_series": "CBOE VIX (S&P 500 volatility index)",
+        "vix_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+        "vix_raw_row_count": "2709",
+        "vix_usable_row_count": "2706"
+      },
+      "dataset_version": "v5",
+      "quote_filter": "static_bounds_midpoint",
+      "rows_prefilter_by_split": {
+        "train": 71753,
+        "val": 9699,
+        "test": 17220
+      },
+      "rows_by_split": {
+        "train": 69680,
+        "val": 9284,
+        "test": 17064
+      },
+      "static_bounds": {
+        "rows": 96028,
+        "below_lower": 0,
+        "above_upper": 0,
+        "violations": 0,
+        "violation_pct": 0.0,
+        "max_gap": 0.0
+      },
+      "nonfinite": {},
+      "min_T_days": 1.7291666311211884,
+      "max_T_days": 1088.7291383743286,
+      "splits": {
+        "train": {
+          "rows": 69680,
+          "n_dates": 48,
+          "first": "2019-12-02",
+          "last": "2020-02-10"
+        },
+        "val": {
+          "rows": 9284,
+          "n_dates": 6,
+          "first": "2020-02-11",
+          "last": "2020-02-19"
+        },
+        "test": {
+          "rows": 17064,
+          "n_dates": 7,
+          "first": "2020-02-20",
+          "last": "2020-02-28"
+        }
+      },
+      "duplicate_input_pct_test": 0.0,
+      "am_settlement_counts": {
+        "0": 12925,
+        "1": 4139
+      },
+      "vix_level": {
+        "min": 12.100000381469727,
+        "median": 14.5600004196167,
+        "max": 40.11000061035156
+      },
+      "parquet_rows_all_types": 277616,
+      "parquet_parts": 2,
+      "sha256": "9f9262cc146865499e6e994e7fd68a19b11228db2c5a958f846ac02863ffdb61"
+    },
+    {
+      "file": "deeponet_tensors_put_v5_smoke.h5",
+      "option_type": "put",
+      "rows": 168409,
+      "min_maturity_days": 1.0,
+      "provenance": {
+        "schema_version": "v4",
+        "t_basis": "settlement",
+        "vix_source_series": "CBOE VIX (S&P 500 volatility index)",
+        "vix_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+        "vix_raw_row_count": "2709",
+        "vix_usable_row_count": "2706"
+      },
+      "dataset_version": "v5",
+      "quote_filter": "static_bounds_midpoint",
+      "rows_prefilter_by_split": {
+        "train": 124469,
+        "val": 16920,
+        "test": 28076
+      },
+      "rows_by_split": {
+        "train": 124082,
+        "val": 16891,
+        "test": 27436
+      },
+      "static_bounds": {
+        "rows": 168409,
+        "below_lower": 0,
+        "above_upper": 0,
+        "violations": 0,
+        "violation_pct": 0.0,
+        "max_gap": 0.0
+      },
+      "nonfinite": {},
+      "min_T_days": 1.7291666311211884,
+      "max_T_days": 1088.7291383743286,
+      "splits": {
+        "train": {
+          "rows": 124082,
+          "n_dates": 48,
+          "first": "2019-12-02",
+          "last": "2020-02-10"
+        },
+        "val": {
+          "rows": 16891,
+          "n_dates": 6,
+          "first": "2020-02-11",
+          "last": "2020-02-19"
+        },
+        "test": {
+          "rows": 27436,
+          "n_dates": 7,
+          "first": "2020-02-20",
+          "last": "2020-02-28"
+        }
+      },
+      "duplicate_input_pct_test": 0.0,
+      "am_settlement_counts": {
+        "0": 19762,
+        "1": 7674
+      },
+      "vix_level": {
+        "min": 12.100000381469727,
+        "median": 14.520000457763672,
+        "max": 40.11000061035156
+      },
+      "parquet_rows_all_types": 277616,
+      "parquet_parts": 2,
+      "sha256": "b8a620b57afdb03f976181db73051aa9c4ea663fadc9dabfa304b5d7a5e81545"
+    }
+  ],
+  "checks": [
+    {
+      "check": "VIX CSV sha256 matches reviewed file",
+      "pass": true,
+      "detail": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301"
+    },
+    {
+      "check": "call: schema_version == v4",
+      "pass": true,
+      "detail": "v4"
+    },
+    {
+      "check": "call: settlement basis recorded",
+      "pass": true,
+      "detail": "settlement"
+    },
+    {
+      "check": "call: maturity threshold recorded",
+      "pass": true,
+      "detail": "1.0"
+    },
+    {
+      "check": "call: VIX source is CBOE VIX",
+      "pass": true,
+      "detail": "CBOE VIX (S&P 500 volatility index)"
+    },
+    {
+      "check": "call: VIX CSV sha matches reviewed file",
+      "pass": true,
+      "detail": "e2f18c516c9d48fb..."
+    },
+    {
+      "check": "call: dataset_version == v5",
+      "pass": true,
+      "detail": "v5"
+    },
+    {
+      "check": "call: quote_filter recorded",
+      "pass": true,
+      "detail": "static_bounds_midpoint"
+    },
+    {
+      "check": "call: quote_filter_tolerance == 0",
+      "pass": true,
+      "detail": "0.0"
+    },
+    {
+      "check": "call: bound convention documented",
+      "pass": true,
+      "detail": "normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(..."
+    },
+    {
+      "check": "call: pre/post filter counts recorded and consistent",
+      "pass": true,
+      "detail": "98672 -> 96028 (2.6796% removed)"
+    },
+    {
+      "check": "call: lineage recorded",
+      "pass": true,
+      "detail": "deeponet_tensors_call_v4_smoke.h5 f26b2b05d8aab678..."
+    },
+    {
+      "check": "call: zero static-bound violations survive the filter",
+      "pass": true,
+      "detail": "0 rows (below 0, above 0), max gap 0.000e+00"
+    },
+    {
+      "check": "call: all required datasets present",
+      "pass": true,
+      "detail": "all present"
+    },
+    {
+      "check": "call: no NaN/Inf in float datasets",
+      "pass": true,
+      "detail": "clean"
+    },
+    {
+      "check": "call: every T > 1.0 days",
+      "pass": true,
+      "detail": "min = 1.7292 days"
+    },
+    {
+      "check": "call: no T <= 0 rows",
+      "pass": true,
+      "detail": "min = 1.729167"
+    },
+    {
+      "check": "call: split ids are exactly {0,1,2}",
+      "pass": true,
+      "detail": "[0, 1, 2]"
+    },
+    {
+      "check": "call: no date appears in two splits",
+      "pass": true,
+      "detail": "0 overlapping"
+    },
+    {
+      "check": "call: splits are time-ordered",
+      "pass": true,
+      "detail": "2020-02-10 < 2020-02-11 .. 2020-02-28"
+    },
+    {
+      "check": "call: duplicate-input rate ~0% (v3 was 17.8/19.8%)",
+      "pass": true,
+      "detail": "0.0000% (0 rows)"
+    },
+    {
+      "check": "call: vix_level in VIX range (not VVIX)",
+      "pass": true,
+      "detail": "min 12.10 / med 14.56 / max 40.11"
+    },
+    {
+      "check": "call: vix_level matches raw CSV (early/mid/late)",
+      "pass": true,
+      "detail": "max |diff| = 6.10e-07"
+    },
+    {
+      "check": "put: schema_version == v4",
+      "pass": true,
+      "detail": "v4"
+    },
+    {
+      "check": "put: settlement basis recorded",
+      "pass": true,
+      "detail": "settlement"
+    },
+    {
+      "check": "put: maturity threshold recorded",
+      "pass": true,
+      "detail": "1.0"
+    },
+    {
+      "check": "put: VIX source is CBOE VIX",
+      "pass": true,
+      "detail": "CBOE VIX (S&P 500 volatility index)"
+    },
+    {
+      "check": "put: VIX CSV sha matches reviewed file",
+      "pass": true,
+      "detail": "e2f18c516c9d48fb..."
+    },
+    {
+      "check": "put: dataset_version == v5",
+      "pass": true,
+      "detail": "v5"
+    },
+    {
+      "check": "put: quote_filter recorded",
+      "pass": true,
+      "detail": "static_bounds_midpoint"
+    },
+    {
+      "check": "put: quote_filter_tolerance == 0",
+      "pass": true,
+      "detail": "0.0"
+    },
+    {
+      "check": "put: bound convention documented",
+      "pass": true,
+      "detail": "normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(..."
+    },
+    {
+      "check": "put: pre/post filter counts recorded and consistent",
+      "pass": true,
+      "detail": "169465 -> 168409 (0.6231% removed)"
+    },
+    {
+      "check": "put: lineage recorded",
+      "pass": true,
+      "detail": "deeponet_tensors_put_v4_smoke.h5 05397972cc6f91f2..."
+    },
+    {
+      "check": "put: zero static-bound violations survive the filter",
+      "pass": true,
+      "detail": "0 rows (below 0, above 0), max gap 0.000e+00"
+    },
+    {
+      "check": "put: all required datasets present",
+      "pass": true,
+      "detail": "all present"
+    },
+    {
+      "check": "put: no NaN/Inf in float datasets",
+      "pass": true,
+      "detail": "clean"
+    },
+    {
+      "check": "put: every T > 1.0 days",
+      "pass": true,
+      "detail": "min = 1.7292 days"
+    },
+    {
+      "check": "put: no T <= 0 rows",
+      "pass": true,
+      "detail": "min = 1.729167"
+    },
+    {
+      "check": "put: split ids are exactly {0,1,2}",
+      "pass": true,
+      "detail": "[0, 1, 2]"
+    },
+    {
+      "check": "put: no date appears in two splits",
+      "pass": true,
+      "detail": "0 overlapping"
+    },
+    {
+      "check": "put: splits are time-ordered",
+      "pass": true,
+      "detail": "2020-02-10 < 2020-02-11 .. 2020-02-28"
+    },
+    {
+      "check": "put: duplicate-input rate ~0% (v3 was 17.8/19.8%)",
+      "pass": true,
+      "detail": "0.0000% (0 rows)"
+    },
+    {
+      "check": "put: vix_level in VIX range (not VVIX)",
+      "pass": true,
+      "detail": "min 12.10 / med 14.52 / max 40.11"
+    },
+    {
+      "check": "put: vix_level matches raw CSV (early/mid/late)",
+      "pass": true,
+      "detail": "max |diff| = 6.10e-07"
+    }
+  ],
+  "n_checks": 45,
+  "n_failed": 0
+}

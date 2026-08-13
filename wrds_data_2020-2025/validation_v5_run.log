@@ -1,0 +1,71 @@
+=== raw VIX CSV ===
+  [PASS] VIX CSV sha256 matches reviewed file -- e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301
+
+=== deeponet_tensors_call_v5.h5 (call) ===
+  [PASS] call: schema_version == v4 -- v4
+  [PASS] call: settlement basis recorded -- settlement
+  [PASS] call: maturity threshold recorded -- 1.0
+  [PASS] call: VIX source is CBOE VIX -- CBOE VIX (S&P 500 volatility index)
+  [PASS] call: VIX CSV sha matches reviewed file -- e2f18c516c9d48fb...
+  [PASS] call: dataset_version == v5 -- v5
+  [PASS] call: quote_filter recorded -- static_bounds_midpoint
+  [PASS] call: quote_filter_tolerance == 0
+  [PASS] call: bound convention documented -- normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(...
+  [PASS] call: pre/post filter counts recorded and consistent -- 4955592 -> 4846268 (2.2061% removed)
+  [PASS] call: lineage recorded -- deeponet_tensors_call_v4.h5 5f1c42aa2cc125fa...
+      static bounds: 0 violations (0.0000%), max gap 0.000e+00
+  [PASS] call: zero static-bound violations survive the filter -- 0 rows (below 0, above 0), max gap 0.000e+00
+  [PASS] call: all required datasets present -- all present
+  [PASS] call: no NaN/Inf in float datasets -- clean
+  [PASS] call: every T > 1.0 days -- min = 1.7292 days
+  [PASS] call: no T <= 0 rows -- min = 1.729167
+  [PASS] call: split ids are exactly {0,1,2} -- [0, 1, 2]
+      train  3,297,722 rows  2128 dates  2015-02-02 .. 2023-07-17
+      val      729,204 rows   266 dates  2023-07-18 .. 2024-08-06
+      test     819,342 rows   267 dates  2024-08-07 .. 2025-08-29
+  [PASS] call: no date appears in two splits -- 0 overlapping
+  [PASS] call: splits are time-ordered -- 2023-07-17 < 2023-07-18 .. 2025-08-29
+  [PASS] call: duplicate-input rate ~0% (v3 was 17.8/19.8%) -- 0.0000% (0 rows)
+  [PASS] call: vix_level in VIX range (not VVIX) -- min 9.14 / med 18.00 / max 82.69
+      2015-02-02: hdf5 19.4300 vs csv 19.4300
+      2020-05-14: hdf5 32.6100 vs csv 32.6100
+      2025-08-29: hdf5 15.3600 vs csv 15.3600
+  [PASS] call: vix_level matches raw CSV (early/mid/late) -- max |diff| = 6.10e-07
+      parquet: 43 parts, 13,595,211 rows (both types, pre-maturity-cut)
+      sha256: ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153
+
+=== deeponet_tensors_put_v5.h5 (put) ===
+  [PASS] put: schema_version == v4 -- v4
+  [PASS] put: settlement basis recorded -- settlement
+  [PASS] put: maturity threshold recorded -- 1.0
+  [PASS] put: VIX source is CBOE VIX -- CBOE VIX (S&P 500 volatility index)
+  [PASS] put: VIX CSV sha matches reviewed file -- e2f18c516c9d48fb...
+  [PASS] put: dataset_version == v5 -- v5
+  [PASS] put: quote_filter recorded -- static_bounds_midpoint
+  [PASS] put: quote_filter_tolerance == 0
+  [PASS] put: bound convention documented -- normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(...
+  [PASS] put: pre/post filter counts recorded and consistent -- 7991054 -> 7925349 (0.8222% removed)
+  [PASS] put: lineage recorded -- deeponet_tensors_put_v4.h5 2ba5b13b0beb374d...
+      static bounds: 0 violations (0.0000%), max gap 0.000e+00
+  [PASS] put: zero static-bound violations survive the filter -- 0 rows (below 0, above 0), max gap 0.000e+00
+  [PASS] put: all required datasets present -- all present
+  [PASS] put: no NaN/Inf in float datasets -- clean
+  [PASS] put: every T > 1.0 days -- min = 1.7292 days
+  [PASS] put: no T <= 0 rows -- min = 1.729167
+  [PASS] put: split ids are exactly {0,1,2} -- [0, 1, 2]
+      train  5,323,327 rows  2128 dates  2015-02-02 .. 2023-07-17
+      val    1,221,643 rows   266 dates  2023-07-18 .. 2024-08-06
+      test   1,380,379 rows   267 dates  2024-08-07 .. 2025-08-29
+  [PASS] put: no date appears in two splits -- 0 overlapping
+  [PASS] put: splits are time-ordered -- 2023-07-17 < 2023-07-18 .. 2025-08-29
+  [PASS] put: duplicate-input rate ~0% (v3 was 17.8/19.8%) -- 0.0000% (0 rows)
+  [PASS] put: vix_level in VIX range (not VVIX) -- min 9.14 / med 17.48 / max 82.69
+      2015-02-02: hdf5 19.4300 vs csv 19.4300
+      2020-05-14: hdf5 32.6100 vs csv 32.6100
+      2025-08-29: hdf5 15.3600 vs csv 15.3600
+  [PASS] put: vix_level matches raw CSV (early/mid/late) -- max |diff| = 6.10e-07
+      parquet: 43 parts, 13,595,211 rows (both types, pre-maturity-cut)
+      sha256: 46f3ee9d03d3423c6330c2b35a4d09893b0f538bdc046bc1018ebab79861c756
+
+45/45 checks passed -> C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\VALIDATION_v5.json
+

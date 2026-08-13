@@ -1,0 +1,454 @@
+{
+  "pipeline_version": "v4",
+  "t_basis": "settlement",
+  "min_maturity_days": -1.0,
+  "quote_time_et": "16:00",
+  "am_settle_time_et": "09:30",
+  "pm_settle_time_et": "16:00",
+  "day_count": 365.0,
+  "lookback_days": 21,
+  "chunk_months": 3,
+  "date_start": null,
+  "date_end": null,
+  "vix_source_file": "vix_2015_2025.csv",
+  "vix_source_series": "CBOE VIX (S&P 500 volatility index)",
+  "vix_source_columns": "date,vixo,vixh,vixl,vix",
+  "vix_column_mapping": "vixo->open, vixh->high, vixl->low, vix->close",
+  "vix_sha256": "e2f18c516c9d48fb1730c2c0203fce36900c70aa0635b99e64afdde157346301",
+  "vix_raw_row_count": 2709,
+  "vix_usable_row_count": 2706,
+  "vix_date_range": "2015-01-02 .. 2025-08-29",
+  "settlement_convention": "OptionMetrics EOD quote at 16:00 ET; am_settlement==1 settles at the SOQ (open, 09:30 ET) of exdate; am_settlement==0 settles at the close (16:00 ET) of exdate. T_settlement = (cal_days*24 + settle_h - quote_h)/(24*365).",
+  "attrition": [
+    {
+      "chunk": "2015-01-01",
+      "after_joins": 96898,
+      "after_vol_surface": 96898,
+      "T_le_0": 955,
+      "T_0_to_min": 0,
+      "after_min_maturity": 96898,
+      "after_lookback_warmup": 63983,
+      "after_history": 63983
+    },
+    {
+      "chunk": "2015-04-01",
+      "after_joins": 98292,
+      "after_vol_surface": 98292,
+      "T_le_0": 894,
+      "T_0_to_min": 0,
+      "after_min_maturity": 98292,
+      "after_lookback_warmup": 98292,
+      "after_history": 98292
+    },
+    {
+      "chunk": "2015-07-01",
+      "after_joins": 131166,
+      "after_vol_surface": 131166,
+      "T_le_0": 1284,
+      "T_0_to_min": 0,
+      "after_min_maturity": 131166,
+      "after_lookback_warmup": 131166,
+      "after_history": 131166
+    },
+    {
+      "chunk": "2015-10-01",
+      "after_joins": 117273,
+      "after_vol_surface": 117273,
+      "T_le_0": 1194,
+      "T_0_to_min": 0,
+      "after_min_maturity": 117273,
+      "after_lookback_warmup": 117273,
+      "after_history": 117273
+    },
+    {
+      "chunk": "2016-01-01",
+      "after_joins": 133261,
+      "after_vol_surface": 133261,
+      "T_le_0": 1560,
+      "T_0_to_min": 0,
+      "after_min_maturity": 133261,
+      "after_lookback_warmup": 133261,
+      "after_history": 133261
+    },
+    {
+      "chunk": "2016-04-01",
+      "after_joins": 135083,
+      "after_vol_surface": 135083,
+      "T_le_0": 2044,
+      "T_0_to_min": 0,
+      "after_min_maturity": 135083,
+      "after_lookback_warmup": 135083,
+      "after_history": 135083
+    },
+    {
+      "chunk": "2016-07-01",
+      "after_joins": 132382,
+      "after_vol_surface": 132382,
+      "T_le_0": 2269,
+      "T_0_to_min": 0,
+      "after_min_maturity": 132382,
+      "after_lookback_warmup": 132382,
+      "after_history": 132382
+    },
+    {
+      "chunk": "2016-10-01",
+      "after_joins": 152851,
+      "after_vol_surface": 152851,
+      "T_le_0": 2643,
+      "T_0_to_min": 0,
+      "after_min_maturity": 152851,
+      "after_lookback_warmup": 152851,
+      "after_history": 152851
+    },
+    {
+      "chunk": "2017-01-01",
+      "after_joins": 155880,
+      "after_vol_surface": 155880,
+      "T_le_0": 2815,
+      "T_0_to_min": 0,
+      "after_min_maturity": 155880,
+      "after_lookback_warmup": 155880,
+      "after_history": 155880
+    },
+    {
+      "chunk": "2017-04-01",
+      "after_joins": 174534,
+      "after_vol_surface": 174534,
+      "T_le_0": 2642,
+      "T_0_to_min": 0,
+      "after_min_maturity": 174534,
+      "after_lookback_warmup": 174534,
+      "after_history": 174534
+    },
+    {
+      "chunk": "2017-07-01",
+      "after_joins": 184380,
+      "after_vol_surface": 184380,
+      "T_le_0": 2620,
+      "T_0_to_min": 0,
+      "after_min_maturity": 184380,
+      "after_lookback_warmup": 184380,
+      "after_history": 184380
+    },
+    {
+      "chunk": "2017-10-01",
+      "after_joins": 193623,
+      "after_vol_surface": 193623,
+      "T_le_0": 3201,
+      "T_0_to_min": 0,
+      "after_min_maturity": 193623,
+      "after_lookback_warmup": 193623,
+      "after_history": 193623
+    },
+    {
+      "chunk": "2018-01-01",
+      "after_joins": 243628,
+      "after_vol_surface": 243628,
+      "T_le_0": 4832,
+      "T_0_to_min": 0,
+      "after_min_maturity": 243628,
+      "after_lookback_warmup": 243628,
+      "after_history": 243628
+    },
+    {
+      "chunk": "2018-04-01",
+      "after_joins": 231674,
+      "after_vol_surface": 231674,
+      "T_le_0": 4291,
+      "T_0_to_min": 0,
+      "after_min_maturity": 231674,
+      "after_lookback_warmup": 231674,
+      "after_history": 231674
+    },
+    {
+      "chunk": "2018-07-01",
+      "after_joins": 215808,
+      "after_vol_surface": 215808,
+      "T_le_0": 3564,
+      "T_0_to_min": 0,
+      "after_min_maturity": 215808,
+      "after_lookback_warmup": 215808,
+      "after_history": 215808
+    },
+    {
+      "chunk": "2018-10-01",
+      "after_joins": 266335,
+      "after_vol_surface": 266335,
+      "T_le_0": 6009,
+      "T_0_to_min": 0,
+      "after_min_maturity": 266335,
+      "after_lookback_warmup": 266335,
+      "after_history": 266335
+    },
+    {
+      "chunk": "2019-01-01",
+      "after_joins": 225608,
+      "after_vol_surface": 225608,
+      "T_le_0": 4520,
+      "T_0_to_min": 0,
+      "after_min_maturity": 225608,
+      "after_lookback_warmup": 225608,
+      "after_history": 225608
+    },
+    {
+      "chunk": "2019-04-01",
+      "after_joins": 231130,
+      "after_vol_surface": 231130,
+      "T_le_0": 4086,
+      "T_0_to_min": 0,
+      "after_min_maturity": 231130,
+      "after_lookback_warmup": 231130,
+      "after_history": 231130
+    },
+    {
+      "chunk": "2019-07-01",
+      "after_joins": 251376,
+      "after_vol_surface": 251376,
+      "T_le_0": 4491,
+      "T_0_to_min": 0,
+      "after_min_maturity": 251376,
+      "after_lookback_warmup": 251376,
+      "after_history": 251376
+    },
+    {
+      "chunk": "2019-10-01",
+      "after_joins": 249918,
+      "after_vol_surface": 249918,
+      "T_le_0": 4347,
+      "T_0_to_min": 0,
+      "after_min_maturity": 249918,
+      "after_lookback_warmup": 249918,
+      "after_history": 249918
+    },
+    {
+      "chunk": "2020-01-01",
+      "after_joins": 353858,
+      "after_vol_surface": 353858,
+      "T_le_0": 7794,
+      "T_0_to_min": 0,
+      "after_min_maturity": 353858,
+      "after_lookback_warmup": 353858,
+      "after_history": 353858
+    },
+    {
+      "chunk": "2020-04-01",
+      "after_joins": 334034,
+      "after_vol_surface": 334034,
+      "T_le_0": 8305,
+      "T_0_to_min": 0,
+      "after_min_maturity": 334034,
+      "after_lookback_warmup": 334034,
+      "after_history": 334034
+    },
+    {
+      "chunk": "2020-07-01",
+      "after_joins": 304570,
+      "after_vol_surface": 304570,
+      "T_le_0": 7352,
+      "T_0_to_min": 0,
+      "after_min_maturity": 304570,
+      "after_lookback_warmup": 304570,
+      "after_history": 304570
+    },
+    {
+      "chunk": "2020-10-01",
+      "after_joins": 309834,
+      "after_vol_surface": 309834,
+      "T_le_0": 7641,
+      "T_0_to_min": 0,
+      "after_min_maturity": 309834,
+      "after_lookback_warmup": 309834,
+      "after_history": 309834
+    },
+    {
+      "chunk": "2021-01-01",
+      "after_joins": 320396,
+      "after_vol_surface": 320396,
+      "T_le_0": 7740,
+      "T_0_to_min": 0,
+      "after_min_maturity": 320396,
+      "after_lookback_warmup": 320396,
+      "after_history": 320396
+    },
+    {
+      "chunk": "2021-04-01",
+      "after_joins": 335674,
+      "after_vol_surface": 335674,
+      "T_le_0": 7476,
+      "T_0_to_min": 0,
+      "after_min_maturity": 335674,
+      "after_lookback_warmup": 335674,
+      "after_history": 335674
+    },
+    {
+      "chunk": "2021-07-01",
+      "after_joins": 366311,
+      "after_vol_surface": 366311,
+      "T_le_0": 7793,
+      "T_0_to_min": 0,
+      "after_min_maturity": 366311,
+      "after_lookback_warmup": 366311,
+      "after_history": 366311
+    },
+    {
+      "chunk": "2021-10-01",
+      "after_joins": 414193,
+      "after_vol_surface": 414193,
+      "T_le_0": 8750,
+      "T_0_to_min": 0,
+      "after_min_maturity": 414193,
+      "after_lookback_warmup": 414193,
+      "after_history": 414193
+    },
+    {
+      "chunk": "2022-01-01",
+      "after_joins": 447743,
+      "after_vol_surface": 447743,
+      "T_le_0": 10068,
+      "T_0_to_min": 0,
+      "after_min_maturity": 447743,
+      "after_lookback_warmup": 447743,
+      "after_history": 447743
+    },
+    {
+      "chunk": "2022-04-01",
+      "after_joins": 459260,
+      "after_vol_surface": 459260,
+      "T_le_0": 13401,
+      "T_0_to_min": 0,
+      "after_min_maturity": 459260,
+      "after_lookback_warmup": 459260,
+      "after_history": 459260
+    },
+    {
+      "chunk": "2022-07-01",
+      "after_joins": 452371,
+      "after_vol_surface": 452371,
+      "T_le_0": 13795,
+      "T_0_to_min": 0,
+      "after_min_maturity": 452371,
+      "after_lookback_warmup": 452371,
+      "after_history": 452371
+    },
+    {
+      "chunk": "2022-10-01",
+      "after_joins": 448223,
+      "after_vol_surface": 448223,
+      "T_le_0": 13863,
+      "T_0_to_min": 0,
+      "after_min_maturity": 448223,
+      "after_lookback_warmup": 448223,
+      "after_history": 448223
+    },
+    {
+      "chunk": "2023-01-01",
+      "after_joins": 460784,
+      "after_vol_surface": 460784,
+      "T_le_0": 13011,
+      "T_0_to_min": 0,
+      "after_min_maturity": 460784,
+      "after_lookback_warmup": 460784,
+      "after_history": 460784
+    },
+    {
+      "chunk": "2023-04-01",
+      "after_joins": 450422,
+      "after_vol_surface": 450422,
+      "T_le_0": 12072,
+      "T_0_to_min": 0,
+      "after_min_maturity": 450422,
+      "after_lookback_warmup": 450422,
+      "after_history": 450422
+    },
+    {
+      "chunk": "2023-07-01",
+      "after_joins": 468565,
+      "after_vol_surface": 468565,
+      "T_le_0": 12917,
+      "T_0_to_min": 0,
+      "after_min_maturity": 468565,
+      "after_lookback_warmup": 468565,
+      "after_history": 468565
+    },
+    {
+      "chunk": "2023-10-01",
+      "after_joins": 492865,
+      "after_vol_surface": 492865,
+      "T_le_0": 13804,
+      "T_0_to_min": 0,
+      "after_min_maturity": 492865,
+      "after_lookback_warmup": 492865,
+      "after_history": 492865
+    },
+    {
+      "chunk": "2024-01-01",
+      "after_joins": 487099,
+      "after_vol_surface": 487099,
+      "T_le_0": 13713,
+      "T_0_to_min": 0,
+      "after_min_maturity": 487099,
+      "after_lookback_warmup": 487099,
+      "after_history": 487099
+    },
+    {
+      "chunk": "2024-04-01",
+      "after_joins": 497230,
+      "after_vol_surface": 497230,
+      "T_le_0": 14084,
+      "T_0_to_min": 0,
+      "after_min_maturity": 497230,
+      "after_lookback_warmup": 497230,
+      "after_history": 497230
+    },
+    {
+      "chunk": "2024-07-01",
+      "after_joins": 550840,
+      "after_vol_surface": 550840,
+      "T_le_0": 16453,
+      "T_0_to_min": 0,
+      "after_min_maturity": 550840,
+      "after_lookback_warmup": 550840,
+      "after_history": 550840
+    },
+    {
+      "chunk": "2024-10-01",
+      "after_joins": 517309,
+      "after_vol_surface": 517309,
+      "T_le_0": 16763,
+      "T_0_to_min": 0,
+      "after_min_maturity": 517309,
+      "after_lookback_warmup": 517309,
+      "after_history": 517309
+    },
+    {
+      "chunk": "2025-01-01",
+      "after_joins": 565070,
+      "after_vol_surface": 565070,
+      "T_le_0": 18032,
+      "T_0_to_min": 0,
+      "after_min_maturity": 565070,
+      "after_lookback_warmup": 565070,
+      "after_history": 565070
+    },
+    {
+      "chunk": "2025-04-01",
+      "after_joins": 591257,
+      "after_vol_surface": 591257,
+      "T_le_0": 21657,
+      "T_0_to_min": 0,
+      "after_min_maturity": 591257,
+      "after_lookback_warmup": 591257,
+      "after_history": 591257
+    },
+    {
+      "chunk": "2025-07-01",
+      "after_joins": 379118,
+      "after_vol_surface": 379118,
+      "T_le_0": 11894,
+      "T_0_to_min": 0,
+      "after_min_maturity": 379118,
+      "after_lookback_warmup": 379118,
+      "after_history": 379118
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+[call] test rows=840493 dates=267 2024-08-07..2025-08-29
+[call] sample=v4 schema=v4 C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_call_v4.h5
+[call] IV inversion: 2.5642% failed (6s)
+  intrinsic_zero_vol           R2(price)=0.999449 R2(log,T>1d)=-15.886622
+  const_sigma                  R2(price)=0.999772 R2(log,T>1d)=0.640497
+  const_sigma_pxfit            R2(price)=0.999799 R2(log,T>1d)=0.659045
+  surface_nearest              R2(price)=0.999851 R2(log,T>1d)=0.775087
+  surface_bilinear             R2(price)=0.999852 R2(log,T>1d)=0.776308
+  surface_spline               R2(price)=0.999852 R2(log,T>1d)=0.776355
+  prev_day_surface_bilinear    R2(price)=0.999846 R2(log,T>1d)=0.739518
+  realized_vol_21d             R2(price)=0.999533 R2(log,T>1d)=0.658381
+  realized_vol_21d_scaled      R2(price)=0.999327 R2(log,T>1d)=0.664469
+  realized_vol_21d_scaled_pxfit R2(price)=0.999688 R2(log,T>1d)=0.284912
+  ewma_vol                     R2(price)=0.999541 R2(log,T>1d)=0.665308
+  ewma_vol_scaled              R2(price)=0.999348 R2(log,T>1d)=0.667937
+  ewma_vol_scaled_pxfit        R2(price)=0.999693 R2(log,T>1d)=0.308901
+  vix_level_over_100           R2(price)=0.999734 R2(log,T>1d)=0.735714
+  vix_level_scaled             R2(price)=0.999796 R2(log,T>1d)=0.797450
+  vix_level_scaled_pxfit       R2(price)=0.999802 R2(log,T>1d)=0.801143
+[put] test rows=1390470 dates=267 2024-08-07..2025-08-29
+[put] sample=v4 schema=v4 C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\wrds_data_2020-2025\deeponet_tensors_put_v4.h5
+[put] IV inversion: 0.8163% failed (6s)
+  intrinsic_zero_vol           R2(price)=0.602701 R2(log,T>1d)=-33.705253
+  const_sigma                  R2(price)=-1.920967 R2(log,T>1d)=-0.366490
+  const_sigma_pxfit            R2(price)=0.935913 R2(log,T>1d)=-3.282317
+  surface_nearest              R2(price)=0.996512 R2(log,T>1d)=-2.495218
+  surface_bilinear             R2(price)=0.996998 R2(log,T>1d)=-2.486455
+  surface_spline               R2(price)=0.997004 R2(log,T>1d)=-2.468796
+  prev_day_surface_bilinear    R2(price)=0.992318 R2(log,T>1d)=-2.481806
+  realized_vol_21d             R2(price)=0.746195 R2(log,T>1d)=-6.553066
+  realized_vol_21d_scaled      R2(price)=-12.420163 R2(log,T>1d)=-0.701548
+  realized_vol_21d_scaled_pxfit R2(price)=0.826040 R2(log,T>1d)=-8.716384
+  ewma_vol                     R2(price)=0.749455 R2(log,T>1d)=-6.618807
+  ewma_vol_scaled              R2(price)=-12.387216 R2(log,T>1d)=-0.690784
+  ewma_vol_scaled_pxfit        R2(price)=0.830578 R2(log,T>1d)=-8.892814
+  vix_level_over_100           R2(price)=0.916291 R2(log,T>1d)=-4.110030
+  vix_level_scaled             R2(price)=-3.245063 R2(log,T>1d)=-0.333645
+  vix_level_scaled_pxfit       R2(price)=0.935159 R2(log,T>1d)=-4.940858
+
+type  baseline                       branch         pxOK       R2(px)  RMSE(px)   MAE(px)  R2(log,T>1d)  RMSE(log,T>1d)   IVrmse   IVmed
+----------------------------------------------------------------------------------------------------------------------------------------
+call  intrinsic_zero_vol             -              yes      0.999449  1.95e-02  1.01e-02    -15.886622          9.7687      n/a     n/a
+call  const_sigma                    -              yes      0.999772  1.25e-02  5.58e-03      0.640497          1.4253   0.1173  0.0596
+call  const_sigma_pxfit              -              yes      0.999799  1.18e-02  4.36e-03      0.659045          1.3881   0.1147  0.0463
+call  surface_nearest                vol_surface    yes      0.999851  1.01e-02  5.71e-04      0.775087          1.1274   0.0914  0.0043
+call  surface_bilinear               vol_surface    yes      0.999852  1.01e-02  4.87e-04      0.776308          1.1243   0.0912  0.0035
+call  surface_spline                 vol_surface    yes      0.999852  1.01e-02  4.71e-04      0.776355          1.1242   0.0912  0.0033
+call  prev_day_surface_bilinear      -              yes      0.999846  1.03e-02  1.15e-03      0.739518          1.2133   0.0971  0.0087
+call  realized_vol_21d               spot_history   yes      0.999533  1.79e-02  6.67e-03      0.658381          1.3894   0.1337  0.0367
+call  realized_vol_21d_scaled        spot_history   yes      0.999327  2.15e-02  8.54e-03      0.664469          1.3770   0.1504  0.0465
+call  realized_vol_21d_scaled_pxfit  spot_history   yes      0.999688  1.46e-02  5.80e-03      0.284912          2.0102   0.1254  0.0473
+call  ewma_vol                       spot_history   yes      0.999541  1.78e-02  6.57e-03      0.665308          1.3753   0.1320  0.0366
+call  ewma_vol_scaled                spot_history   yes      0.999348  2.12e-02  8.36e-03      0.667937          1.3699   0.1481  0.0458
+call  ewma_vol_scaled_pxfit          spot_history   yes      0.999693  1.45e-02  5.66e-03      0.308901          1.9762   0.1236  0.0463
+call  vix_level_over_100             -              yes      0.999734  1.35e-02  5.21e-03      0.735714          1.2221   0.1115  0.0465
+call  vix_level_scaled               -              yes      0.999796  1.18e-02  3.09e-03      0.797450          1.0699   0.1055  0.0255
+call  vix_level_scaled_pxfit         -              yes      0.999802  1.17e-02  2.83e-03      0.801143          1.0601   0.1057  0.0214
+put   intrinsic_zero_vol             -              NO       0.602701  1.51e-02  9.08e-03    -33.705253         11.6961      n/a     n/a
+put   const_sigma                    -              NO      -1.920967  4.11e-02  2.89e-02     -0.366490          2.3209   0.2723  0.2672
+put   const_sigma_pxfit              -              NO       0.935913  6.08e-03  3.96e-03     -3.282317          4.1085   0.1918  0.0590
+put   surface_nearest                vol_surface    yes      0.996512  1.42e-03  7.97e-04     -2.495218          3.7118   0.1701  0.0092
+put   surface_bilinear               vol_surface    yes      0.996998  1.32e-03  7.10e-04     -2.486455          3.7071   0.1700  0.0071
+put   surface_spline                 vol_surface    yes      0.997004  1.31e-03  7.02e-04     -2.468796          3.6977   0.1698  0.0070
+put   prev_day_surface_bilinear      -              yes      0.992318  2.11e-03  1.20e-03     -2.481806          3.7047   0.1716  0.0165
+put   realized_vol_21d               spot_history   NO       0.746195  1.21e-02  5.62e-03     -6.553066          5.4564   0.2189  0.0825
+put   realized_vol_21d_scaled        spot_history   NO     -12.420163  8.80e-02  4.97e-02     -0.701548          2.5898   0.5409  0.3123
+put   realized_vol_21d_scaled_pxfit  spot_history   NO       0.826040  1.00e-02  5.57e-03     -8.716384          6.1887   0.2312  0.1004
+put   ewma_vol                       spot_history   NO       0.749455  1.20e-02  5.51e-03     -6.618807          5.4801   0.2178  0.0817
+put   ewma_vol_scaled                spot_history   NO     -12.387216  8.79e-02  4.95e-02     -0.690784          2.5816   0.5380  0.3048
+put   ewma_vol_scaled_pxfit          spot_history   NO       0.830578  9.89e-03  5.47e-03     -8.892814          6.2446   0.2310  0.0993
+put   vix_level_over_100             -              NO       0.916291  6.95e-03  3.35e-03     -4.110030          4.4880   0.1934  0.0472
+put   vix_level_scaled               -              NO      -3.245063  4.95e-02  3.19e-02     -0.333645          2.2928   0.3045  0.2592
+put   vix_level_scaled_pxfit         -              NO       0.935159  6.12e-03  3.12e-03     -4.940858          4.8392   0.2016  0.0511
+
+ranking guidance:
+  call: on this option type the best R2(log) baseline is vix_level_scaled_pxfit (log 0.8011, price 0.999802); the best price-accurate one (R2(price)>0.99) is vix_level_scaled_pxfit (log 0.8011, price 0.999802). Quote BOTH metrics -- neither alone identifies a 'best baseline'.
+  put: on this option type the best R2(log) baseline is vix_level_scaled (log -0.3336, price -3.245063); the best price-accurate one (R2(price)>0.99) is surface_spline (log -2.4688, price 0.997004). Quote BOTH metrics -- neither alone identifies a 'best baseline'.
+
+per-stratum  n / R2(price) / R2(log,full):
+  call  intrinsic_zero_vol             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999449 R2log=-15.8866 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  const_sigma                    T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999772 R2log=0.6405 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  const_sigma_pxfit              T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999799 R2log=0.6590 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  surface_nearest                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999851 R2log=0.7751 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  surface_bilinear               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999852 R2log=0.7763 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  surface_spline                 T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999852 R2log=0.7764 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  prev_day_surface_bilinear      T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999846 R2log=0.7395 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  realized_vol_21d               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999533 R2log=0.6584 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  realized_vol_21d_scaled        T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999327 R2log=0.6645 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  realized_vol_21d_scaled_pxfit  T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999688 R2log=0.2849 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  ewma_vol                       T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999541 R2log=0.6653 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  ewma_vol_scaled                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999348 R2log=0.6679 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  ewma_vol_scaled_pxfit          T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999693 R2log=0.3089 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  vix_level_over_100             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999734 R2log=0.7357 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  vix_level_scaled               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999796 R2log=0.7974 | T_eq_1d: n=0 R2px=nan R2log=nan
+  call  vix_level_scaled_pxfit         T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=840493 R2px=0.999802 R2log=0.8011 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   intrinsic_zero_vol             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.602701 R2log=-33.7053 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   const_sigma                    T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-1.920967 R2log=-0.3665 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   const_sigma_pxfit              T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.935913 R2log=-3.2823 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   surface_nearest                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.996512 R2log=-2.4952 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   surface_bilinear               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.996998 R2log=-2.4865 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   surface_spline                 T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.997004 R2log=-2.4688 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   prev_day_surface_bilinear      T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.992318 R2log=-2.4818 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   realized_vol_21d               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.746195 R2log=-6.5531 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   realized_vol_21d_scaled        T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-12.420163 R2log=-0.7015 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   realized_vol_21d_scaled_pxfit  T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.826040 R2log=-8.7164 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   ewma_vol                       T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.749455 R2log=-6.6188 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   ewma_vol_scaled                T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-12.387216 R2log=-0.6908 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   ewma_vol_scaled_pxfit          T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.830578 R2log=-8.8928 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   vix_level_over_100             T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.916291 R2log=-4.1100 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   vix_level_scaled               T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=-3.245063 R2log=-0.3336 | T_eq_1d: n=0 R2px=nan R2log=nan
+  put   vix_level_scaled_pxfit         T_eq_0: n=0 R2px=nan R2log=nan | T_gt_0_le_1d: n=0 R2px=nan R2log=nan | T_gt_1d: n=1390470 R2px=0.935159 R2log=-4.9409 | T_eq_1d: n=0 R2px=nan R2log=nan
+
+surface fixed-point diagnostics (T>0 rows):
+  call  surface_nearest                nonconv=3.3064% (27790) out-of-grid=40.4059% (delta 248187, tenor 186168) of 840493
+  call  surface_bilinear               nonconv=0.0001% (1) out-of-grid=40.3889% (delta 248042, tenor 186168) of 840493
+  call  surface_spline                 nonconv=0.0000% (0) out-of-grid=40.4252% (delta 248347, tenor 186168) of 840493
+  call  prev_day_surface_bilinear      nonconv=0.0004% (3) out-of-grid=40.5442% (delta 248452, tenor 186168) of 840493
+  put   surface_nearest                nonconv=7.6778% (106758) out-of-grid=51.8431% (delta 614288, tenor 282325) of 1390470
+  put   surface_bilinear               nonconv=0.0000% (0) out-of-grid=51.7913% (delta 613557, tenor 282325) of 1390470
+  put   surface_spline                 nonconv=0.0000% (0) out-of-grid=51.7264% (delta 612654, tenor 282325) of 1390470
+  put   prev_day_surface_bilinear      nonconv=0.0000% (0) out-of-grid=51.7211% (delta 611845, tenor 282325) of 1390470
+
+wrote C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\results\baselines_v4.json and C:\Users\iamlz\Documents\__LZF_FILEs__\DL_optionPricing\results\baselines_v4.csv
