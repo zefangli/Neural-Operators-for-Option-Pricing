@@ -236,14 +236,27 @@ def write_markdown(rows, path):
 
 
 def write_replication(all_rows, version):
-    """Seed replication summary: mean +/- sample stdev per cell, over ALL seeds.
+    """Seed replication summary: mean +/- sample stdev, vol_surface cells only.
 
     Kept in its own file on purpose -- averaging replication seeds into T1 would
     silently change what the headline number means.
+
+    Restricted to branch_key=='branch_u' (vol_surface): those are the only cells
+    with a deliberate multi-seed replication plan (seeds 42/43/44). Every
+    spot_history/vix_history cell still has exactly one seed (42) -- including
+    them here would report n_seeds=1 rows, and a naive std=0.0 for those would
+    misrepresent an UNMEASURED dispersion as a MEASURED zero. Dropped entirely
+    rather than shown with a fake number.
+
+    Defense in depth: even within vol_surface, any cell that somehow ends up
+    with fewer than 2 seeds gets std=None ("N/A" in the table), never 0.0.
     """
     by_cell = {}
     for m in all_rows:
-        by_cell.setdefault(cell(m), []).append(m)
+        c = cell(m)
+        if c[1] != "branch_u":   # vol_surface only -- see docstring
+            continue
+        by_cell.setdefault(c, []).append(m)
     out = []
     for c in sorted(by_cell, key=lambda c: (c[0], BRANCH_ORDER.get(c[1], 9), c[2])):
         ms = sorted(by_cell[c], key=lambda m: m["seed"])
@@ -252,7 +265,7 @@ def write_replication(all_rows, version):
         for k in REPL_METRICS:
             vals = [m[k] for m in ms if isinstance(m.get(k), float)]
             row[k + "_mean"] = statistics.mean(vals) if vals else float("nan")
-            row[k + "_std"] = statistics.stdev(vals) if len(vals) > 1 else 0.0
+            row[k + "_std"] = statistics.stdev(vals) if len(vals) > 1 else None
         out.append(row)
 
     write_csv(out, OUT_DIR / f"replication_seeds_{version}.csv")
@@ -262,7 +275,10 @@ def write_replication(all_rows, version):
     for r in out:
         cells = [r["option_type"], BRANCH_LABEL.get(r["branch_key"], r["branch_key"]),
                  r["arch"], r["seeds"]]
-        cells += [f"{r[k + '_mean']:.6f} +/- {r[k + '_std']:.6f}" for k in REPL_METRICS]
+        for k in REPL_METRICS:
+            sd = r[k + "_std"]
+            sd_str = "N/A" if sd is None else f"{sd:.6f}"
+            cells.append(f"{r[k + '_mean']:.6f} +/- {sd_str}")
         lines.append("| " + " | ".join(cells) + " |")
     (OUT_DIR / f"replication_seeds_{version}.md").write_text("\n".join(lines) + "\n")
     return out
