@@ -1,3 +1,28 @@
+## -1.8. 2026-08-15 addendum — manuscript readiness inventory corrected
+
+`results/MANUSCRIPT_READINESS_INVENTORY.md` (added in addendum -1.7 below) contained a
+put-baseline mischaracterization and a stale-v3-sourced "tied" claim; both are now fixed, plus
+§7's open items are reclassified by actual blocking status. No numbers in any `results/*` file
+changed — this was a prose/citation fix only. See the inventory file itself for the corrected
+text.
+
+---
+
+## -1.7. 2026-08-15 addendum — manuscript readiness inventory added
+
+The full v5 experimental campaign is now complete: canonical dataset (build + 45/45 validation),
+all 12 canonical seed-42 cells trained and evaluated, and 8 seed-43/44 replications of the 4
+headline `vol_surface` configs trained/evaluated/aggregated (commits `00897f6`, `c6801b5`,
+`d5410e5`). A single reference document collecting every file that backs every claim needed to
+start drafting the results section now exists: **`results/MANUSCRIPT_READINESS_INVENTORY.md`**.
+It covers dataset/preprocessing, T1, replication/robustness (including the corrected "~40x to
+just under three orders of magnitude" robustness claim and the architecture-ranking caution),
+baselines, data quality/diagnostics, provenance, and a scoped open-items list (figures, greeks/
+arbitrage diagnostics, the scalar-σ ablation, and the throughput-noise caveat). Documentation
+only — no `.py` files, training runs, or GPU use.
+
+---
+
 # Progress Report — Paper Artifacts (analysis/ build)
 
 **Session date:** 2026-06-12. **Author:** Claude (auto mode). **Status of repo
