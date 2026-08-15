@@ -1,0 +1,65 @@
+{
+  "n_test": 819342,
+  "r2_price": 0.9997169575992051,
+  "r2_log_filtered": 0.9912418664413896,
+  "r2_log_full": 0.9912418664413896,
+  "rmse_log": 0.219429881497233,
+  "rmse_price": 0.007591464737027735,
+  "mae_price": 0.0009427386816042982,
+  "mse_log": 0.04814947289388971,
+  "mse_log_filtered": 0.04814947289388971,
+  "n_keep_filtered": 819342,
+  "n_near_expiry_dropped": 0,
+  "n_tail_sqerr_gt10": 49,
+  "tail_sse_share": 0.016041026616037877,
+  "clamp_hit_count": 0,
+  "throughput_contracts_per_s": 81660.82544673378,
+  "liquidity_strata": {
+    "bid_pos": {
+      "n_test": 814015,
+      "r2_price": 0.9997169448512745,
+      "r2_log_filtered": 0.9912166891517077,
+      "r2_log_full": 0.9912166891517077,
+      "rmse_log": 0.2141452796163014,
+      "rmse_price": 0.007616263859206772,
+      "mae_price": 0.0009488793356943137
+    },
+    "relspread_le1": {
+      "n_test": 799803,
+      "r2_price": 0.9997188695707608,
+      "r2_log_filtered": 0.9915039737640979,
+      "r2_log_full": 0.9915039737640979,
+      "rmse_log": 0.20046995920482946,
+      "rmse_price": 0.007656966887318816,
+      "mae_price": 0.000964209469275205
+    },
+    "bid_pos_and_relspread_le1": {
+      "n_test": 799803,
+      "r2_price": 0.9997188695707608,
+      "r2_log_filtered": 0.9915039737640979,
+      "r2_log_full": 0.9915039737640979,
+      "rmse_log": 0.20046995920482946,
+      "rmse_price": 0.007656966887318816,
+      "mae_price": 0.000964209469275205
+    }
+  },
+  "liquidity_strata_note": {
+    "bid_pos": "best_bid > 0 (excludes zero-bid quotes from the REPORT only)",
+    "relspread_le1": "(ask - bid) / mid <= 1 (bounded by 2 when bid >= 0)",
+    "bid_pos_and_relspread_le1": "both of the above",
+    "_not_a_filter": "Reporting strata only. No row is dropped anywhere on liquidity."
+  },
+  "arch": "B",
+  "option_type": "call",
+  "branch_key": "branch_u",
+  "results_dir": "train_model_v3\\call\\results_vol_surface_don_v5_seed44",
+  "stable_log": false,
+  "max_contracts": null,
+  "seed": 44,
+  "dataset_version": "v5",
+  "schema_version": "v4",
+  "is_canonical_version": true,
+  "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_call_v5.h5",
+  "h5_sha256": "ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153",
+  "canonical_dataset": true
+}
