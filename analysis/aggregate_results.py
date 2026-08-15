@@ -98,7 +98,8 @@ def warn_quarantine():
     excluded = sorted(p.name for p in QUARANTINE_DIR.iterdir() if p.is_dir())
     print("WARNING: VVIX-trained run(s) detected in train_model_v3/_vix_is_vvix_LEGACY/ —")
     print("  these are EXCLUDED VVIX artifacts (input was CBOE VVIX, secid 152892, not VIX)")
-    print("  and are intentionally not aggregated. VIX runs are pending GPU retraining.")
+    print("  and are intentionally not aggregated. Corrected canonical CBOE-VIX v5")
+    print("  vix_history runs are complete and ARE included in this table.")
     for name in excluded:
         print(f"  - {name}")
 

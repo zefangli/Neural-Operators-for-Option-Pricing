@@ -8,13 +8,15 @@ Quarantine is a LOCATION (_vix_is_vvix_LEGACY/), not a name prefix.
 
 Run: pytest tests/test_quarantine_filter.py  or  python tests/test_quarantine_filter.py
 """
+import io
 import sys
+from contextlib import redirect_stdout
 from pathlib import Path
 
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "analysis"))
-from aggregate_results import PROJECT_ROOT, is_quarantined  # noqa: E402
+from aggregate_results import PROJECT_ROOT, is_quarantined, warn_quarantine  # noqa: E402
 
 QUARANTINED = [
     "train_model_v3/_vix_is_vvix_LEGACY/call_results_vix_history/metrics.json",
@@ -50,6 +52,19 @@ def test_corrected_runs_are_not_quarantined(rel):
     assert not is_quarantined(PROJECT_ROOT / rel), (
         f"{rel} must NOT be excluded -- corrected/valid runs have to reach the tables"
     )
+
+
+def test_warning_does_not_say_pending():
+    """Regression: the warning said 'VIX runs are pending GPU retraining' after
+    the v5 vix_history runs had already completed. Corrected canonical VIX runs
+    exist now -- the warning must never again claim they're still pending."""
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        warn_quarantine()
+    text = buf.getvalue()
+    if text:  # only asserts when the quarantine dir actually exists to warn about
+        assert "pending GPU retraining" not in text
+        assert "are complete" in text or "ARE included" in text
 
 
 if __name__ == "__main__":
