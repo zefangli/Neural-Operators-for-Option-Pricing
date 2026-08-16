@@ -167,9 +167,8 @@ from. Do not cite a number here that is not in a results file.*
 > §6). Trained weights (`*.pth`) are not committed to git; the committed artifacts are `config.json`,
 > `metrics.json`, `loss_history.txt`, `loss_plot.png` per run.
 >
-> **What is still genuinely open** (unchanged by this note, see §7 for the full list): the "matches
-> or beats a direct-price regressor" claim has no supporting experiment and should be dropped from
-> the manuscript rather than backed after the fact; figures F1 (architecture diagram), F4 (near-expiry
+> **What is still genuinely open** (unchanged by this note, see §7 for the full list): figures F1
+> (architecture diagram), F4 (near-expiry
 > SSE-vs-T tail), and F6 (a greeks-agreement *figure*, as opposed to the already-run greeks *check*)
 > are not built; related-work citations (§2) and environment/dependency pinning (Appendix C) are not
 > gathered; a surface-wide arbitrage violation-rate diagnostic remains queued, non-blocking work.
@@ -235,11 +234,14 @@ would include a `dσ̂/dS · vega` term the frozen-`σ̂` check cannot see.
 
 **Contributions (headline claims).**
 1. Per-query `σ̂` recovers the volatility smile/skew that a single-scalar `σ̂` cannot.
-2. The analytical-BS decoder matches or beats a direct-price regressor of equal capacity, while
-   giving analytic partial greeks and pointwise BS-consistent prices.
-3. Among market-state inputs (IV surface / SPX history / VIX history), we quantify which prices best
+2. Among market-state inputs (IV surface / SPX history / VIX history), we quantify which prices best
    — and by how much (§6, T1; all three legs done on v5, including the corrected genuine-CBOE-VIX
    `vix_history` runs).
+
+The analytical-BS decoder additionally gives analytic partial greeks (verified in §5.4) and
+pointwise BS-consistent prices (§3.4) — structural properties of the design. This paper makes no
+claim about how it compares to a direct-price regressor of equal capacity: that control was never
+run (§7).
 
 > **Note on scope (keep while drafting):** this is an empirical / application paper. The core idea
 > (differentiable BS layer, learning IV not price, analytical-pricer decoder) is sound but **not
@@ -498,7 +500,6 @@ puts (~5.3%). ⚠️ v3's `T > 1/365` filter did **not** actually exclude 1-day 
 filter (§4.1) is a no-op — on v4, "headline" and "full-domain" `R²(log)` are the same number. Do
 **not** re-cut v4 to imitate the v3 float32 rounding accident; that would weaken the methodology.
 
-> **TODO:** retention / row-count table across the full pipeline (raw → filtered → per-split).
 > **Resolved 2026-08-12:** whether per-contract observed IV can be recovered for the smile figure
 > F2 — `analysis/baselines.py` now inverts `normalized_price` via vectorised bisection on the v4
 > sample and cross-checks it against the stored OptionMetrics `impl_volatility`: combined coverage
@@ -508,6 +509,45 @@ filter (§4.1) is a no-op — on v4, "headline" and "full-domain" `R²(log)` are
 > the numbers. **Resolved 2026-08-15:** the 12 core model runs are trained on v5 (§4.1a, §5.1) — the
 > full experimental campaign for this paper is complete; see the 2026-08-15 note near the top of this
 > document.
+
+### 4.3 Retention / row counts across the pipeline
+
+Compiled from `wrds_data_2020-2025/VALIDATION_v4.json`, `VALIDATION_v5.json` and
+`DATASET_MANIFEST.json` (no new computation; percentages are `(v4 − v5) / v4`).
+
+**Stage 1 — phase-1 parquet.** `deeponet_training_data_parts_v4/` holds **13,595,211** rows in 43
+parts, both option types combined, *before* the maturity cut (`VALIDATION_{v4,v5}.json`,
+`parquet_rows_all_types`). Phase 2 then splits by `cp_flag` and applies the required-column
+null-drop, the `vol_surface_vector` length check and the `--min-maturity-days 1.0` settlement-aware
+maturity cut, yielding the v4 HDF5 row counts below (12,946,646 call+put, i.e. 648,565 parquet rows
+did not survive phase 2).
+
+**Stage 2 — v4 (unfiltered) → v5 (quote-quality filtered).** The zero-tolerance static
+no-arbitrage midpoint filter (§4.1a, `results/QUOTE_QUALITY_REPORT.md`) removes rows only; all
+2128/266/267 split dates are preserved bit-identically.
+
+| option | split | v4 rows | v5 rows | removed | removed % |
+|---|---|---:|---:|---:|---:|
+| call | train | 3,360,823 | 3,297,722 | 63,101 | 1.878% |
+| call | validation | 754,276 | 729,204 | 25,072 | 3.324% |
+| call | test | 840,493 | 819,342 | 21,151 | 2.516% |
+| call | **total** | **4,955,592** | **4,846,268** | **109,324** | **2.206%** |
+| put | train | 5,370,629 | 5,323,327 | 47,302 | 0.881% |
+| put | validation | 1,229,955 | 1,221,643 | 8,312 | 0.676% |
+| put | test | 1,390,470 | 1,380,379 | 10,091 | 0.726% |
+| put | **total** | **7,991,054** | **7,925,349** | **65,705** | **0.822%** |
+
+Split dates are identical in v4 and v5: train 2,128 dates (2015-02-02 … 2023-07-17), validation 266
+(2023-07-18 … 2024-08-06), test 267 (2024-08-07 … 2025-08-29). The train-vs-test removal
+differential is small (+0.64 pp call, −0.16 pp put), which is why this rule was preferred over
+spread-based alternatives that shift 1.9–4.4× more of train than test (§4.1a).
+
+> **Still TODO (one stage only):** the *raw* OptionMetrics CSV row count and the per-rule attrition
+> inside phase 1 (secid/index filters, date-range cut, VIX/spot join losses) are not recorded in any
+> committed artifact — only the post-phase-1 parquet total (13,595,211) and the 648,565-row phase-2
+> attrition are, and the latter is not itself broken down by cause (null-drop vs surface-length vs
+> maturity cut). Filling this in requires re-scanning the raw CSVs, which is new computation and was
+> deliberately not run for this table.
 
 ---
 
@@ -792,7 +832,8 @@ separately.
   specification issue** (an undifferentiated `T=0` from calendar-day rounding), not a fact about how
   hard the pricing problem is.
 - **(b) Genuine small-`T` ill-conditioning (secondary, still real).** For contracts with small but
-  strictly positive `T` (e.g. `0 < T ≤ 1` day), `∂log(price)/∂σ` does blow up near ATM, and the
+  strictly positive `T`, `∂log(price)/∂σ` does blow up near ATM — continuously worse as `T → 0`,
+  with no threshold maturity at which it switches on — and the
   inverse problem really is ill-conditioned there — this part of the original narrative stands and
   is not being retracted, only separated from (a). Log-perfection on this slice is genuinely
   unattainable, unlike the `T=0` slice, which is unattainable for a different (fixable) reason.
@@ -898,17 +939,24 @@ carries the full 45-cell table per option type; summarized here.
 Overall test-split RMSE(log): call 0.2219, put 0.2941 (matches T1's `vol_surface` A row exactly, as
 expected — this is the same run). Both option types show the same qualitative pattern: **error is
 highest in the deep wings and at short maturity, and lowest near-ATM at medium-to-long maturity.**
-For calls, the `(1,7]`-day bucket peaks at RMSE(log)=1.304 in the deepest ITM column (n=357) versus
-0.019–0.033 near ATM in the same maturity row; for puts the pattern is asymmetric because puts are
-naturally OTM on the left of the grid — the `(1,7]`-day row peaks at RMSE(log)=0.636–0.659 in the
-deep-OTM columns (`log(S/K) > 0.10`, tens of thousands of rows) versus 0.003–0.037 in the deep-ITM
-columns. On the **price scale**, however, these same cells are tiny in absolute terms (e.g. the
-worst call cell is RMSE(V/K)=2.4e-05, the worst put short-dated OTM cell is RMSE(V/K)≈1e-3) —
-consistent with §6/§7's point that the near-expiry log tail is economically small even where it is
-statistically large. No `T ≤ 1 day` row exists in v5 by construction (`(T_days <= 1).sum() == 0`,
-asserted by the figure script itself), so unlike the historical v3 near-expiry analysis, every cell
-here reflects genuine `T > 1 day` pricing difficulty (mechanism (b), §6 historical subsection), not
-the exact-`T=0` decoder degeneracy (mechanism (a), which does not exist in this sample).
+The two grids are mirror images of each other, because the OTM side sits on opposite ends of the
+log-moneyness axis for the two option types (a call is OTM at `log(S/K) < 0`, a put at
+`log(S/K) > 0`). For **calls**, the shortest-maturity `(1,7]`-day row peaks at RMSE(log)=1.304 in
+the deepest **OTM** column (`log(S/K) ≤ −0.20`, n=357), is 0.398 in the ATM band
+(`|log(S/K)| ≤ 0.02`, n=49,804), and falls to 0.003–0.033 across the ITM columns
+(`log(S/K) > 0.02`). For **puts** the same row peaks on the other side — RMSE(log)=0.636–0.659 in
+the deep-**OTM** columns (`log(S/K) > 0.10`, 42,318 rows) versus 0.003–0.037 in the ITM columns
+(`log(S/K) ≤ −0.02`). On the **price scale**, however, these same cells are tiny in absolute terms
+(e.g. the worst call cell is RMSE(V/K)=2.4e-05, the worst put short-dated OTM cell is
+RMSE(V/K)≈1e-3) — consistent with §6/§7's point that the near-expiry log tail is economically small
+even where it is statistically large. No `T ≤ 1 day` row exists in v5 by construction
+(`(T_days <= 1).sum() == 0`, asserted by the figure script itself), so unlike the historical v3
+near-expiry analysis, no cell here can be the exact-`T=0` decoder degeneracy (mechanism (a), §6
+historical subsection) — that mechanism is absent from this sample. What remains is mechanism (b),
+the ill-conditioning of `∂log(price)/∂σ` near ATM, which worsens **continuously as `T → 0`** rather
+than switching on below any particular maturity; the `(1.73, 7]`-day row is simply v5's
+shortest-maturity band (observed minimum 1.729 days) and is therefore where that continuous effect
+is most visible, not a bucket that satisfies some literal sub-one-day definition.
 
 ---
 
@@ -918,10 +966,13 @@ the exact-`T=0` decoder degeneracy (mechanism (a), which does not exist in this 
   Mechanism (a), the exact-`T=0` decoder degeneracy from calendar-day rounding, was a v3
   **specification bug**; v5's settlement-aware `--min-maturity-days 1.0` filter removes it by
   construction (zero `T=0` rows, `results/diagnostics_tail_v5.json`) — no further remediation is
-  needed. Mechanism (b), genuine small-`T` ill-conditioning for `0 < T ≤ 1` day, is real and
-  structural and is visible in F3's elevated short-maturity RMSE cells (§6, T4); log-perfection there
-  is unattainable. Since v5 has no `T ≤ 1 day` rows at all, mechanism (b) is now bounded to the
-  `(1, 7]`-day bucket rather than sub-1-day — a strictly easier residual than the v3-era one. A
+  needed. Mechanism (b), the genuine ill-conditioning of `∂log(price)/∂σ` near ATM, is real and
+  structural: it is a **continuous** effect that worsens as `T → 0`, not a regime that begins below
+  some threshold maturity. v5's maturity filter therefore does not remove it, it only bounds how
+  severe it can get — the worst-conditioned rows the sample can contain are those in the shortest
+  surviving band, `(1.73, 7]` days, which is exactly where F3's elevated short-maturity RMSE cells
+  sit (§6, T4). Log-perfection there is unattainable, but the residual is strictly milder than the
+  v3-era one, which extended all the way down to the degenerate `T = 0` rows. A
   tail-aware loss / reparametrization / σ̂ uncertainty quantification remains a natural but
   out-of-scope follow-on.
 - **Pointwise, not surface-wide, BS-consistency.** The decoder guarantees static no-arbitrage bounds
@@ -972,11 +1023,11 @@ the exact-`T=0` decoder degeneracy (mechanism (a), which does not exist in this 
 - **European-style assumption.** SPX options are European, so BS applies directly. Any American-style
   contamination would violate the BS-pricing assumption.
 - **No transaction costs / bid-ask.** We price the mid; spreads and costs are out of scope.
-- **No direct-price-regression baseline.** The introduction's claim (§1, contribution 2) that the
-  BS-decoder design "matches or beats a direct-price regressor of equal capacity" has no supporting
-  experiment in this campaign. For a first preprint the recommended resolution is to remove this
-  claim rather than add a new experimental workstream (`results/MANUSCRIPT_READINESS_INVENTORY.md`
-  §7); it is flagged here rather than silently left in §1.
+- **No direct-price-regression baseline.** This campaign never trained a direct-price regressor of
+  equal capacity, so the paper makes no claim about how the BS-decoder design compares to one — the
+  claim that was previously carried in §1 has been removed rather than backed after the fact
+  (`results/MANUSCRIPT_READINESS_INVENTORY.md` §7). Running that control is a natural follow-on, not
+  a blocker for a first preprint.
 - **Throughput numbers are not benchmark-quality.** `throughput_contracts_per_s` appears in every
   run's `metrics.json` but is an uncontrolled, run-to-run-noisy measurement — not citable for any
   performance/latency claim until measured under a controlled, repeated-timing benchmark.
@@ -1011,7 +1062,7 @@ real contribution (§7).
 The canonical v5 dataset (§4.1a), the 12-run training matrix, the seed-43/44 replication, the
 per-query-vs-scalar ablation, the greeks check, and figures F2/F3/F5 are all complete as of
 2026-08-15 — the experimental campaign behind this paper is done. What remains before submission is
-scoped, not open-ended: drop the unsupported direct-price-regressor claim from §1, build figures F1
+scoped, not open-ended: build figures F1
 (architecture diagram), F4 (near-expiry SSE-vs-T tail), and F6 (a plotted greeks-agreement figure),
 gather related-work citations (§2), and pin the environment (Appendix C).
 

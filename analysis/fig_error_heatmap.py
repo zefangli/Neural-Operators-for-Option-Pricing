@@ -171,7 +171,7 @@ def make_figure(option_type, out_png, max_contracts=None, device="cpu"):
     _panel(axes[1], rmse_price, counts, "RMSE of $V/K$  (price scale)",
            "RMSE $V/K$", ".1e")
     fig.suptitle(f"F3 — error heatmap, {option_type}s (v5 test split, n={counts.sum():,}): "
-                 f"per-query run `results_vol_surface_v5`", fontsize=12)
+                 f"per-query volatility model", fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     Path(out_png).parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_png, dpi=150)
