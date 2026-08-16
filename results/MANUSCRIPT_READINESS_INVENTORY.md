@@ -157,7 +157,8 @@ to `spot_history`), scalar-VIX (context-free, NOT branch-comparable to `vix_hist
   - The **least-negative R2(log)** baseline is `vix_level_scaled` at **-0.3563** (`results/
     baselines_v5.json`, `option_type="put"`, `baseline="vix_level_scaled"`, `metrics.all.
     r2_log_full = -0.3563177573450871`) — but it is **price-inaccurate**: R2(price) =
-    **-3.8454** (`metrics.all.r2_price = -3.8453744869713047`), i.e. catastrophic in price space.
+    **-3.8454** (`metrics.all.r2_price = -3.8453744869713047`), i.e. worse than predicting the
+    mean price.
   - The **best price-accurate** baseline is `surface_spline` at R2(price) **+0.9966**
     (`results/baselines_v5.json`, `baseline="surface_spline"`, `metrics.all.r2_price =
     0.9965944957550128`), but its R2(log) is **-2.5186** (`metrics.all.r2_log_full =
@@ -242,6 +243,11 @@ to `spot_history`), scalar-VIX (context-free, NOT branch-comparable to `vix_hist
 
 ## 6. Provenance / reproducibility
 
+- **Which numbers are canonical.** Every metric cited in the manuscript comes from the independent
+  evaluators (`analysis/eval_to_json.py`, `analysis/aggregate_results.py`, `analysis/
+  eval_ablation.py`): full test split, fixed evaluation batch size, deterministic, loaded from the
+  saved `best_model.pth`. The metrics at the tail of each run's `loss_history.txt` are
+  training-time and preliminary — they differ slightly for the same run and must never be cited.
 - **Single source of truth for dataset versions/paths/hashes:**
   `wrds_data_2020-2025/DATASET_MANIFEST.json` (`"canonical": "v5"`, generated
   2026-08-13T12:40:12+00:00).
@@ -267,17 +273,19 @@ to `spot_history`), scalar-VIX (context-free, NOT branch-comparable to `vix_hist
 
 ## 7. Open items before submission
 
+**Complete (previously listed here as blocking):**
+- ✅ **Per-query-vs-scalar-σ ablation — DONE.** Run on v5, seed 42, all four runs
+  (`{call,put} × {per_query, scalar_sigma}`): `results/ablation_scalar_sigma_v5.md` / `.csv` /
+  `.json`, produced by `analysis/eval_ablation.py`. Removing the per-contract conditioning drops
+  call R2(log,T>1d) 0.991044 → 0.800103 and put R2(log,T>1d) 0.977899 → −0.316871 (put R2(price)
+  0.992553 → −3.090190, i.e. negative). Kept deliberately OUT of T1 — it is a restricted control
+  architecture, not a candidate model.
+- ✅ **Greeks derivative-consistency check — DONE.** `analysis/greeks_check.py` executed on the
+  v5-trained models: `results/greeks_check_{call,put}_v5.json` (+ the paired `*_arrays_*.npz`).
+  Supports only the corrected claim — analytic BS partial greeks at the predicted σ̂ held fixed,
+  not total sensitivity of the learned system (no `dσ̂/dS · vega` term).
+
 **Blocking (preprint-critical — must be resolved before submission):**
-- **Per-query-vs-scalar-σ ablation not yet run.** This is the headline ablation motivating the
-  conditional-vol-head design (per-query σ̂ is the paper's headline contribution 1, and it is what
-  the proposed core figure F2 depends on). Without it, that headline architectural claim is
-  currently unsupported. Speccable but not started on v5 (WS4 in `PROGRESS_paper_artifacts.md`).
-- **Greeks check (`analysis/greeks_check.py`) — conditionally blocking.** Needed only if the paper
-  retains its Greeks claim (the analytic-partial-greeks-at-frozen-σ claim, already corrected once
-  from an "exact greeks" overclaim — see `CLAUDE.md`'s "Two claims that were overstated" section
-  and prior addenda). If the paper drops the Greeks claim entirely, this becomes optional and can
-  move to the nice-to-have list. The script exists but has not been executed on a v5-trained
-  model.
 - **The "matches or beats a direct-price regressor" claim is currently unsupported.** No
   direct-price-regression baseline has been run to back it. For a first preprint, the recommended
   resolution is to **remove this claim from the manuscript** rather than add another experimental

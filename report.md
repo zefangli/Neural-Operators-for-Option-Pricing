@@ -497,7 +497,7 @@ commands in `train_model_v3/_vix_is_vvix_LEGACY/DEFERRED_GPU_COMMANDS.md`).
 >   `vix_level_scaled` +0.7974 (0.999796); `surface_spline` +0.7764 (**best call price-R²,
 >   0.999852**); `surface_bilinear` +0.7763; `surface_nearest` +0.7751; `prev_day_surface_bilinear`
 >   +0.7395; `intrinsic_zero_vol` −15.8866 (0.999449).
-> - **Puts, by R²(log):** `vix_level_scaled` is least-negative at **−0.3336** but has a catastrophic
+> - **Puts, by R²(log):** `vix_level_scaled` is least-negative at **−0.3336** but has a strongly negative
 >   price-R² of **−3.245063**; `const_sigma` −0.3665 (price −1.920967); `surface_spline` −2.4688 with
 >   the **best price-accurate result, price-R² +0.997004**; `intrinsic_zero_vol` −33.7053 (0.602701).
 >   Any "best baseline" claim on puts must carry both metrics — log-R² and price-R² rank the
