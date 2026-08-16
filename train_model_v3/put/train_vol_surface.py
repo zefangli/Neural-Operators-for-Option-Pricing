@@ -889,11 +889,17 @@ def add_provenance(cfg):
     cfg["quote_filter"] = quote_filter
     cfg["quote_filter_tolerance"] = quote_filter_tolerance
     cfg["quote_filter_bounds"] = _s("quote_filter_bounds")
+    # Architecture identity as an explicit FIELD, never inferred from the
+    # results_dir name (a directory can be renamed or copied; this cannot).
+    cfg["model_variant"] = "per_query"
+    cfg["sigma_conditioning"] = "latent_plus_query"
     cfg["data_provenance"] = {
         # Same four fields as the top-level cfg keys above, repeated here so a
         # reader of either location sees the same sample identity (analysis/
         # eval_to_json.py hard-fails if they ever disagree).
         "dataset_version": dataset_version,
+        "model_variant": "per_query",
+        "sigma_conditioning": "latent_plus_query",
         "quote_filter": quote_filter,
         "quote_filter_tolerance": quote_filter_tolerance,
         "quote_filter_bounds": cfg["quote_filter_bounds"],

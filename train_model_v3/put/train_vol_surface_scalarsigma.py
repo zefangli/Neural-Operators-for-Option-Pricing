@@ -1,19 +1,21 @@
 """
-Train FNO model on call options using implied volatility surface (branch_u).
-V3.1: Per-query implicit IV surface (was: single scalar sigma per market state).
+Train FNO model on put options using implied volatility surface (branch_u).
+SCALAR-SIGMA ABLATION counterpart to train_vol_surface.py. The ONLY architectural
+difference is ScalarVolHead (sigma_hat from the market-state latent alone) in place
+of ConditionalVolHead (sigma_hat conditioned on the per-contract query); encoder,
+BS pricer, loss, schedule, hyperparameters and provenance gate are identical.
 
 Architecture:
   Encoder: 2D FNO on IV surface grid (11x17) -> market-state latent vector
-  Head:    MLP([latent, log_moneyness, T_years]) -> sigma_hat (positive scalar)
+  Head:    MLP([latent]) -> sigma_hat (positive scalar, SAME for every query)
   Pricing: bs_normalized_price([log_moneyness, T_years, r, q, sigma_hat]) -> V/K
 
 Loss: Data MSE on log(V/K). No PDE / arbitrage / BS-anchor terms.
 
-Why the change: a single scalar sigma cannot price both ATM and deep-OTM
-contracts under the same market state (volatility smile). The conditional head
-lets the model emit a different sigma for each (log_m, T) query against the
-same market-state latent, recovering the smile/skew that constant-vol BS cannot
-capture.
+Why this exists: it is the null hypothesis for the paper's core architectural
+claim. A single scalar sigma cannot price both ATM and deep-OTM contracts under
+the same market state (volatility smile); this script measures how much is lost
+by removing the per-query conditioning.
 """
 
 import argparse
@@ -83,7 +85,7 @@ class FNO_MarketEncoder(nn.Module):
 
     Takes a 2D grid, passes through 4 FNO blocks with residual connections,
     then projects to a fixed-size latent. The latent is consumed downstream
-    by ConditionalVolHead together with the per-contract (log_m, T) query.
+    by ScalarVolHead, which in this ablation sees ONLY the latent.
     Uses SiLU activation throughout.
     """
     def __init__(self, grid_h, grid_w, modes1, modes2, width=32, latent_dim=64):
@@ -136,29 +138,31 @@ class FNO_MarketEncoder(nn.Module):
 
 
 # ==========================================
-# CONDITIONAL VOL HEAD
+# SCALAR VOL HEAD (ABLATION)
 # ==========================================
 
-class ConditionalVolHead(nn.Module):
-    """MLP mapping (market_state_latent, log_moneyness, T_years) -> sigma_hat.
+class ScalarVolHead(nn.Module):
+    """ABLATION head: MLP mapping (market_state_latent,) -> sigma_hat.
 
-    Lets the model emit a different sigma per contract query against the same
-    market-state latent, so it can fit the volatility smile/skew that a single
-    scalar sigma cannot represent. Output is softplus-positive.
+    Identical depth/width to ConditionalVolHead in train_vol_surface.py, minus the
+    per-contract query inputs: the first layer is Linear(latent_dim, hidden) rather
+    than Linear(latent_dim + 2, hidden). Consequence (the whole point of the
+    ablation): every contract queried against the same market state receives the
+    EXACT SAME sigma_hat, i.e. flat-vol Black-Scholes, no smile/skew.
+    Output is softplus-positive, matching the original.
     """
     def __init__(self, latent_dim=64, hidden=64):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(latent_dim + 2, hidden),
+            nn.Linear(latent_dim, hidden),
             nn.SiLU(),
             nn.Linear(hidden, hidden),
             nn.SiLU(),
             nn.Linear(hidden, 1),
         )
 
-    def forward(self, latent, log_moneyness, T_years):
-        x = torch.cat([latent, log_moneyness, T_years], dim=-1)
-        return F.softplus(self.net(x))
+    def forward(self, latent):
+        return F.softplus(self.net(latent))
 
 
 # ==========================================
@@ -226,7 +230,7 @@ class VolEstimatorModel(nn.Module):
         self.encoder = FNO_MarketEncoder(
             grid_h, grid_w, modes1, modes2, width, latent_dim=latent_dim,
         )
-        self.head = ConditionalVolHead(latent_dim=latent_dim, hidden=head_hidden)
+        self.head = ScalarVolHead(latent_dim=latent_dim, hidden=head_hidden)
         # When True, price log(V/K) with the stable log_ndtr path instead of
         # log(clamp(price, 1e-8)). Intended for eval; see bs_log_normalized_price.
         self.use_stable_log = use_stable_log
@@ -234,7 +238,7 @@ class VolEstimatorModel(nn.Module):
 
     def forward(self, branch, log_moneyness, T_years, r, q):
         latent = self.encoder(branch)
-        sigma_hat = self.head(latent, log_moneyness, T_years)
+        sigma_hat = self.head(latent)
         if self.use_stable_log:
             log_v_hat = bs_log_normalized_price(
                 log_moneyness, T_years, r, q, sigma_hat, self.option_type,
@@ -739,7 +743,7 @@ def get_config():
     """Return the default configuration for this script."""
     script_dir = Path(__file__).resolve().parent
     project_root = script_dir.parent.parent
-    h5_path = str(project_root / "wrds_data_2020-2025" / "deeponet_tensors_call_v5.h5")
+    h5_path = str(project_root / "wrds_data_2020-2025" / "deeponet_tensors_put_v5.h5")
 
     return {
         "seed": 42,
@@ -762,8 +766,8 @@ def get_config():
         "grid_w": 17,
         "modes1": 4,
         "modes2": 8,
-        "option_type": "call",
-        "results_dir": str(script_dir / "results_vol_surface_v5"),
+        "option_type": "put",
+        "results_dir": str(script_dir / "results_vol_surface_scalarsigma_v5"),
     }
 
 
@@ -891,15 +895,15 @@ def add_provenance(cfg):
     cfg["quote_filter_bounds"] = _s("quote_filter_bounds")
     # Architecture identity as an explicit FIELD, never inferred from the
     # results_dir name (a directory can be renamed or copied; this cannot).
-    cfg["model_variant"] = "per_query"
-    cfg["sigma_conditioning"] = "latent_plus_query"
+    cfg["model_variant"] = "scalar_sigma"
+    cfg["sigma_conditioning"] = "market_state_only"
     cfg["data_provenance"] = {
         # Same four fields as the top-level cfg keys above, repeated here so a
         # reader of either location sees the same sample identity (analysis/
         # eval_to_json.py hard-fails if they ever disagree).
         "dataset_version": dataset_version,
-        "model_variant": "per_query",
-        "sigma_conditioning": "latent_plus_query",
+        "model_variant": "scalar_sigma",
+        "sigma_conditioning": "market_state_only",
         "quote_filter": quote_filter,
         "quote_filter_tolerance": quote_filter_tolerance,
         "quote_filter_bounds": cfg["quote_filter_bounds"],
@@ -916,7 +920,7 @@ def add_provenance(cfg):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Train FNO on calls with vol surface input (V3, analytical BS)")
+    parser = argparse.ArgumentParser(description="Train FNO on puts with vol surface input (V3, analytical BS) -- SCALAR-SIGMA ABLATION")
     parser.add_argument("--epochs-adam", type=int, default=None)
     parser.add_argument("--epochs-finetune", type=int, default=None)
     parser.add_argument("--max-train-batches", type=int, default=None)
@@ -927,13 +931,13 @@ def parse_args():
     parser.add_argument("--latent-dim", type=int, default=None)
     parser.add_argument("--head-hidden", type=int, default=None)
     parser.add_argument("--h5-path", type=str, default=None,
-                        help="Override the input HDF5 (default: deeponet_tensors_call_v5.h5). "
+                        help="Override the input HDF5 (default: deeponet_tensors_put_v5.h5). "
                              "Must be a dataset_version=v5 (quote-filtered) file; v4 (unfiltered) and v3 "
                              "files are refused at startup "
                              "(different maturity basis / filtering / contract identity). "
                              "See _vix_is_vvix_LEGACY/DEFERRED_GPU_COMMANDS.md.")
     parser.add_argument("--results-dir", type=str, default=None,
-                        help="Override the output directory (default: results_vol_surface_v5). "
+                        help="Override the output directory (default: results_vol_surface_scalarsigma_v5). "
                              "Never point this at a v3/v4 results_* dir -- those weights back the "
                              "current report table and must not be overwritten.")
     parser.add_argument("--eval-only", action="store_true",

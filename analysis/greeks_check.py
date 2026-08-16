@@ -1,7 +1,12 @@
 """
-Substantiate the "exact greeks" claim: autograd through the Black-Scholes decoder
-vs the closed-form greeks, at the model's predicted sigma_hat, on sampled test
-contracts. Expect agreement to ~1e-7 (fp32: ~1e-6).
+BS-decoder derivative consistency at fixed predicted sigma_hat: autograd through
+the Black-Scholes decoder vs the closed-form greeks, at the model's predicted
+sigma_hat, on sampled test contracts. Expect agreement to ~1e-7 (fp32: ~1e-6).
+
+This is NOT an "exact greeks" claim. What is checked are the analytic BS partial
+greeks at the predicted sigma, holding sigma FIXED -- not the total sensitivity
+of the learned system, which would additionally include a d sigma_hat/dS * vega
+term (see CLAUDE.md, "Two claims that were overstated in early docs/writeup").
 
 Conventions (normalized price c = V/K, M = S/K = exp(log_moneyness)):
   c_call = M e^{-qT} N(d1) - e^{-rT} N(d2)
@@ -13,7 +18,9 @@ greeks AT sigma_hat, not through the encoder).
 
 Usage:  python analysis/greeks_check.py [results_dir] [--n 2000]
 Default results_dir = train_model_v3/call/results_vol_surface.
-Writes results/greeks_check.json (+ arrays for figure F6).
+Writes results/greeks_check_{option_type}_{dataset_version}.json (+ arrays for
+figure F6). Per-run filenames on purpose: the old fixed names meant running call
+then put silently overwrote the first result.
 Cheap (a few k contracts, one forward + autograd) -> safe to run on CPU.
 """
 
@@ -27,6 +34,7 @@ import torch
 
 from _common import (PROJECT_ROOT, bs_normalized_price, load_run,
                      load_test_split, resolve_h5_path)
+from eval_to_json import config_dataset_version
 
 
 def _norm_pdf(x):
@@ -107,22 +115,29 @@ def main():
             "max_rel_diff": float((absdiff / denom).max()),
         }
 
+    # v3-era configs record no dataset_version; "v3" is that absence, not a guess.
+    dataset_version = config_dataset_version(config) or "v3"
     out = {
         "results_dir": str(results_dir.relative_to(PROJECT_ROOT)),
         "arch": arch,
         "option_type": option_type,
+        "dataset_version": dataset_version,
+        "checks": "BS-decoder derivative consistency at fixed predicted sigma_hat "
+                  "(analytic BS partials at sigma_hat, NOT total system greeks)",
         "n_sampled": int(branch.shape[0]),
         "delta": stats(delta_auto, delta_cf),
         "vega": stats(vega_auto, vega_cf),
     }
     OUT = PROJECT_ROOT / "results"
     OUT.mkdir(exist_ok=True)
-    (OUT / "greeks_check.json").write_text(json.dumps(out, indent=2))
+    tag = f"{option_type}_{dataset_version}"
+    (OUT / f"greeks_check_{tag}.json").write_text(json.dumps(out, indent=2))
     # Arrays for figure F6 (autograd vs closed-form scatter).
-    np.savez(OUT / "greeks_check_arrays.npz",
+    np.savez(OUT / f"greeks_check_arrays_{tag}.npz",
              delta_auto=delta_auto.numpy().ravel(), delta_cf=delta_cf.numpy().ravel(),
              vega_auto=vega_auto.numpy().ravel(), vega_cf=vega_cf.numpy().ravel())
     print(json.dumps(out, indent=2))
+    print(f"  wrote results/greeks_check_{tag}.json and greeks_check_arrays_{tag}.npz")
     if out["delta"]["max_abs_diff"] > 1e-6 or out["vega"]["max_abs_diff"] > 1e-6:
         print("WARNING: greeks disagreement exceeds 1e-6 (float64 claim is ~1e-7). Investigate.")
 

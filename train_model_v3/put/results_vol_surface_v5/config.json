@@ -26,8 +26,12 @@
   "quote_filter": "static_bounds_midpoint",
   "quote_filter_tolerance": 0.0,
   "quote_filter_bounds": "normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(-r*T); call midpoint must lie in [max(fwd - disc, 0), fwd], put midpoint in [max(disc - fwd, 0), disc]; inclusive, zero tolerance. Evaluated in float64 on the parquet AND on the float32-rounded values, so no row can flip sides in the export cast.",
+  "model_variant": "per_query",
+  "sigma_conditioning": "latent_plus_query",
   "data_provenance": {
     "dataset_version": "v5",
+    "model_variant": "per_query",
+    "sigma_conditioning": "latent_plus_query",
     "quote_filter": "static_bounds_midpoint",
     "quote_filter_tolerance": 0.0,
     "quote_filter_bounds": "normalized V/K units; fwd = moneyness*exp(-q*T), disc = exp(-r*T); call midpoint must lie in [max(fwd - disc, 0), fwd], put midpoint in [max(disc - fwd, 0), disc]; inclusive, zero tolerance. Evaluated in float64 on the parquet AND on the float32-rounded values, so no row can flip sides in the export cast.",

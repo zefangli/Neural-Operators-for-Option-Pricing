@@ -1,0 +1,18 @@
+{
+  "results_dir": "train_model_v3\\put\\results_vol_surface_v5",
+  "arch": "A",
+  "option_type": "put",
+  "dataset_version": "v5",
+  "checks": "BS-decoder derivative consistency at fixed predicted sigma_hat (analytic BS partials at sigma_hat, NOT total system greeks)",
+  "n_sampled": 2000,
+  "delta": {
+    "max_abs_diff": 1.432187701766452e-14,
+    "median_abs_diff": 8.370040771588094e-17,
+    "max_rel_diff": 2.0854038459098048e-13
+  },
+  "vega": {
+    "max_abs_diff": 2.1163626406917047e-15,
+    "median_abs_diff": 5.551115123125783e-17,
+    "max_rel_diff": 1.7633635609082453e-12
+  }
+}
