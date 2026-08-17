@@ -15,7 +15,8 @@
 \usepackage{float}
 \usepackage{enumitem}
 
-\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+% No \TODO macro is defined: any open item is left as a LaTeX comment, so nothing
+% renders as red placeholder text in the compiled PDF.
 
 \title{Learning Implied Volatility, Not Prices: A Neural-Operator Encoder\\
 with a Differentiable Black--Scholes Decoder for SPX Option Pricing}
@@ -47,13 +48,19 @@ $-3.090$ (call effects are smaller but in the same direction: 0.991 $\to$ 0.800)
 the three market-state inputs, the contemporaneous implied-volatility surface prices consistently
 better than either historical-price input: $R^2(\log, T{>}1\text{ day}) \approx 0.98$--$0.99$ for the
 surface branch versus $\approx 0.90$--$0.94$ for SPX-history and VIX-history branches, on both option
-types. Third, the analytical decoder gives Black--Scholes-consistent prices for any $\hat\sigma \geq
+types. We are explicit about what the surface result does and does not mean: the surface branch is
+fed OptionMetrics' own \emph{same-day} standardized volatility surface, itself built from that day's
+option quotes, so that setting is out-of-time (date-split) \emph{same-day cross-sectional
+reconstruction} conditional on an observed surface, not independent price discovery or forecasting;
+the SPX-history and VIX-history branches, which use only lagged OHLC(V) data, carry no such same-day
+dependence, and the three encoders are not parameter-matched. Third, the analytical decoder gives Black--Scholes-consistent prices for any $\hat\sigma \geq
 0$ at the queried contract, and its autograd-computed partial greeks agree with the closed-form BS
 expressions at the predicted $\hat\sigma$ to within $\sim\!10^{-14}$--$10^{-16}$ absolute error;
 this is a derivative-consistency check at fixed $\hat\sigma$, not a claim about total system
 sensitivity or surface-wide arbitrage freedom. Between the two per-query head designs (an MLP head
-and a DeepONet branch--trunk readout), three-seed replication on the volatility-surface branch shows
-no significant difference in accuracy given measured seed-to-seed dispersion.
+and a DeepONet branch--trunk readout), the observed accuracy differences under three-seed replication
+on the volatility-surface branch are small relative to the measured seed-to-seed variation, and three
+seeds are insufficient to rank the two designs.
 \end{abstract}
 
 \section{Introduction}
@@ -73,12 +80,16 @@ through any other differentiable layer; no learned pricing surrogate is needed.
 
 Two structural properties fall out of this design and are worth stating precisely, because both have
 been overstated in earlier informal write-ups of this work and we want to state the corrected,
-narrower claims here. First, a BS price computed from any $\hat\sigma \geq 0$ exactly solves the BS
-PDE and respects the static, single-contract no-arbitrage bounds \emph{at that one queried contract}.
-This is a \emph{pointwise} Black--Scholes-consistency property, not a claim that the full predicted
-surface is arbitrage-free: because $\hat\sigma$ is fit independently for each query, nothing in the
-architecture guarantees calendar-spread or butterfly consistency \emph{across} the predicted
-$(K,T)$ surface, and we do not check this here. Second, every greek we report is the closed-form BS
+narrower claims here. First, conditional on a fixed predicted $\hat\sigma$, the decoder returns the
+closed-form BS price, respects its single-contract static no-arbitrage bounds, and has the
+corresponding analytical partial derivatives. This is a \emph{pointwise, frozen-$\hat\sigma$}
+Black--Scholes-consistency property. It is not a claim about the total learned map: $\hat\sigma$
+itself varies with the query $(\log(S/K), T)$, so the composed map from market state and contract
+terms to price need not satisfy the BS PDE, whose derivation assumes a volatility that does not
+depend on strike or maturity. Nor is it a claim that the full predicted surface is arbitrage-free:
+because $\hat\sigma$ is fit independently for each query, nothing in the architecture guarantees
+calendar-spread or butterfly consistency \emph{across} the predicted $(K,T)$ surface, and we do not
+check this here. Second, every greek we report is the closed-form BS
 partial derivative evaluated at the predicted $\hat\sigma$, holding $\hat\sigma$ fixed --- an
 \emph{analytic partial greek}, not the total sensitivity of the learned system, which would include
 an additional $\partial\hat\sigma/\partial S \cdot \text{vega}$ term that a frozen-$\hat\sigma$ check
@@ -95,9 +106,19 @@ per market state (flat-vol BS, no smile or skew) with everything else held fixed
 and, for puts, qualitative: removing per-query conditioning drives put $R^2(\text{price})$ negative
 (Section~\ref{sec:results-ablation}).
 \item \textbf{We quantify which of three candidate market-state inputs prices best.} Comparing an
-implied-volatility-surface encoder against SPX-price-history and VIX-history encoders of matched
-capacity, the surface input wins by a wide and consistent margin on both option types and both head
-architectures (Section~\ref{sec:results-branch}).
+implied-volatility-surface encoder against SPX-price-history and VIX-history encoders, the surface
+input wins by a wide and consistent margin on both option types and both head architectures
+(Section~\ref{sec:results-branch}). Two qualifications travel with this result and we state them up
+front. (a) The surface branch is fed OptionMetrics' own same-day standardized volatility surface,
+derived from that trading day's option quotes; the date-based split rules out cross-date leakage but
+not this same-day dependence, so that branch demonstrates same-day cross-sectional reconstruction
+conditional on an observed surface rather than independent price discovery. The SPX-history and
+VIX-history branches use only lagged OHLC(V) data and carry no such dependence. (b) The three
+encoders are \emph{not} parameter-matched --- because the flattened FNO output is projected by a
+single dense layer whose input width scales with the grid, that projection alone holds 766{,}080
+parameters for the $11{\times}17$ surface grid, 430{,}208 for the $21{\times}5$ SPX-history grid, and
+344{,}192 for the $21{\times}4$ VIX-history grid --- so the branch comparison is confounded by
+capacity as well as by input content (Section~\ref{sec:limitations}).
 \item \textbf{The BS decoder gives verified derivative consistency at the predicted $\hat\sigma$.} We
 compare autograd-computed delta and vega through the decoder against the closed-form BS expressions
 at the same $\hat\sigma$ and find agreement at float64 machine precision, confirming the decoder is
@@ -105,9 +126,9 @@ implemented and differentiated correctly (Section~\ref{sec:results-greeks}).
 \end{enumerate}
 
 We additionally report a comparison between the two per-query head designs we use throughout (an
-MLP head and a DeepONet branch--trunk readout); with only three random seeds of replication on the
-volatility-surface branch, we find no significant difference between them and do not treat this as a
-fourth contribution or a ranking claim (Section~\ref{sec:results-ab}).
+MLP head and a DeepONet branch--trunk readout); the observed differences are small relative to the
+seed-to-seed variation we measure, and three seeds are insufficient to rank the two architectures, so
+we do not treat this as a fourth contribution or a ranking claim (Section~\ref{sec:results-ab}).
 
 \section{Related work}
 \label{sec:related}
@@ -125,18 +146,33 @@ training the network only to output its one free parameter, $\hat\sigma$, per co
 train a network to approximate BS itself, and we do not calibrate a parametric stochastic volatility
 model.
 
+\paragraph{Implied-volatility-surface-conditioned neural pricing.} Closest in spirit to our
+surface branch, \citet{Wiedemann2025OpDeepSmoothing} use a neural operator to map raw, irregularly
+observed option quotes directly to a smoothed implied-volatility surface, and
+\citet{Ding2025DLIVSurfaces} compress observed market volatility surfaces with a variational
+autoencoder and price contracts from the resulting latent code together with strike and maturity.
+Both, like our surface-branch experiment, condition on an observed contemporaneous surface; our
+contribution relative to them is not the conditioning itself but the analytical BS output layer
+(the network emits only $\hat\sigma$) and the side-by-side comparison of that surface input against
+purely historical inputs on the same architecture, dataset, and split.
+
 \paragraph{Physics-informed and structure-constrained approaches.} Physics-informed neural networks
 \citep{Raissi2019PINN} enforce a governing PDE via a soft penalty term added to the training loss,
 originally in a physics setting and subsequently adapted to option pricing and calibration problems
-by other authors. Our architecture reaches a related property --- pointwise consistency with the BS
-PDE and static no-arbitrage bounds --- structurally, by construction of the decoder, rather than via
-an auxiliary loss term; \S\ref{sec:method-decoder} discusses precisely what this guarantees and does
-not guarantee.
+by other authors. Our architecture reaches a related but weaker property --- at a frozen predicted
+$\hat\sigma$, the closed-form BS price and its single-contract static no-arbitrage bounds at each
+queried contract --- structurally, by construction of the decoder, rather than via an auxiliary loss
+term; \S\ref{sec:method-decoder} discusses precisely what this guarantees and does not guarantee.
 
 \paragraph{Neural operators.} The market-state encoder is a 2-D Fourier Neural Operator
 \citep{Li2021FNO}. We also use a DeepONet-style branch--trunk readout \citep{Lu2021DeepONet} as an
 alternative per-query head, dotting a market-state branch vector against a trunk network evaluated
-at each contract's $(\log$-moneyness$, T)$ query.
+at each contract's $(\log$-moneyness$, T)$ query. \citet{NoguerIAlonso2026DerivInformed} train
+operator-learning surrogates for finance against both prices and directional derivatives, and make
+the same distinction we rely on in \S\ref{sec:method-decoder} and \S\ref{sec:results-greeks}: a
+surrogate that matches prices need not match their sensitivities, so derivative consistency is a
+separate property that has to be established on its own terms rather than inferred from pricing
+accuracy.
 
 \paragraph{Classical implied-volatility surface modeling.} SVI \citep{Gatheral2004SVI} and its
 arbitrage-free extension SSVI \citep{GatherJacquier2014SSVI} are standard practitioner
@@ -151,11 +187,6 @@ option return panels on data-quality grounds in an asset-pricing context, and
 cautioning that outright removal (as opposed to repair) discards information. Our dataset filter
 (Section~\ref{sec:data-filter}) follows the removal approach with the caveat these authors raise
 explicitly noted.
-
-% TODO-VERIFY: a direct comparison paper for FNO/DeepONet-style neural operators specifically applied
-% to option pricing or implied-volatility-surface learning (as opposed to general PDE surrogates) may
-% exist and would strengthen this section; none was confirmed with high enough bibliographic
-% confidence to cite here without risking a fabricated reference.
 
 \section{Method}
 \label{sec:method}
@@ -177,17 +208,30 @@ projected to a 128-dimensional latent vector. We evaluate three candidate market
 per encoder instance, each reshaped from its native 1-D form to a 2-D grid inside the encoder:
 
 \begin{itemize}[leftmargin=*]
-\item \textbf{Implied-volatility surface} --- the observed IV surface on an $11 \times 17$
-(maturity $\times$ moneyness) grid.
-\item \textbf{SPX price history} --- 21 trading days of SPX OHLCV data, a $21 \times 5$ grid.
-\item \textbf{VIX history} --- 21 trading days of CBOE VIX OHLC data, a $21 \times 4$ grid.
+\item \textbf{Implied-volatility surface} --- OptionMetrics' standardized volatility surface for the
+\emph{same} trade date, on an $11 \times 17$ (maturity $\times$ delta) grid. This input is derived
+from that day's own option quotes (Section~\ref{sec:data-surface}), so this branch is conditioned on
+contemporaneous cross-sectional information rather than on strictly prior information.
+\item \textbf{SPX price history} --- 21 trading days of SPX OHLCV data, a $21 \times 5$ grid, each
+row divided by the window's final close (and volume by the final volume).
+\item \textbf{VIX history} --- 21 trading days of CBOE VIX OHLC data, a $21 \times 4$ grid,
+normalized the same way: each value is divided by the window's final VIX close. This representation
+is therefore scale-free and retains only the \emph{shape} of the recent VIX path; the absolute VIX
+level is not visible to that encoder.
 \end{itemize}
+
+The flattened FNO output is projected to the latent vector by a single dense layer whose input width
+is proportional to the grid size, so the three encoders differ in parameter count: that projection
+alone holds 766{,}080 parameters for the surface grid, 430{,}208 for SPX history, and 344{,}192 for
+VIX history. The branch comparison in Section~\ref{sec:results-branch} is therefore not a
+capacity-controlled comparison, and we read it accordingly (Section~\ref{sec:limitations}).
 
 \subsection{Per-query volatility head}
 \label{sec:method-head}
 The market-state latent vector feeds a per-query head that additionally takes each contract's
 $(\log$-moneyness$, T)$ query and outputs $\hat\sigma$ for that specific contract, not one scalar per
-market state. We compare two interchangeable head designs of matched capacity:
+market state. We compare two interchangeable head designs, both with hidden width 128 acting on the
+same 128-dimensional latent vector:
 
 \begin{itemize}[leftmargin=*]
 \item \textbf{Architecture A (MLP head).} An MLP on the concatenation of the latent vector and the
@@ -219,11 +263,15 @@ BS partial derivative evaluated at the predicted $\hat\sigma$, holding $\hat\sig
 this numerically in Section~\ref{sec:results-greeks} by comparing autograd through the decoder
 against the closed-form expressions; this checks decoder correctness, not the total (sticky-strike)
 sensitivity of the learned system, which would additionally involve $\partial \hat\sigma / \partial S$.
-\item \textbf{Pointwise Black--Scholes-consistent prices.} A price computed from any $\hat\sigma \geq
-0$ solves the BS PDE and respects the static no-arbitrage bounds at the one queried contract. This
-does not, by itself, guarantee calendar-spread or butterfly consistency across the full predicted
-$(K,T)$ surface, since $\hat\sigma$ is estimated independently per query; we do not run a
-surface-wide arbitrage violation-rate check in this paper.
+\item \textbf{Pointwise Black--Scholes-consistent prices.} Conditional on a fixed predicted
+$\hat\sigma$, the decoder returns the closed-form BS price, respects its single-contract static
+no-arbitrage bounds, and has the corresponding analytical partial derivatives. This is a property of
+the frozen-$\hat\sigma$ mapping only. It is not a claim that the total learned map solves the BS PDE:
+the predicted $\hat\sigma$ is a function of the query $(\log(S/K), T)$, whereas the BS PDE is derived
+under a volatility that does not vary with strike or maturity, so the composed map need not satisfy
+it. Nor does the pointwise property guarantee calendar-spread or butterfly consistency across the
+full predicted $(K,T)$ surface, since $\hat\sigma$ is estimated independently per query; we do not
+run a surface-wide arbitrage violation-rate check in this paper.
 \end{enumerate}
 
 \begin{figure}[t]
@@ -232,25 +280,46 @@ surface-wide arbitrage violation-rate check in this paper.
 \caption{Forward pass. One of three candidate market-state inputs (implied-volatility surface, SPX
 price history, or VIX history) is encoded by a 2-D FNO into a shared latent vector. A per-query
 volatility head (architecture A: MLP head, or architecture B: DeepONet branch--trunk) combines the
-latent vector with a contract-specific query $(\log(S/K), T)$ to produce $\hat\sigma$. $\hat\sigma$
-is fed through the analytical Black--Scholes decoder to produce the normalized price $V/K$. Only
-$\hat\sigma$ is learned; the pricing function itself is fixed and differentiable.}
+latent vector with a contract-specific query $(\log(S/K), T)$ to produce $\hat\sigma$. The analytical
+Black--Scholes decoder takes five inputs --- $\log(S/K)$, $T$, the rate $r$, the dividend yield $q$,
+and $\hat\sigma$ --- and returns the normalized price $V/K$; the first four are observed contract and
+market data routed to the decoder directly, and only $\hat\sigma$ comes from the network. The pricing
+function itself is fixed and differentiable.}
 \label{fig:f1}
 \end{figure}
 
 \subsection{Loss}
 \label{sec:method-loss}
 Training minimizes plain mean-squared error on $\log(V/K)$, computed as $\log(\mathrm{clamp}(V/K,
-10^{-8}))$ for numerical stability. There is no auxiliary PDE, arbitrage, or BS-anchor penalty term:
-the analytical decoder makes such terms redundant, since every prediction the decoder can produce is
-already consistent with BS by construction.
+10^{-8}))$ for numerical stability. There is no auxiliary PDE, arbitrage, or BS-anchor penalty term.
+We do not claim such terms would be redundant --- the pointwise consistency of
+Section~\ref{sec:method-decoder} says nothing about calendar-spread or butterfly consistency across
+the predicted surface, which is exactly what a soft arbitrage penalty would target. The plain data
+loss is used because it was sufficient for the questions this paper asks and keeps the training
+objective free of tuned penalty weights; adding and evaluating a surface-wide arbitrage penalty is
+left to future work.
 
 \section{Data}
 \label{sec:data}
 
-We use SPX index options (European-style, so the BS assumption applies directly) from OptionMetrics,
-accessed via WRDS, covering 2015-02-02 through 2025-08-29. Contracts are filtered to those with
-nonzero traded volume.
+We use SPX index options from OptionMetrics, accessed via WRDS, covering 2015-02-02 through
+2025-08-29. European exercise removes the early-exercise complication; BS is used as the analytical
+decoder. Contracts are filtered to those with nonzero traded volume.
+
+\subsection{The implied-volatility-surface input and its same-day dependence}
+\label{sec:data-surface}
+The surface branch input is OptionMetrics' standardized volatility surface: an $11 \times 17$ grid of
+interpolated implied volatilities over eleven fixed maturities (10--730 calendar days) and seventeen
+fixed BS spot-delta points ($+10$ to $+90$ for calls, $-90$ to $-10$ for puts). Preprocessing joins
+this surface to the option targets on \emph{the same trade date}. Because the surface is constructed
+by OptionMetrics from that day's own option quotes, the input can share information with the
+population of quotes being priced: the date-based split described below prevents any
+information from crossing between train, validation, and test \emph{dates}, but it does not and
+cannot remove this within-date dependence. Accordingly, the surface-branch experiment should be read
+as out-of-time (date-split), same-day cross-sectional reconstruction conditional on an observed
+surface --- a nowcasting task --- and not as independent price discovery or as forecasting. The
+SPX-history and VIX-history inputs are built exclusively from the trailing 21-day OHLC(V) window and
+have no such dependence.
 
 \subsection{Maturity and contract-identity handling}
 Each contract's maturity is computed on a settlement-aware basis: AM-settled contracts lose the
@@ -310,8 +379,11 @@ $\hat\sigma$) does not occur in this sample.
 
 \subsection{Train/validation/test split}
 The 80/10/10 split is by unique trade date, not by row: all contracts quoted on a given date are
-assigned entirely to one split. This is a deliberate, time-ordered, no-leakage split that prevents
-same-day information from crossing between splits.
+assigned entirely to one split. This is a deliberate, time-ordered split that prevents information
+from any given trade date from crossing between splits. It does not, and cannot, address dependence
+\emph{within} a date: the surface branch input is a same-day construct
+(Section~\ref{sec:data-surface}), so the split makes the evaluation out-of-time but leaves that
+branch's task a same-day cross-sectional one.
 
 \subsection{What is not reconstructed}
 The raw OptionMetrics CSV row count and a per-rule breakdown of upstream attrition (secid/index
@@ -354,8 +426,27 @@ loss.
 We compare the trained models against three baselines with no learned per-query conditioning: (i) a
 zero-parameter baseline (intrinsic value for calls, $\hat\sigma{=}0$ fed through BS for puts); (ii) a
 single train-fitted constant $\hat\sigma$ per option type (flat-vol BS); and (iii) classical
-implied-volatility-surface interpolation (spline and nearest-neighbor fits to the observed $11
-\times 17$ surface, then BS). All three are evaluated on the same filtered test split as the models.
+implied-volatility-surface interpolation (nearest-neighbor, bilinear, and cubic-spline fits to the
+observed $11 \times 17$ surface, then BS). All three are evaluated on the same filtered test split as the models.
+
+\paragraph{Surface-interpolation details.} The surface baseline queries the standardized grid on a
+regular (calendar-days, delta-percent) lattice. Two points deserve explicit acknowledgment. First,
+the surface's moneyness axis is BS spot delta, which is itself a Black--Scholes-derived quantity
+computed from a volatility; a contract's grid coordinate therefore depends on the volatility being
+looked up. We resolve this with a damped fixed-point iteration ($\sigma \leftarrow
+\text{surface}(T, \delta(\sigma))$, damping 0.7, initialized at the at-the-money $|\delta| = 50$
+column, tolerance $10^{-6}$), and report the non-convergence count as a diagnostic. This baseline is
+consequently not model-free in the strict sense --- it inherits the BS delta convention --- which is
+appropriate here since it is compared against a pricer that also decodes through BS. Second, queries
+outside the observed grid (tenors below 10 or above 730 days, deltas outside the $10$--$90$ band) are
+clamped to the nearest grid boundary rather than extrapolated, so the baseline never invents surface
+values in regions OptionMetrics does not report; the counts of tenor- and delta-clamped rows are
+recorded with the results. We report all three interpolation orders --- nearest, bilinear, and cubic
+spline --- rather than choosing one; cubic spline is the one carried into
+Table~\ref{tab:baselines-call} and Table~\ref{tab:baselines-put} because it is the strongest of the
+three on both option types (calls, $R^2(\log)$: 0.7628 nearest, 0.7641 bilinear, 0.7642 spline), and
+because it is the smoothest, which is the fairest comparator against a smooth learned surface. The
+three differ only marginally, so no conclusion in this paper turns on that choice.
 
 \subsection{Ablation: per-query vs.\ scalar $\hat\sigma$}
 \label{sec:ablation-method}
@@ -364,14 +455,22 @@ between architectures or inputs), we train a restricted variant of the IV-surfac
 model in which $\hat\sigma$ is produced from the market-state latent alone, with no dependence on the
 contract query. Everything else --- encoder, decoder, training schedule, seed --- is held fixed. This
 variant is not a candidate model; it exists only to quantify the effect of removing per-query
-conditioning.
+conditioning. Like the ablation's per-query reference run, it is trained at a single seed (42) and is
+not replicated, so the reported magnitudes are descriptive of that one run rather than averaged
+estimates. We nevertheless read the qualitative conclusion as robust to this: the scalar variant
+cannot express a smile or skew \emph{by construction} --- $\hat\sigma$ is constant across all
+contracts sharing a market state --- so the direction and rough scale of the gap follow from the
+restriction itself, not from a favorable draw of the random seed.
 
 \subsection{Greeks consistency check}
 \label{sec:greeks-method}
 For the trained IV-surface, architecture-A models, we sample 2{,}000 test contracts per option type
-and compute delta ($\partial \text{price}/\partial S$) and vega through the decoder in two ways:
-autograd through the full forward pass, and the closed-form BS expressions evaluated at the same
-predicted $\hat\sigma$. Agreement between the two is a check that the decoder is implemented and
+and compute delta ($\partial \text{price}/\partial S$) and vega in two ways: by autograd through the
+Black--Scholes decoder \emph{only}, and by the closed-form BS expressions, both evaluated at the same
+predicted $\hat\sigma$. The model's $\hat\sigma$ is explicitly detached before the autograd pass, so
+no gradient flows back through the head or the FNO encoder; the quantity differentiated is the
+closed-form BS price as a function of $(S, T)$ at a frozen $\hat\sigma$, not the encoder--head--decoder
+composition. Agreement between the two is a check that the decoder is implemented and
 differentiated correctly, not an independent validation of the learned $\hat\sigma$ itself.
 
 \section{Results}
@@ -415,10 +514,22 @@ The ranking across market-state inputs is consistent across both option types an
 \textbf{IV surface} $\gg$ \textbf{SPX history} $\approx$ \textbf{VIX history} on the headline log
 metric. Calls: 0.990--0.991 (surface) versus 0.922--0.944 (SPX history) and 0.921--0.940 (VIX
 history). Puts: 0.978--0.981 (surface) versus 0.902--0.909 (SPX history) and 0.918--0.921 (VIX
-history). SPX-history and VIX-history inputs are close to each other on both option types: a
-contemporaneous IV surface carries substantially more pricing signal than either historical-price
-input, but the two historical inputs carry similar, more limited amounts of that signal.
-Three-seed replication (Table~\ref{tab:replication}) on the IV-surface cells confirms this gap is far
+history). SPX-history and VIX-history inputs are close to each other on both option types.
+
+Three qualifications bound what this ranking supports. (i) The surface branch is conditioned on the
+same-day standardized surface (Section~\ref{sec:data-surface}), so its advantage is measured in a
+same-day cross-sectional reconstruction setting; the historical branches, which see only lagged
+OHLC(V), are solving a strictly harder problem, and the gap is therefore not a like-for-like measure
+of how much ``signal'' the two input families contain. (ii) The encoders are not parameter-matched
+(766{,}080 / 430{,}208 / 344{,}192 parameters in the flattening projection alone), so capacity is
+confounded with input content. (iii) The VIX-history tensor is divided by the window's final VIX
+close, which removes the absolute level of VIX and leaves only the shape of the 21-day path; the
+correct reading of the VIX result is that \emph{this close-normalized representation} underperforms
+the surface, not that VIX history is uninformative in general --- indeed a level-based VIX baseline
+is the strongest non-neural baseline on calls in the wider baseline sweep behind
+Table~\ref{tab:baselines-call} (not tabulated here). Within these
+qualifications, the ordering itself is stable: it holds on both option types and both head
+architectures. Three-seed replication (Table~\ref{tab:replication}) on the IV-surface cells confirms this gap is far
 larger than seed-to-seed dispersion: for example, call architecture A's across-seed standard
 deviation (0.000073) is roughly three orders of magnitude smaller than its gap over SPX-history
 architecture A ($0.991 - 0.922 \approx 0.07$); the smallest such ratio among the four replicated
@@ -450,11 +561,14 @@ On calls, architectures A and B are effectively tied: their $R^2(\log)$ means di
 standard deviation of either (0.990996 vs.\ 0.991075). On puts, architecture B's mean is somewhat
 higher than architecture A's (0.981738 vs.\ 0.979099), but this reading rests on only three seeds and
 is not, by itself, a strong superiority claim. We therefore do not rank the two architectures: the
-data support \emph{no significant difference given measured seed-to-seed dispersion}, not a
-preference for either design. The SPX-history and VIX-history branches have no replication at all
-(single seed each), so no dispersion estimate exists for the other eight cells in
-Table~\ref{tab:t1}, and any architecture comparison restricted to those branches would carry no
-statistical support whatsoever; we do not attempt one.
+observed differences are small relative to the measured seed-to-seed variation, and three seeds are
+insufficient to rank the architectures. We ran no inferential test, and none of the comparisons in
+this subsection should be read as a significance test; the $\pm$ figures in
+Table~\ref{tab:replication} are descriptive across-seed standard deviations over three runs, nothing
+more. The SPX-history and VIX-history branches have no replication at all --- one seed each --- so
+\emph{no dispersion estimate exists} for the other eight cells of Table~\ref{tab:t1}. For those
+branches we cannot say whether an observed A-versus-B difference is larger or smaller than run-to-run
+noise, and we therefore draw no architecture comparison there at all.
 
 \subsection{Ablation: per-query volatility conditioning}
 \label{sec:results-ablation}
@@ -482,11 +596,18 @@ Put  & scalar (market state only) & $-3.090190$ & $-0.316871$ & 2.270415 \\
 
 Removing per-contract conditioning drops call $R^2(\log)$ from 0.991 to 0.800 and put $R^2(\log)$
 from 0.978 to $-0.317$; on puts, the price-space effect is even starker: $R^2(\text{price})$ falls
-from 0.993 to $-3.090$, worse than always predicting the mean price. Figure~\ref{fig:f2} shows the
+from 0.993 to $-3.090$, worse than always predicting the mean price. Both rows are single-seed
+(seed 42, Section~\ref{sec:ablation-method}), so the exact figure $-3.090$ describes this one run and
+should not be read as a replicated estimate; the qualitative finding --- a large gap, qualitative on
+puts --- follows from the structural inability of a market-state-only $\hat\sigma$ to express a smile
+and does not depend on the seed. Figure~\ref{fig:f2} shows the
 visual counterpart of this result on the volatility surface itself: at three fixed test dates and
 three maturity buckets per option type, the per-query $\hat\sigma$ curve tracks the observed
 market-IV smile/skew across moneyness, while the scalar-$\hat\sigma$ curve is, by construction, flat
-within each panel.
+within each panel. Both models here take the IV-surface branch, so what the per-query curve
+demonstrates is that the architecture can \emph{reconstruct} the day's smile from that day's
+standardized surface plus the contract query (Section~\ref{sec:data-surface}); it is not evidence
+that the smile is recovered from information available strictly before the quote.
 
 \begin{figure}[t]
 \centering
@@ -545,16 +666,17 @@ three baselines of Section~\ref{sec:baselines-method}.
 \centering
 \small
 \caption{Calls: baselines are close to saturated on $R^2(\text{price})$; all four numbers lie within
-a 0.0014 range, so this metric alone does not discriminate pricers on this dataset.}
+a 0.0014 range, so this metric alone does not discriminate pricers on this dataset. The log-space
+column separates them by orders of magnitude.}
 \label{tab:baselines-call}
-\begin{tabular}{lr}
+\begin{tabular}{lrr}
 \toprule
-Baseline / model & $R^2(\text{price})$ \\
+Baseline / model & $R^2(\text{price})$ & $R^2(\log)$ \\
 \midrule
-Zero-parameter (intrinsic value) & 0.998586 \\
-Constant $\hat\sigma$ (train-fitted, $\sigma{=}0.1933$) & 0.999706 \\
-IV-surface spline interpolation & 0.999982 \\
-Best neural model (IV surface, A) & 0.999977 \\
+Zero-parameter (intrinsic value) & 0.998586 & $-16.806016$ \\
+Constant $\hat\sigma$ (train-fitted, $\sigma{=}0.1933$) & 0.999706 & 0.620788 \\
+IV-surface spline interpolation & 0.999982 & 0.764181 \\
+Best neural model (IV surface, A) & 0.999977 & \textbf{0.991044} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -578,8 +700,12 @@ Best neural model (IV surface, B) & 0.993780 & \textbf{0.981298} \\
 
 On calls, all four numbers in Table~\ref{tab:baselines-call} sit within a 0.0014 range: an
 intrinsic-value baseline with no fitted parameters already reaches $R^2(\text{price}) = 0.9986$,
-so call price-$R^2$ is a weak discriminator on its own and the log-space metric
-(Table~\ref{tab:t1}) is the more informative one for calls. On puts, the two metrics disagree on
+so call price-$R^2$ is a weak discriminator on its own and the log-space metric is the more
+informative one for calls. That column separates the same four pricers cleanly: $-16.81$ for the
+zero-parameter baseline, 0.621 for a train-fitted constant $\hat\sigma$, 0.764 for spline
+interpolation of the observed surface, and 0.991 for the model. Unlike puts, calls show no material
+metric disagreement: the model leads every baseline on log-space and sits within $5\times10^{-6}$ of
+the best baseline on price-space. On puts, the two metrics disagree on
 which pricer wins: IV-surface spline interpolation edges out the model on price-space (0.996594 vs.\
 0.993780), but the model is decisively ahead on log-space (0.981298 vs.\ $-2.518559$). Whichever
 pricer a reader considers "better" for puts depends on which metric they weight; we report both
@@ -640,9 +766,10 @@ $\hat\sigma$ check does not exercise.
 \label{sec:limitations}
 
 \begin{itemize}[leftmargin=*]
-\item \textbf{Pointwise, not surface-wide, Black--Scholes consistency.} The decoder guarantees static
-no-arbitrage bounds at each queried contract but not calendar-spread or butterfly consistency across
-the predicted surface. A violation-rate diagnostic on the predicted $(K,T)$ surface would be needed to
+\item \textbf{Pointwise, not surface-wide, Black--Scholes consistency.} At a fixed predicted
+$\hat\sigma$ the decoder guarantees the single-contract static no-arbitrage bounds at each queried
+contract, but not calendar-spread or butterfly consistency across the predicted surface, and not
+that the total learned map (in which $\hat\sigma$ varies with the query) satisfies the BS PDE. A violation-rate diagnostic on the predicted $(K,T)$ surface would be needed to
 make a surface-wide claim, and we do not run one here.
 \item \textbf{Call price-$R^2$ is a weak metric on this dataset.} A zero-parameter intrinsic-value
 baseline already reaches $R^2(\text{price}) = 0.9986$ for calls (Table~\ref{tab:baselines-call}), so
@@ -650,20 +777,40 @@ most of the call price-$R^2$ figures in this paper should not be read as strong 
 own; the put comparison and the log-space metric carry the informative signal.
 \item \textbf{Architecture ranking (A vs.\ B) is underdetermined.} Three-seed replication exists only
 for the four IV-surface cells, and even there the put result (B somewhat ahead of A) rests on three
-seeds, not enough for a superiority claim. The SPX-history and VIX-history branches are single-seed
-throughout, with genuinely unmeasured dispersion; we make no architecture claim for those eight cells.
+seeds, not enough for a superiority claim; we report descriptive across-seed dispersion and run no
+inferential test anywhere in this paper. The SPX-history and VIX-history branches are single-seed
+throughout, with genuinely unmeasured dispersion; we make no architecture claim for those eight
+cells. The scalar-$\hat\sigma$ ablation is likewise single-seed
+(Section~\ref{sec:ablation-method}), so its magnitudes are descriptive of one run.
+\item \textbf{The surface branch is conditioned on same-day information.} Its input is
+OptionMetrics' own standardized surface for the trade date being priced, built from that day's
+quotes (Section~\ref{sec:data-surface}). The date-based split removes cross-date leakage but not
+this within-date dependence, so the surface-branch results establish same-day cross-sectional
+reconstruction conditional on an observed surface, not forecasting or independent price discovery.
+Any deployment reading of those numbers would require the surface to be available at pricing time.
+\item \textbf{The branch comparison is not capacity-controlled, and the VIX representation is
+level-free.} The flattening projection alone holds 766{,}080 (surface), 430{,}208 (SPX history), and
+344{,}192 (VIX history) parameters, a spread of roughly $2.2\times$, so input content and encoder
+capacity are confounded in Section~\ref{sec:results-branch}. Separately, the VIX-history tensor is
+divided by the window's final VIX close, which discards the absolute VIX level and retains only the
+path shape; the VIX result therefore speaks only to that close-normalized representation and not to
+VIX history as an information source. A capacity-matched rerun with a level-preserving VIX encoding
+would be needed to attribute the branch gap to input content alone.
 \item \textbf{Near-expiry ill-conditioning is real and not removed by the maturity filter.} The
 maturity filter removes the degenerate exact-$T{=}0$ case but not the continuous ill-conditioning of
 $\partial \log(\text{price})/\partial \hat\sigma$ as $T \to 0$; the shortest surviving maturity band
 still shows elevated log-space error (Section~\ref{sec:results-error}), though it is small in absolute
 price terms.
-\item \textbf{Single underlying, European-style only.} All results are on SPX index options, which
-are European-style, so the BS assumption applies directly; we make no claim about American-style
-contracts or other underlyings.
+\item \textbf{Single underlying, European exercise only.} All results are on SPX index options.
+European exercise removes the early-exercise complication; BS is used as the analytical decoder,
+with the dividend yield handled through the decoder's $q$ term. We make no claim about American-style
+contracts or other underlyings, and the remaining BS idealizations (constant volatility over the
+contract's life, frictionless continuous trading) are not satisfied by the market --- they are
+precisely why $\hat\sigma$ must be predicted per contract in the first place.
 \item \textbf{Mid-price only.} We price the bid-ask midpoint; transaction costs and the bid-ask spread
 itself are out of scope.
 \item \textbf{No direct-price-regressor control.} We do not compare against a direct-price regressor
-of matched capacity that skips the BS decoder entirely, so this paper makes no claim about how the
+of comparable size that skips the BS decoder entirely, so this paper makes no claim about how the
 BS-decoder design compares to that alternative.
 \item \textbf{Loss function.} We use plain MSE on $\log(V/K)$ throughout; an informal comparison
 against a Huber loss did not improve the headline log-space metric and is not reported as a
@@ -674,10 +821,11 @@ controlled ablation.
 \label{sec:conclusion}
 Predicting a per-contract implied volatility and pricing it through a differentiable Black--Scholes
 decoder removes the need for a learned pricing surrogate and yields two structural properties by
-construction: analytic partial greeks at the predicted $\hat\sigma$ (confirmed to
-$\sim\!10^{-14}$--$10^{-16}$ agreement between autograd and closed-form BS,
-Section~\ref{sec:results-greeks}) and pointwise Black--Scholes-consistent prices at every queried
-contract (Section~\ref{sec:method-decoder}), though not, without further evidence, a guarantee of
+construction, both conditional on the predicted $\hat\sigma$ being held fixed: analytic partial
+greeks at that $\hat\sigma$ (confirmed to $\sim\!10^{-14}$--$10^{-16}$ agreement between autograd
+through the decoder and closed-form BS, Section~\ref{sec:results-greeks}) and pointwise
+Black--Scholes-consistent prices at every queried contract (Section~\ref{sec:method-decoder}).
+Neither extends to the total learned map, whose $\hat\sigma$ varies with the query, nor to
 arbitrage-freedom across the full predicted surface. The per-query-vs-scalar ablation
 (Section~\ref{sec:results-ablation}) shows that per-query conditioning is doing real work, not merely
 adding parameters: removing it collapses put $R^2(\log)$ from 0.978 to $-0.317$ and put
@@ -685,16 +833,21 @@ $R^2(\text{price})$ to $-3.09$, worse than predicting the mean. Comparing three 
 inputs, the contemporaneous implied-volatility surface consistently prices better than either
 SPX-price or VIX historical inputs, on both option types and both head architectures
 (Section~\ref{sec:results-branch}); three-seed replication confirms this branch-comparison result is
-robust to seed variation, while the separate question of which per-query head architecture is better
-remains unresolved given measured dispersion. Overall, on this dataset the approach reaches
+robust to seed variation. That comparison is not, however, like-for-like: the surface branch reads
+OptionMetrics' own same-day standardized surface, so it demonstrates out-of-time (date-split),
+same-day cross-sectional reconstruction conditional on an observed surface rather than forecasting,
+and the three encoders differ in parameter count while the VIX input is normalized in a way that
+removes the absolute VIX level (Section~\ref{sec:limitations}). The separate question of which
+per-query head architecture is better remains unresolved: the observed differences are small
+relative to the seed-to-seed variation we measure, and three seeds are insufficient to rank them. Overall, on this dataset the approach reaches
 $R^2(\text{price}) \approx 0.9999$--$0.99998$ and $R^2(\log) \approx 0.990$--$0.991$ on the
 IV-surface input for calls, though calls' price-$R^2$ is close to a zero-parameter baseline and
 should not be read in isolation; the more informative put comparison shows the model a shade below
 IV-surface interpolation on price-space (0.993--0.994 vs.\ 0.997) but decisively ahead of it on
 log-space (0.978--0.981 vs.\ $-2.52$).
 
-\section*{Acknowledgments}
-\TODO{Add funding/acknowledgment text if applicable before submission.}
+% Acknowledgments section intentionally omitted: no funding to acknowledge for this draft.
+% Add a \section*{Acknowledgments} block here before submission if that changes.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
@@ -755,8 +908,10 @@ alongside its checkpoints at training time.
 Two additional figures were considered but are not included in this manuscript. A near-expiry
 SSE-vs-maturity tail plot (isolating the residual ill-conditioning discussed in
 Section~\ref{sec:results-error} as a function of maturity within the shortest surviving bands) was
-not built for this version. \TODO{Build near-expiry SSE-vs-maturity figure if space/time permits in a
-future revision.} A plotted version of the greeks-agreement check in
+not built for this version; the maturity-stratified rows of Figure~\ref{fig:f3} already convey the
+same qualitative pattern.
+% Optional future revision: build the near-expiry SSE-vs-maturity figure if space permits.
+A plotted version of the greeks-agreement check in
 Section~\ref{sec:results-greeks} was judged unnecessary given that Table~\ref{tab:greeks} already
 reports the full numerical agreement; we omit a dedicated figure for it.
 

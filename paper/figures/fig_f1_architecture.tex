@@ -4,6 +4,9 @@
 %   one of three branch inputs -> FNO encoder -> latent market-state vector
 %   -> per-query vol head (latent + (log-moneyness, T)) -> sigma-hat
 %   -> analytical Black-Scholes decoder -> price (V/K).
+% The decoder signature is bs_normalized_price(log_moneyness, T, r, q, sigma),
+% so it takes five inputs: the contract query and (r, q) go into it directly,
+% alongside sigma-hat from the head.
 \begin{tikzpicture}[
     font=\small,
     node distance=8mm and 10mm,
@@ -31,8 +34,10 @@
 % --- per-query head ---
 \node[procbox, right=of latent] (head) {per-query\\[-1pt]\footnotesize vol head\\[-1pt]\footnotesize (MLP-head A / DeepONet B)};
 
-% --- query inputs feeding the head from below ---
+% --- contract terms: the query (log-moneyness, T) feeds the head AND, together with
+%     the observed rate and dividend yield (r, q), the BS decoder directly.
 \node[inputbox, below=14mm of head, minimum width=27mm] (query) {contract query\\[-1pt]\footnotesize $(\log(S/K),\,T)$};
+\node[inputbox, right=10mm of query, minimum width=27mm] (rq) {market inputs\\[-1pt]\footnotesize rate $r$, div.\ yield $q$};
 
 % --- sigma hat ---
 \node[vecbox, right=of head] (sigma) {$\hat\sigma$\\[-1pt]\footnotesize softplus-positive};
@@ -52,6 +57,11 @@
 \draw[arrow] (query) -- (head);
 \draw[arrow] (head) -- (sigma);
 \draw[arrow] (sigma) -- (bs);
+% the decoder also consumes the contract terms directly, not only sigma-hat
+\draw[arrow] (query.south) -- ++(0,-8mm) -| (bs.south west)
+    node[pos=0.25, below, font=\scriptsize] {$\log(S/K),\,T$};
+\draw[arrow] (rq.south) -- ++(0,-4mm) -| (bs.south east)
+    node[pos=0.25, below, font=\scriptsize] {$r,\,q$};
 \draw[arrow] (bs) -- (price);
 
 \end{tikzpicture}
