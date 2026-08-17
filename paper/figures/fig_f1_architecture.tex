@@ -1,0 +1,57 @@
+% F1 -- architecture / forward-pass diagram.
+% Standalone TikZ, included via \input{figures/fig_f1_architecture} inside a
+% figure environment in main.tex. Matches report.md Sec.3 (Method) exactly:
+%   one of three branch inputs -> FNO encoder -> latent market-state vector
+%   -> per-query vol head (latent + (log-moneyness, T)) -> sigma-hat
+%   -> analytical Black-Scholes decoder -> price (V/K).
+\begin{tikzpicture}[
+    font=\small,
+    node distance=8mm and 10mm,
+    box/.style={draw, thick, rounded corners, align=center, minimum height=10mm, inner sep=3pt},
+    inputbox/.style={box, fill=gray!12, minimum width=27mm},
+    procbox/.style={box, fill=blue!8, minimum width=27mm},
+    vecbox/.style={box, fill=orange!12, minimum width=24mm},
+    decbox/.style={box, fill=green!10, minimum width=27mm},
+    arrow/.style={-{Latex[length=2mm]}, thick}
+]
+
+% --- three interchangeable branch inputs (stacked) ---
+\node[inputbox] (in1) at (0, 12mm)  {IV surface\\[-1pt]\footnotesize $11\times17$};
+\node[inputbox] (in2) at (0, 0)     {SPX history\\[-1pt]\footnotesize $21\times5$ OHLCV};
+\node[inputbox] (in3) at (0,-12mm)  {VIX history\\[-1pt]\footnotesize $21\times4$ OHLC};
+
+\node[draw, dashed, rounded corners, fit=(in1)(in2)(in3), inner sep=4pt, label={[font=\scriptsize]above:one branch input, selected per run}] (inputgroup) {};
+
+% --- FNO encoder ---
+\node[procbox, right=of in2] (fno) {2-D FNO\\[-1pt]\footnotesize encoder};
+
+% --- latent vector ---
+\node[vecbox, right=of fno] (latent) {latent\\[-1pt]\footnotesize market state $\in\mathbb{R}^{128}$};
+
+% --- per-query head ---
+\node[procbox, right=of latent] (head) {per-query\\[-1pt]\footnotesize vol head\\[-1pt]\footnotesize (MLP-head A / DeepONet B)};
+
+% --- query inputs feeding the head from below ---
+\node[inputbox, below=14mm of head, minimum width=27mm] (query) {contract query\\[-1pt]\footnotesize $(\log(S/K),\,T)$};
+
+% --- sigma hat ---
+\node[vecbox, right=of head] (sigma) {$\hat\sigma$\\[-1pt]\footnotesize softplus-positive};
+
+% --- BS decoder ---
+\node[decbox, right=of sigma] (bs) {analytical\\[-1pt]\footnotesize Black--Scholes decoder};
+
+% --- price output ---
+\node[vecbox, right=of bs, minimum width=22mm] (price) {price\\[-1pt]\footnotesize $V/K$};
+
+% arrows
+\draw[arrow] (in1) -- (fno);
+\draw[arrow] (in2) -- (fno);
+\draw[arrow] (in3) -- (fno);
+\draw[arrow] (fno) -- (latent);
+\draw[arrow] (latent) -- (head);
+\draw[arrow] (query) -- (head);
+\draw[arrow] (head) -- (sigma);
+\draw[arrow] (sigma) -- (bs);
+\draw[arrow] (bs) -- (price);
+
+\end{tikzpicture}
