@@ -23,3 +23,16 @@ __pycache__/
 # Local Claude Code settings
 .claude/
 claude_resume.txt
+
+# Local process/methodology docs - kept on disk, not published
+CLAUDE.md
+DLforPhysicalSystems_project.pdf
+PROGRESS_paper_artifacts.md
+PROGRESS_phase2_v3.md
+final_report.tex
+plan_phase1.md
+plan_phase2.md
+plan_phase2_v2.md
+plan_phase2_v3.md
+pub_plan.md
+report.md
