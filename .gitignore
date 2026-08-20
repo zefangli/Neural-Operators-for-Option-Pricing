@@ -3,8 +3,18 @@
 *.csv
 *.parquet
 
-# Trained model weights (reproducible from training scripts)
+# Trained model weights: ship only the canonical eval checkpoint per run;
+# phase-1/final intermediate checkpoints are reproducible from training scripts
 *.pth
+!**/best_model.pth
+
+# Operational/orchestration scratch (job launchers, coordinator logs, sentinels,
+# smoke-test runs, interrupted attempts) - not part of the reproducible record
+train_model_v3/jobs/
+train_model_v3/runs/
+train_model_v3/_INTERRUPTED_NOT_FOR_EVALUATION/
+**/*_smoke/
+*.log
 
 # Python caches
 __pycache__/
@@ -12,3 +22,4 @@ __pycache__/
 
 # Local Claude Code settings
 .claude/
+claude_resume.txt
