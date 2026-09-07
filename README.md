@@ -33,7 +33,7 @@ trade date:
 Two results this table can't show on its own:
 
 - **Per-query conditioning has the largest effect.** Collapsing σ̂ to one scalar per market state
-  instead of one per contract drops put R²(log, T>1 day) from 0.978 to −0.317 and put R²(price) from
+  instead of one per contract drops put R²(log, T>1 day) from 0.978 to about −0.32 and put R²(price) from
   0.993 to −3.090; calls move the same way (0.991 → 0.800).
 - **Greeks come from the same analytical decoder.** Autograd through the decoder agrees with
   closed-form Black–Scholes at the predicted σ̂ to a maximum absolute discrepancy of ~2×10⁻¹⁴

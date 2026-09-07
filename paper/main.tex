@@ -40,8 +40,8 @@ analytical pricer, with no learned surrogate. A 2-D Fourier Neural Operator enco
 from one of three inputs (implied-volatility surface, SPX price history, or VIX history), and a
 per-query head emits $\hat\sigma$ from each contract's log-moneyness and maturity. On
 quote-quality-filtered SPX options (OptionMetrics via WRDS) split 80/10/10 by trade date, three
-results follow. Per-query conditioning has the largest effect: one scalar $\hat\sigma$ per market
-state rather than per contract collapses put $R^2(\log)$ from 0.978 to $-0.317$ and
+results follow. Per-query conditioning matters most: one scalar $\hat\sigma$ per market
+state rather than per contract collapses put $R^2(\log)$ from 0.978 to about $-0.32$ and
 $R^2(\text{price})$ to $-3.090$. The surface-conditioned configuration prices best, $R^2(\log) \approx
 0.98$--$0.99$ against $\approx 0.90$--$0.94$ for the historical ones. Autograd partial greeks through
 the decoder match closed-form BS at the predicted $\hat\sigma$ to a maximum absolute discrepancy of
@@ -108,9 +108,10 @@ tensors are 21-trading-day windows ending on the target trade date and therefore
 underlying and VIX closes; their same-day dependence on the option market is weaker and far
 lower-dimensional than the surface branch's (SPX history has none directly, only the same-day
 underlying close; VIX is a single scalar index that Cboe computes from contemporaneous SPX option
-quotations), but it is not zero. (b) The three encoders are \emph{not} parameter-matched---because
-the flattened FNO output is projected by a single dense layer whose input width scales with the grid,
-that projection alone holds 766{,}080 parameters for the $11{\times}17$ surface grid, 430{,}208 for
+quotations), but it is not zero. (b) The three encoders are \emph{not} parameter-matched---the
+flattened FNO output is projected to the latent vector by two dense layers, and the first of them,
+whose input width scales with the grid, dominates the count: it holds 766{,}080 parameters (weights
+and bias) for the $11{\times}17$ surface grid, 430{,}208 for
 the $21{\times}5$ SPX-history grid, and 344{,}192 for the $21{\times}4$ VIX-history grid, so input
 content, timing, normalization, grid size, and capacity all vary together and the comparison is
 between whole configurations, not raw inputs (Section~\ref{sec:limitations}).
@@ -225,10 +226,12 @@ separates these branches from the surface branch is the amount and directness of
 single scalar index (further reduced to a shape by the normalization) versus the full standardized
 $11 \times 17$ implied volatility surface---not its presence or absence.
 
-The flattened FNO output is projected to the latent vector by a single dense layer whose input width is
-proportional to the grid size, so the three encoders differ in parameter count: that projection alone
-holds 766{,}080 parameters for the surface grid, 430{,}208 for SPX history, and 344{,}192 for VIX
-history. The branch comparison in Section~\ref{sec:results-branch} is consequently not a
+The flattened FNO output is projected to the latent vector by two dense layers, a flatten-to-128 layer
+whose input width is proportional to the grid size followed by a fixed 128-to-latent layer, so the
+three encoders differ in parameter count. The first layer dominates that difference and is the one the
+published counts refer to: including its bias it holds 766{,}080 parameters for the surface grid,
+430{,}208 for SPX history, and 344{,}192 for VIX history, while the second layer is identical across
+all three branches. The branch comparison in Section~\ref{sec:results-branch} is consequently not a
 capacity-controlled comparison, and we read it accordingly (Section~\ref{sec:limitations}).
 
 \subsection{Per-query volatility head}
@@ -278,7 +281,9 @@ strictly more than 24 hours remaining to settlement, excludes this case from the
 implementation is not exactly $\hat\sigma$-independent at $T{=}0$: it evaluates
 $\sqrt{\mathrm{clamp}(T, 10^{-10})}$, clamping the maturity before taking the square root rather than
 clamping the square root itself, and therefore retains a residual $\hat\sigma$ dependence of order
-$10^{-6}$ in a vanishing band around the money. No contract in this dataset reaches that regime.
+$10^{-5}$ in a vanishing band around the money: a synthetic exact-$T{=}0$ probe of the decoder finds a
+maximum price spread over $\hat\sigma$ of $1.2\times10^{-5}$ in $V/K$ units
+(\texttt{results/diagnostics\_tail\_v5.json}). No contract in this dataset reaches that regime.
 
 \begin{figure}[t]
 \centering
@@ -385,9 +390,11 @@ Put  & \textbf{Total} & \textbf{7{,}991{,}054} & \textbf{7{,}925{,}349} & \textb
 \end{tabular}
 \end{table}
 
-After filtering, an automated data-quality pass finds \textbf{zero} static-bound violations remaining
-across every maturity and moneyness stratum for both option types, and \textbf{0.00\%} duplicate-input
-rows (every contract maps to a distinct model input). No contract is quoted exactly on its own expiry
+After filtering, the dataset validation pass finds \textbf{zero} static-bound violations, no
+non-finite values, and a minimum maturity of 1.73 days across all 4{,}846{,}268 call and 7{,}925{,}349
+put rows, and a separate duplicate-input check finds \textbf{0.00\%} duplicate-input rows within every
+split, over the full dataset, and across split boundaries, so every contract maps to a distinct model
+input. No contract is quoted exactly on its own expiry
 date under the settlement-aware maturity cut, so the $T{=}0$ degeneracy discussed in
 Section~\ref{sec:method-decoder}, where the theoretical Black--Scholes price collapses to intrinsic
 value and the implied volatility is unidentified, does not occur in this sample.
@@ -435,25 +442,36 @@ IV-surface runs (call/put $\times$ architecture A/B) are additionally trained at
 44) to give a dispersion estimate for the architecture comparison and for the surface branch's own
 stability in Section~\ref{sec:results}. That replication does not cover the branch-vs-branch
 comparison: the SPX-history and VIX-history runs remain single-seed, and we do not report or imply a
-variance estimate for them. Test-set metrics reported throughout are computed on the normalized price
-$V/K$, not raw dollar prices, and are averaged over the full test split (no subsampling) by a held-out
-evaluation script loaded from each run's best checkpoint by validation loss.
+variance estimate for them. Two of those eight single-seed history runs, call SPX history with
+architecture A and put SPX history with architecture B, reached their best validation loss at epoch 1
+of the 16 epochs recorded and never improved on it
+(\texttt{train\_model\_v3/call/results\_spot\_history\_v5/loss\_history.txt},
+\texttt{train\_model\_v3/put/results\_spot\_history\_don\_v5/loss\_history.txt}), so the checkpoints
+carried into those two cells of Table~\ref{tab:t1} are effectively one-epoch models. The single-seed
+history-branch results should therefore be read as potentially optimization-sensitive rather than as
+tuned ceilings for those configurations. Test-set metrics reported throughout are computed on the
+normalized price $V/K$, not raw dollar prices, and are averaged over the full test split (no
+subsampling) by a held-out evaluation script loaded from each run's best checkpoint by validation
+loss.
 
 \subsection{Baselines}
 \label{sec:baselines-method}
 We compare the trained models against three baselines with no learned per-query conditioning: the
 zero-volatility limit (discounted forward intrinsic), which prices a call at
 $\max(\mathrm{fwd}-\mathrm{disc},0)$ and a put at $\max(\mathrm{disc}-\mathrm{fwd},0)$ in $V/K$ units
-and fits no parameter at all; a single constant $\hat\sigma$ per option type (flat-vol BS), fitted on
-the training split under two separate objectives, minimum MSE on $\log(V/K)$ and minimum MSE on $V/K$,
+and fits no parameter at all; a single constant $\hat\sigma$ per option type (flat-vol BS), fitted
+under two separate objectives, minimum MSE on $\log(V/K)$ and minimum MSE on $V/K$,
 because the two objectives select materially different constants; and classical implied-volatility-surface
 interpolation (nearest-neighbor, bilinear, and cubic-spline fits to the observed $11 \times 17$
-surface, then BS). All three are evaluated on the same filtered test split as the models. The same
+surface, then BS). All three are evaluated on the same filtered test split as the models. Every
+fitted baseline constant reported in this paper, the two constant-$\hat\sigma$ values and every scale
+factor alike, is fitted on one fixed uniform 300{,}000-row subsample of the training split drawn with
+seed 0 (\texttt{results/baselines\_v5.json}), not on the full training split. The same
 sweep also evaluates a family of VIX-level baselines that set $\hat\sigma$ to the day's VIX level times
-a single train-fitted scale factor; we do not tabulate these as headline comparators, since they use a
-market observable that is not one of the three branch inputs, but we quote the price-space-fitted
-variant, \texttt{vix\_level\_scaled\_pxfit}, in Section~\ref{sec:results-branch}, where it bears on how
-the VIX result should be read.
+a single scale factor fitted on that same train subsample; we do not tabulate these as headline
+comparators, since they use a market observable that is not one of the three branch inputs, but we
+quote the price-space-fitted variant, \texttt{vix\_level\_scaled\_pxfit}, in
+Section~\ref{sec:results-branch}, where it bears on how the VIX result should be read.
 
 \paragraph{Surface-interpolation details.} The surface baseline queries the standardized grid on a
 regular (calendar-days, delta-percent) lattice. Two points deserve explicit acknowledgment. First, the
@@ -550,16 +568,17 @@ same-day cross-sectional reconstruction setting; the historical branches, whose 
 the trade date but carry only that day's underlying close (SPX history) or a single same-day VIX level
 reduced to a path shape (VIX history), are solving a substantially harder problem, so the gap is not a
 like-for-like measure of how much ``signal'' the two input families contain. Second, the encoders are
-not parameter-matched (766{,}080 / 430{,}208 / 344{,}192 parameters in the flattening projection
-alone), and they also differ in grid size, spectral modes, and input normalization, so input content,
-timing, and capacity vary together and what is ranked is three complete configurations rather than
-three raw inputs. Third, the VIX-history tensor is divided by the window's final VIX close, which
-removes the absolute level of VIX and leaves only the shape of the 21-day path; the correct reading of
-the VIX result is that \emph{this close-normalized representation} underperforms the surface, not that
-VIX history is uninformative in general. The \texttt{vix\_level\_scaled\_pxfit} baseline, which
-uses the raw VIX \emph{level} scaled by a single train-fitted constant, attains the highest call-side
-$R^2(\log)$ of any non-neural baseline we evaluated, 0.7904 (price-space $R^2 = 0.999809$), above the
-0.7642 of spline interpolation of the observed surface in Table~\ref{tab:baselines-call}.
+not parameter-matched (766{,}080 / 430{,}208 / 344{,}192 parameters in the first, grid-dependent
+layer of the flattening projection), and they also differ in grid size, spectral modes, and input
+normalization, so input content, timing, and capacity vary together and what is ranked is three
+complete configurations rather than three raw inputs. Third, the VIX-history tensor is divided by
+the window's final VIX close, which removes the absolute level of VIX and leaves only the shape of
+the 21-day path; the correct reading of the VIX result is that \emph{this close-normalized
+representation} underperforms the surface, not that VIX history is uninformative in general. The
+\texttt{vix\_level\_scaled\_pxfit} baseline, which uses the raw VIX \emph{level} scaled by a single
+train-subsample-fitted constant, attains the highest call-side $R^2(\log)$ of any non-neural
+baseline we evaluated, 0.7904 (price-space $R^2 = 0.999809$), above the 0.7642 of spline
+interpolation of the observed surface in Table~\ref{tab:baselines-call}.
 
 Within these qualifications, the ordering itself is stable: it holds on both option types and both
 head architectures. Three-seed replication (Table~\ref{tab:replication}) exists only for the IV-surface
@@ -618,7 +637,9 @@ Section~\ref{sec:ablation-method}.
 \caption{Per-query vs.\ scalar-$\hat\sigma$ ablation, IV-surface branch, architecture A, seed 42. The
 scalar-$\hat\sigma$ row is a restricted control, not a candidate model. The per-query rows repeat the
 canonical Table~\ref{tab:t1} values; the separate ablation evaluator reproduces them to the fifth
-decimal, returning 0.221896, 0.977899, and 0.294127 for the three cells where the two scripts differ.}
+decimal, returning 0.221896, 0.977899, and 0.294127 for the three cells where the two scripts differ.
+All figures come from the independent CPU ablation evaluator in float32 at batch size 4096 over the
+full test split.}
 \label{tab:ablation}
 \begin{tabular}{llrrr}
 \toprule
@@ -633,7 +654,9 @@ Put  & scalar (market state only) & $-3.090190$ & $-0.316871$ & 2.270415 \\
 \end{table}
 
 Removing per-contract conditioning drops call $R^2(\log)$ from 0.991 to 0.800 and put $R^2(\log)$ from
-0.978 to $-0.317$. On puts, the price-space effect is larger still: $R^2(\text{price})$ falls from
+0.978 to about $-0.32$; the scalar-$\hat\sigma$ log-space figures are quoted to two decimals because
+that is the precision they reproduce to across evaluation paths (Appendix~\ref{app:numstab}). On puts,
+the price-space effect is larger still: $R^2(\text{price})$ falls from
 0.993 to $-3.090$, worse than always predicting the mean price. Both rows are single-seed (seed 42,
 Section~\ref{sec:ablation-method}), so the exact figure $-3.090$ describes this one run and should not
 be read as a replicated estimate. What is seed-independent here is the representational restriction: a
@@ -708,7 +731,8 @@ three baselines of Section~\ref{sec:baselines-method}.
 \small
 \caption{Calls: baselines are close to saturated on $R^2(\text{price})$; all five numbers lie within a
 0.0014 range, so this metric alone does not discriminate pricers on this dataset. The log-space column
-separates them sharply. Both constant-$\hat\sigma$ rows are fitted on the training split, one by
+separates them sharply. Both constant-$\hat\sigma$ rows are train-subsample-fitted
+(Section~\ref{sec:baselines-method}), one by
 minimizing MSE on $\log(V/K)$ and one by minimizing MSE on $V/K$.}
 \label{tab:baselines-call}
 \begin{tabular}{lrr}
@@ -728,7 +752,8 @@ Best neural model (IV surface, A) & 0.999977 & \textbf{0.991044} \\
 \centering
 \small
 \caption{Puts: price-space and log-space metrics disagree on which pricer wins. Both
-constant-$\hat\sigma$ rows are fitted on the training split, one by minimizing MSE on $\log(V/K)$ and
+constant-$\hat\sigma$ rows are train-subsample-fitted (Section~\ref{sec:baselines-method}), one by
+minimizing MSE on $\log(V/K)$ and
 one by minimizing MSE on $V/K$; the two objectives select different constants and rank in opposite
 directions on the two metrics.}
 \label{tab:baselines-put}
@@ -751,12 +776,12 @@ call price-$R^2$ is a weak discriminator on its own and the log-space metric is 
 one for calls. That column separates the same pricers cleanly: $-16.81$ for the zero-volatility limit,
 0.621 and 0.640 for the log-fitted and price-fitted constant $\hat\sigma$, 0.764 for spline
 interpolation of the observed surface, and 0.991 for the model. Unlike puts, calls show no material
-metric disagreement: the model leads every baseline on log-space and sits within $5\times10^{-6}$ of
-the best baseline on price-space. On puts, the two metrics disagree on which pricer wins: IV-surface
-spline interpolation edges out the model on price-space (0.996594 vs.\ 0.993780), while the model
-leads on log-space by 3.50 in $R^2$ (0.981298 vs.\ $-2.518559$). Whichever pricer a reader considers
-``better'' for puts depends on which metric they weight; we report both rather than only the more
-flattering one.
+metric disagreement: the model leads every baseline on log-space and sits within $6\times10^{-6}$ of
+the best baseline on price-space (a gap of $5.5\times10^{-6}$). On puts, the two metrics disagree on
+which pricer wins: IV-surface spline interpolation edges out the model on price-space (0.996594 vs.\
+0.993780), while the model leads on log-space by 3.50 in $R^2$ (0.981298 vs.\ $-2.518559$).
+Whichever pricer a reader considers ``better'' for puts depends on which metric they weight; we
+report both rather than only the more flattering one.
 
 The spline's negative put log-$R^2$ is a grid-boundary artefact rather than a general failure of
 surface interpolation. A row-level decomposition of the same baseline
@@ -808,7 +833,7 @@ $\pm 10\%$.
 \caption{Puts}
 \end{subfigure}
 \caption{\textbf{Predicted vs.\ market normalized price ($V/K$)}, log-log axes, colored by maturity
-bucket, 50{,}000-row uniform sample of the test split, IV-surface architecture-A/B models.}
+bucket, 50{,}000-row uniform sample of the test split, IV-surface architecture-A models.}
 \label{fig:f5}
 \end{figure}
 
@@ -891,7 +916,8 @@ direct than the surface branch's, but a design that required strictly pre-trade-
 have to lag these windows by a day, which we did not do.
 
 \paragraph{The branch comparison compares configurations, not inputs, and the VIX representation is
-level-free.} The flattening projection alone holds 766{,}080 (surface), 430{,}208 (SPX history), and
+level-free.} The first, grid-dependent layer of the two-layer flattening projection holds 766{,}080
+(surface), 430{,}208 (SPX history), and
 344{,}192 (VIX history) parameters, a spread of roughly $2.2\times$; grid size, spectral modes, input
 timing, and normalization also differ across the three branches. Input content is therefore confounded
 with all of these in Section~\ref{sec:results-branch}, and the result should be read as a ranking of
@@ -921,9 +947,6 @@ itself are out of scope.
 comparable size that skips the BS decoder entirely, so this paper makes no claim about how the
 BS-decoder design compares to that alternative.
 
-\paragraph{Loss function.} We use plain MSE on $\log(V/K)$ throughout; an informal comparison against a
-Huber loss did not improve the headline log-space metric and is not reported as a controlled ablation.
-
 \section{Conclusion}
 \label{sec:conclusion}
 Predicting a per-contract implied volatility and pricing it through a differentiable Black--Scholes
@@ -937,7 +960,7 @@ learned map, whose $\hat\sigma$ varies with the query, nor to arbitrage-freedom 
 predicted surface.
 
 The per-query-vs-scalar ablation (Section~\ref{sec:results-ablation}) shows that per-query conditioning
-matters: removing it collapses put $R^2(\log)$ from 0.978 to $-0.317$ and put $R^2(\text{price})$ to
+matters: removing it collapses put $R^2(\log)$ from 0.978 to about $-0.32$ and put $R^2(\text{price})$ to
 $-3.09$, worse than predicting the mean. Comparing three candidate market-state input--encoder
 configurations, the one reading the contemporaneous implied-volatility surface consistently prices
 better than either historical configuration, on both option types and both head architectures
@@ -990,15 +1013,32 @@ stability. A numerically exact alternative, using a stable log-normal-CDF formul
 evaluation only: its gradient is exact but explodes near the money, which causes training to diverge if
 used during optimization, so it is used only as a read-only diagnostic, never during training.
 
+A controlled re-evaluation of the same scalar-$\hat\sigma$ checkpoints on CPU (batch 512 and 4096) and
+GPU (batch 512, the training-time path) reproduces $R^2(\text{price})$ to within $4\times10^{-7}$ but
+$R^2(\log)$ only to about $3\times10^{-3}$ across device paths, and decoding the same float32
+$\hat\sigma$ in float64 moves $R^2(\log)$ further, to 0.798 for calls and $-0.328$ for puts, because
+float32 cancellation in $\log(\mathrm{clamp}(V/K, 10^{-8}))$ on the rows the scalar model prices at
+the floor differs between device paths and precisions; the per-query models, which never reach the
+floor, agree to $10^{-6}$ under every path and precision
+(\texttt{results/ablation\_evaluator\_consistency\_v5.json}). The scalar-$\hat\sigma$ log-space metrics
+are therefore stable only to about $10^{-2}$ in $R^2(\log)$ for puts and $2\times10^{-3}$ for calls,
+which is why the prose reports them to two decimals; Table~\ref{tab:ablation} keeps the canonical
+float32 CPU evaluator's digits. No implementation error was found.
+
 \section{Reproducibility and environment}
 \label{app:repro}
-All experiments were run under a single conda environment. Table~\ref{tab:env} lists the direct package
-dependencies and their installed versions, obtained by querying the environment directly.
+Table~\ref{tab:env} lists the direct package dependencies and their installed versions on the audit
+and reproduction machine, captured on 2026-09-07 by \texttt{analysis/snapshot\_environment.py}
+(\texttt{results/environment\_snapshot\_2026-09-07.txt}), which is the environment every evaluation
+number reported in this paper was produced in. The August 2026 training environment was not
+snapshotted and cannot be reconstructed from this table, so no version listed here should be read as
+the version a model was trained under.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Environment used for all training and evaluation runs in this paper.}
+\caption{Audit and reproduction environment, captured 2026-09-07, in which the evaluation numbers
+reported in this paper were produced. It is not the training environment.}
 \label{tab:env}
 \begin{tabular}{ll}
 \toprule
@@ -1016,7 +1056,7 @@ GPU driver & 595.95 \\
 \end{tabular}
 \end{table}
 
-Each run's exact configuration (seed, hyperparameters, dataset version and checksum) is saved alongside
-its checkpoints at training time.
+Each run's exact configuration is saved alongside its checkpoints at training time; that record covers
+the seed, the hyperparameters, and the dataset version and checksum, but not package versions.
 
 \end{document}

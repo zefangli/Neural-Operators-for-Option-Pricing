@@ -270,7 +270,20 @@ def R(rel, pattern, group=1):
     return m.group(group)
 
 
-SAFE_NS = {"J": J, "C": C, "R": R, "abs": abs, "min": min, "max": max, "sum": sum,
+def EPOCHS(rel):
+    """[(epoch, train_loss, val_loss)] parsed from a run's `loss_history.txt`."""
+    out = []
+    for line in _resolve_path(rel).read_text(encoding="utf-8", errors="replace").splitlines():
+        p = line.split("\t")
+        if len(p) == 3 and p[0].isdigit():
+            out.append((int(p[0]), float(p[1]), float(p[2])))
+    if not out:
+        raise KeyError("%s: no epoch rows" % rel)
+    return out
+
+
+SAFE_NS = {"J": J, "C": C, "R": R, "EPOCHS": EPOCHS,
+           "abs": abs, "min": min, "max": max, "sum": sum,
            "len": len, "float": float, "int": int, "round": round, "str": str,
            "sorted": sorted, "exp": math.exp, "log": math.log, "log1p": math.log1p,
            "sqrt": math.sqrt, "__builtins__": {}}

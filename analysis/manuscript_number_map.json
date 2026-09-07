@@ -859,13 +859,6 @@
       "source": "records.option_type=put&baseline=surface_spline.diagnostics.n_out_of_grid_tenor",
       "note": "cubic-spline surface baseline grid-clamping diagnostic"
     },
-    "5\\times10^{-6}": {
-      "category": "derived statistic",
-      "source_file": "results/baselines_v5.json + train_model_v3/call/results_vol_surface_v5/metrics.json",
-      "derivation": "J('results/baselines_v5.json','records.option_type=call&baseline=surface_spline.metrics.all.r2_price') - J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_price')",
-      "note": "'the model ... sits within 5e-6 of the best baseline on price-space' is a BOUND claim; the actual call gap is 5.487e-6, which is larger. KNOWN OPEN ITEM for the manuscript-editing pass",
-      "comparison": "upper_bound"
-    },
     "3.50": {
       "category": "derived statistic",
       "source_file": "results/baselines_v5.json + train_model_v3/put/results_vol_surface_don_v5/metrics.json",
@@ -1391,7 +1384,7 @@
     "10^{-6}": {
       "category": "theoretical constant",
       "source_value": 1e-06,
-      "note": "two distinct roles: the spline baseline's fixed-point tolerance and the reproduction tolerance in analysis/spline_boundary_decomposition.py (--tol 1e-6). The THIRD occurrence, the residual sigma-dependence at T=0 on L281, is a different claim and is overridden per line"
+      "note": "two distinct roles: the spline baseline's fixed-point tolerance and the reproduction tolerance in analysis/spline_boundary_decomposition.py (--tol 1e-6). The THIRD occurrence, the per-query evaluator agreement on L1020, is a different claim and is overridden per line"
     },
     "766080": {
       "category": "derived statistic",
@@ -1675,41 +1668,147 @@
       "source_file": "results/environment_snapshot_*.txt",
       "source_regex": "Driver Version:\\s*([\\d.]+)",
       "note": "GPU driver, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "-0.32": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.r2_log_filtered",
+      "note": "put scalar-sigma R2(log), canonical CPU evaluator (-0.316871), quoted to two decimals in the abstract, Section results-ablation and the Conclusion because results/ablation_evaluator_consistency_v5.json shows the scalar-sigma log metric is only ~1e-2 reproducible across device paths and decoder precisions (Appendix numstab); Table tab:ablation keeps the six-decimal value"
+    },
+    "1.2\\times10^{-5}": {
+      "category": "experiment output",
+      "source_file": "results/diagnostics_tail_v5.json",
+      "source": "call.degeneracy.T=0.max_price_spread_over_sigma",
+      "note": "synthetic exact-T=0 probe of the decoder: maximum price spread over sigma_hat in V/K units, 1.1928e-5 (the put probe gives the same value to 1e-11)"
+    },
+    "1.73": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/VALIDATION_v5.json",
+      "derivation": "max(float(J('wrds_data_2020-2025/VALIDATION_v5.json','checks.15.detail').split('=')[1].split()[0]), float(J('wrds_data_2020-2025/VALIDATION_v5.json','checks.37.detail').split('=')[1].split()[0]))",
+      "note": "minimum maturity over the full filtered dataset; checks 15 (call) and 37 (put) 'every T > 1.0 days', detail 'min = 1.7292 days' on both option types"
+    },
+    "300000": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma.params.n_fit_rows",
+      "note": "every fitted baseline constant (const_sigma, const_sigma_pxfit, vix_level_scaled*, realized/ewma *_scaled*) records n_fit_rows 300000, fitted_on 'split_id==0 (train)', subsample_seed 0"
+    },
+    "16": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/loss_history.txt",
+      "derivation": "max(len(EPOCHS('train_model_v3/call/results_spot_history_v5/loss_history.txt')), len(EPOCHS('train_model_v3/put/results_spot_history_don_v5/loss_history.txt')))",
+      "note": "epochs recorded in the two SPX-history loss histories (call arch A, put arch B); both stop at 16"
+    },
+    "4096": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "source": "results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.batch_size",
+      "note": "canonical CPU ablation evaluator batch size (analysis/eval_ablation.py EVAL_BATCH), recorded per path in the evaluator-consistency artifact"
+    },
+    "512": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "source": "results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.batch_size",
+      "note": "the second CPU batch size and the GPU/training-path batch size in the evaluator-consistency diagnostic"
+    },
+    "6\\times10^{-6}": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json",
+      "derivation": "J('results/baselines_v5.json','records.option_type=call&baseline=surface_spline.metrics.all.r2_price') - J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_price')",
+      "comparison": "upper_bound",
+      "note": "call price-space gap, spline baseline minus best model: 0.9999824083511915 - 0.9999769213678237 = 5.487e-6, which the sentence bounds at 6e-6 and then quotes exactly"
+    },
+    "5.5\\times10^{-6}": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json",
+      "derivation": "J('results/baselines_v5.json','records.option_type=call&baseline=surface_spline.metrics.all.r2_price') - J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_price')",
+      "note": "the same call price-space gap quoted to two significant figures, 5.487e-6"
+    },
+    "4\\times10^{-7}": {
+      "category": "derived statistic",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "derivation": "max(max([J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price')]) - min([J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price')]), max([J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price')]) - min([J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_price'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_price')]))",
+      "comparison": "upper_bound",
+      "note": "widest R2(price) spread for the scalar-sigma checkpoints over the three device paths and both decoder precisions: 1.05e-10 (call), 3.54e-7 (put)"
+    },
+    "3\\times10^{-3}": {
+      "category": "derived statistic",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "derivation": "max(max([J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_log_filtered')]) - min([J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_log_filtered')]), max([J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_log_filtered')]) - min([J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.gpu_bs512.metrics_as_produced.r2_log_filtered')]))",
+      "note": "widest R2(log) spread for the scalar-sigma checkpoints across the three device paths at the native float32 precision: 2.39e-4 (call), 3.04e-3 (put); the sentence says 'about 3e-3', not a strict bound"
+    },
+    "2\\times10^{-3}": {
+      "category": "derived statistic",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "derivation": "abs(J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered') - J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'))",
+      "note": "call scalar-sigma R2(log) moved by re-decoding the same float32 sigma_hat in float64: |0.798491 - 0.800103| = 1.612e-3"
+    },
+    "10^{-2}": {
+      "category": "derived statistic",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "derivation": "abs(J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered') - J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'))",
+      "note": "put scalar-sigma R2(log) moved by re-decoding the same float32 sigma_hat in float64: |-0.327938 - (-0.316871)| = 1.107e-2, the reason the prose reports the scalar-sigma log metrics to two decimals"
+    },
+    "0.798": {
+      "category": "experiment output",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "source": "results.option_type=call&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered",
+      "note": "call scalar-sigma R2(log) with the same float32 sigma_hat re-decoded in float64 (identical to 6 decimals on all three device paths)"
+    },
+    "-0.328": {
+      "category": "experiment output",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "source": "results.option_type=put&model_variant=scalar_sigma.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered",
+      "note": "put scalar-sigma R2(log) with the same float32 sigma_hat re-decoded in float64 (identical to 6 decimals on all three device paths)"
+    },
+    "2026-09-07": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_2026-09-07.txt",
+      "source_regex": "Captured: (\\d{4}-\\d{2}-\\d{2})",
+      "note": "capture date of the audit / reproduction environment snapshot (analysis/snapshot_environment.py); Appendix app:repro and the tab:env caption"
+    },
+    "2026": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_2026-09-07.txt",
+      "source_regex": "trained in August (\\d{4})",
+      "note": "the snapshot states the v5 checkpoints were trained in August 2026 and that that environment was never captured"
     }
   },
   "by_line": {
-    "544:0.921": {
+    "562:0.921": {
       "category": "experiment output",
       "source_file": "train_model_v3/put/results_vix_history_v5/metrics.json",
       "source": "r2_log_filtered",
       "note": "puts' VIX-history range 0.918--0.921 (architecture A); L543's 0.921 is the call cell"
     },
-    "281:10^{-6}": {
+    "284:10^{-5}": {
       "category": "experiment output",
       "source_file": "results/diagnostics_tail_v5.json",
       "source": "call.degeneracy.T=0.max_price_spread_over_sigma",
-      "note": "'a residual sigma dependence of order 1e-6 in a vanishing band around the money'. results/diagnostics_tail_v5.json records 1.19e-5, an order of magnitude larger. KNOWN OPEN ITEM for the manuscript-editing pass"
+      "note": "'a residual sigma dependence of order 1e-5': the exact-T=0 probe records 1.1928e-5, so the stated order is the measured one; the sentence quotes the value itself immediately after. Elsewhere 10^{-5} is the fine-tuning learning rate, hence the per-line override"
+    },
+    "446:1": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/loss_history.txt",
+      "derivation": "max(min(EPOCHS('train_model_v3/call/results_spot_history_v5/loss_history.txt'), key=lambda r: r[2])[0], min(EPOCHS('train_model_v3/put/results_spot_history_don_v5/loss_history.txt'), key=lambda r: r[2])[0])",
+      "note": "both SPX-history runs named in the sentence (call arch A, put arch B) reach their lowest validation loss at epoch 1: 0.248027 and 0.252674, against final 0.305326 and 0.318117"
+    },
+    "1022:10^{-6}": {
+      "category": "derived statistic",
+      "source_file": "results/ablation_evaluator_consistency_v5.json",
+      "derivation": "max(max([J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.gpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_log_filtered')]) - min([J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.gpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=call&model_variant=per_query.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_log_filtered')]), max([J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.gpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_log_filtered')]) - min([J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.cpu_bs4096.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.gpu_bs512.metrics_as_produced.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.cpu_bs4096.metrics_sigma_redecoded_float64_naive.r2_log_filtered'), J('results/ablation_evaluator_consistency_v5.json','results.option_type=put&model_variant=per_query.paths.gpu_bs512.metrics_sigma_redecoded_float64_naive.r2_log_filtered')]))",
+      "note": "widest R2(log) spread for the per-query checkpoints over both device paths and both decoder precisions: 1.20e-7 (call), 1.41e-6 (put), i.e. order 1e-6, against 3e-3 for the scalar-sigma pair. Elsewhere 10^{-6} is the spline fixed-point / reproduction tolerance, hence the per-line override"
     }
   },
   "text_checks": [
     {
-      "line": 811,
+      "line": 836,
       "section_or_table": "fig:f5",
       "literal": "architecture-A/B",
       "expected": "architecture-A",
       "category": "unsupported",
       "source_file": "results/fig_F5_pred_vs_market_v5.md",
-      "note": "the F5 caption says the figure shows 'IV-surface architecture-A/B models', but results/fig_F5_pred_vs_market_v5.md records a single run per option type, train_model_v3/{call,put}/results_vol_surface_v5 -- architecture A only. KNOWN OPEN ITEM for the manuscript-editing pass"
-    },
-    {
-      "line": 925,
-      "section_or_table": "Limitations",
-      "literal": "Huber loss did not improve",
-      "expected": "(no artifact)",
-      "category": "unsupported",
-      "source_file": "",
-      "status": "UNSUPPORTED",
-      "note": "the Huber-loss remark is UNSUPPORTED: no Huber-loss run, metric or log is committed anywhere in this repository (the Huber branch is commented out in train_vol_surface*.py compute_loss), so the claim that it did not improve the headline log metric rests on an unrecorded experiment"
+      "note": "the F5 caption must name architecture A only: results/fig_F5_pred_vs_market_v5.md records a single run per option type, train_model_v3/{call,put}/results_vol_surface_v5, both architecture A. Fixed; this check guards against the regression"
     }
   ]
 }
