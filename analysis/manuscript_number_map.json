@@ -1,0 +1,1715 @@
+{
+  "_doc": "Literal -> provenance map for analysis/audit_manuscript_numbers.py. Keys of `literals` are the NORMALISED literal (LaTeX thousands separators removed); keys of `by_line` are '<line>:<normalised literal>' and win over `literals` for that one occurrence. Every entry carries a category from the six allowed and either a `source` (JSON dotted path / CSV 'selector:field'), a `source_regex` over a text artifact, a `derivation` expression, or a literal `source_value` for a definitional constant. `comparison: upper_bound` marks a sentence that states a BOUND rather than a rounded value.",
+  "literals": {
+    "0.999977": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_v5"
+    },
+    "0.991044": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_v5"
+    },
+    "0.221894": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_v5"
+    },
+    "0.000641": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_v5"
+    },
+    "0.999914": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_don_v5"
+    },
+    "0.990290": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_don_v5"
+    },
+    "0.231041": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_don_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_don_v5"
+    },
+    "0.000739": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_don_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vol_surface_don_v5"
+    },
+    "0.999812": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_v5"
+    },
+    "0.922020": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_v5"
+    },
+    "0.654761": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_v5"
+    },
+    "0.003569": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_v5"
+    },
+    "0.999181": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_don_v5"
+    },
+    "0.944390": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_don_v5"
+    },
+    "0.552923": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_don_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_don_v5"
+    },
+    "0.002769": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_don_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_spot_history_don_v5"
+    },
+    "0.999848": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_v5"
+    },
+    "0.921333": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_v5"
+    },
+    "0.657639": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_v5"
+    },
+    "0.003114": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_v5"
+    },
+    "0.998125": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_don_v5"
+    },
+    "0.939874": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_don_v5"
+    },
+    "0.574940": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_don_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_don_v5"
+    },
+    "0.002985": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_don_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row call/results_vix_history_don_v5"
+    },
+    "0.992553": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_v5"
+    },
+    "0.977898": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_v5"
+    },
+    "0.294136": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_v5"
+    },
+    "0.000823": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_v5"
+    },
+    "0.993780": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_don_v5"
+    },
+    "0.981298": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_don_v5"
+    },
+    "0.270566": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_don_v5"
+    },
+    "0.000659": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vol_surface_don_v5"
+    },
+    "0.952078": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_v5"
+    },
+    "0.909410": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_v5"
+    },
+    "0.595489": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_v5"
+    },
+    "0.002484": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_v5"
+    },
+    "0.942330": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_don_v5"
+    },
+    "0.901553": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_don_v5"
+    },
+    "0.620777": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_don_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_don_v5"
+    },
+    "0.002847": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_don_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_spot_history_don_v5"
+    },
+    "0.962518": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_v5"
+    },
+    "0.920722": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_v5"
+    },
+    "0.557070": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_v5"
+    },
+    "0.002429": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_v5"
+    },
+    "0.961502": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_don_v5"
+    },
+    "0.917777": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_don_v5"
+    },
+    "0.567323": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_don_v5/metrics.json",
+      "source": "rmse_log",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_don_v5"
+    },
+    "0.002477": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_don_v5/metrics.json",
+      "source": "mae_price",
+      "note": "Table T1 / all_metrics_v5.csv row put/results_vix_history_don_v5"
+    },
+    "0.978": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_vol_surface_v5 r2_log_filtered"
+    },
+    "0.98": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_vol_surface_v5 r2_log_filtered"
+    },
+    "0.99": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_vol_surface_v5 r2_log_filtered"
+    },
+    "0.90": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_spot_history_don_v5 r2_log_filtered"
+    },
+    "0.94": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_spot_history_don_v5 r2_log_filtered"
+    },
+    "0.990": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_vol_surface_don_v5 r2_log_filtered"
+    },
+    "0.991": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_vol_surface_v5 r2_log_filtered"
+    },
+    "0.922": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_spot_history_v5 r2_log_filtered"
+    },
+    "0.944": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_spot_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_spot_history_don_v5 r2_log_filtered"
+    },
+    "0.921": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_vix_history_v5 r2_log_filtered"
+    },
+    "0.940": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vix_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 call/results_vix_history_don_v5 r2_log_filtered"
+    },
+    "0.981": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_vol_surface_don_v5 r2_log_filtered"
+    },
+    "0.902": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_spot_history_don_v5 r2_log_filtered"
+    },
+    "0.909": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_spot_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_spot_history_v5 r2_log_filtered"
+    },
+    "0.918": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_don_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "rounded restatement of the Table T1 put/results_vix_history_don_v5 r2_log_filtered"
+    },
+    "0.993": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_v5/metrics.json",
+      "source": "r2_price",
+      "note": "rounded restatement of the Table T1 put/results_vol_surface_v5 r2_price"
+    },
+    "0.994": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "rounded restatement of the Table T1 put/results_vol_surface_don_v5 r2_price"
+    },
+    "0.9999": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_don_v5/metrics.json",
+      "source": "r2_price",
+      "note": "rounded restatement of the Table T1 call/results_vol_surface_don_v5 r2_price"
+    },
+    "0.99998": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "source": "r2_price",
+      "note": "rounded restatement of the Table T1 call/results_vol_surface_v5 r2_price"
+    },
+    "0.999825": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=call&model_variant=scalar_sigma.r2_price",
+      "note": "scalar-sigma ablation table, call/scalar_sigma (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "0.800103": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=call&model_variant=scalar_sigma.r2_log_filtered",
+      "note": "scalar-sigma ablation table, call/scalar_sigma (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "1.048319": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=call&model_variant=scalar_sigma.rmse_log",
+      "note": "scalar-sigma ablation table, call/scalar_sigma (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "-3.090190": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.r2_price",
+      "note": "scalar-sigma ablation table, put/scalar_sigma (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "-0.316871": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.r2_log_filtered",
+      "note": "scalar-sigma ablation table, put/scalar_sigma (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "2.270415": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.rmse_log",
+      "note": "scalar-sigma ablation table, put/scalar_sigma (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "0.221896": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=call&model_variant=per_query.rmse_log",
+      "note": "scalar-sigma ablation table, call/per_query (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "0.977899": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=per_query.r2_log_filtered",
+      "note": "scalar-sigma ablation table, put/per_query (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "0.294127": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=per_query.rmse_log",
+      "note": "scalar-sigma ablation table, put/per_query (analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096)"
+    },
+    "0.800": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=call&model_variant=scalar_sigma.r2_log_filtered",
+      "note": "rounded restatement of the scalar-sigma ablation call r2_log_filtered"
+    },
+    "-3.090": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.r2_price",
+      "note": "rounded restatement of the scalar-sigma ablation put r2_price"
+    },
+    "-3.09": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.r2_price",
+      "note": "rounded restatement of the scalar-sigma ablation put r2_price"
+    },
+    "-0.317": {
+      "category": "experiment output",
+      "source_file": "results/ablation_scalar_sigma_v5.json",
+      "source": "rows.option_type=put&model_variant=scalar_sigma.r2_log_filtered",
+      "note": "rounded restatement of the scalar-sigma ablation put r2_log_filtered"
+    },
+    "0.999972": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=A:r2_price_mean",
+      "note": "three-seed replication table (seeds 42/43/44), call arch A"
+    },
+    "0.000005": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=A:r2_price_std",
+      "note": "three-seed replication table (seeds 42/43/44), call arch A"
+    },
+    "0.990996": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=A:r2_log_filtered_mean",
+      "note": "three-seed replication table (seeds 42/43/44), call arch A"
+    },
+    "0.000073": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=A:r2_log_filtered_std",
+      "note": "three-seed replication table (seeds 42/43/44), call arch A"
+    },
+    "0.222493": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=A:rmse_log_mean",
+      "note": "three-seed replication table (seeds 42/43/44), call arch A"
+    },
+    "0.000896": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=A:rmse_log_std",
+      "note": "three-seed replication table (seeds 42/43/44), call arch A"
+    },
+    "0.999865": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=B:r2_price_mean",
+      "note": "three-seed replication table (seeds 42/43/44), call arch B"
+    },
+    "0.000131": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=B:r2_price_std",
+      "note": "three-seed replication table (seeds 42/43/44), call arch B"
+    },
+    "0.991075": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=B:r2_log_filtered_mean",
+      "note": "three-seed replication table (seeds 42/43/44), call arch B"
+    },
+    "0.000716": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=B:r2_log_filtered_std",
+      "note": "three-seed replication table (seeds 42/43/44), call arch B"
+    },
+    "0.221388": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=B:rmse_log_mean",
+      "note": "three-seed replication table (seeds 42/43/44), call arch B"
+    },
+    "0.008838": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=call,arch=B:rmse_log_std",
+      "note": "three-seed replication table (seeds 42/43/44), call arch B"
+    },
+    "0.994660": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=A:r2_price_mean",
+      "note": "three-seed replication table (seeds 42/43/44), put arch A"
+    },
+    "0.001898": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=A:r2_price_std",
+      "note": "three-seed replication table (seeds 42/43/44), put arch A"
+    },
+    "0.979099": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=A:r2_log_filtered_mean",
+      "note": "three-seed replication table (seeds 42/43/44), put arch A"
+    },
+    "0.001424": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=A:r2_log_filtered_std",
+      "note": "three-seed replication table (seeds 42/43/44), put arch A"
+    },
+    "0.285924": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=A:rmse_log_mean",
+      "note": "three-seed replication table (seeds 42/43/44), put arch A"
+    },
+    "0.009813": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=A:rmse_log_std",
+      "note": "three-seed replication table (seeds 42/43/44), put arch A"
+    },
+    "0.995392": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=B:r2_price_mean",
+      "note": "three-seed replication table (seeds 42/43/44), put arch B"
+    },
+    "0.001403": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=B:r2_price_std",
+      "note": "three-seed replication table (seeds 42/43/44), put arch B"
+    },
+    "0.981738": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=B:r2_log_filtered_mean",
+      "note": "three-seed replication table (seeds 42/43/44), put arch B"
+    },
+    "0.000611": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=B:r2_log_filtered_std",
+      "note": "three-seed replication table (seeds 42/43/44), put arch B"
+    },
+    "0.267345": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=B:rmse_log_mean",
+      "note": "three-seed replication table (seeds 42/43/44), put arch B"
+    },
+    "0.004491": {
+      "category": "experiment output",
+      "source_file": "results/replication_seeds_v5.csv",
+      "source": "option_type=put,arch=B:rmse_log_std",
+      "note": "three-seed replication table (seeds 42/43/44), put arch B"
+    },
+    "0.000080": {
+      "category": "derived statistic",
+      "source_file": "results/replication_seeds_v5.csv",
+      "derivation": "abs(float(C('results/replication_seeds_v5.csv','option_type=call,arch=B','r2_log_filtered_mean')) - float(C('results/replication_seeds_v5.csv','option_type=call,arch=A','r2_log_filtered_mean')))",
+      "note": "A-vs-B mean difference on calls"
+    },
+    "40": {
+      "category": "derived statistic",
+      "source_file": "results/replication_seeds_v5.csv + train_model_v3/*/metrics.json",
+      "derivation": "min((J('train_model_v3/put/results_vol_surface_v5/metrics.json','r2_log_filtered') - J('train_model_v3/put/results_vix_history_v5/metrics.json','r2_log_filtered')) / float(C('results/replication_seeds_v5.csv','option_type=put,arch=A','r2_log_filtered_std')), (J('train_model_v3/put/results_vol_surface_v5/metrics.json','r2_log_filtered') - J('train_model_v3/put/results_spot_history_v5/metrics.json','r2_log_filtered')) / float(C('results/replication_seeds_v5.csv','option_type=put,arch=A','r2_log_filtered_std')))",
+      "note": "least favourable of the four replicated cells: the put/A surface-vs-history gap in units of the put/A across-seed SD (40.14; the other seven cell/branch combinations give 48 to 960)"
+    },
+    "0.07": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/*/metrics.json",
+      "derivation": "J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_log_filtered') - J('train_model_v3/call/results_spot_history_v5/metrics.json','r2_log_filtered')",
+      "note": "0.991 - 0.922, call architecture A, surface minus SPX history"
+    },
+    "0.998586": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=intrinsic_zero_vol.metrics.all.r2_price",
+      "note": "baseline table, call intrinsic_zero_vol"
+    },
+    "-16.806016": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=intrinsic_zero_vol.metrics.all.r2_log_filtered",
+      "note": "baseline table, call intrinsic_zero_vol"
+    },
+    "0.999706": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma.metrics.all.r2_price",
+      "note": "baseline table, call const_sigma"
+    },
+    "0.620788": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma.metrics.all.r2_log_filtered",
+      "note": "baseline table, call const_sigma"
+    },
+    "0.999800": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma_pxfit.metrics.all.r2_price",
+      "note": "baseline table, call const_sigma_pxfit"
+    },
+    "0.640351": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma_pxfit.metrics.all.r2_log_filtered",
+      "note": "baseline table, call const_sigma_pxfit"
+    },
+    "0.999982": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_spline.metrics.all.r2_price",
+      "note": "baseline table, call surface_spline"
+    },
+    "0.764181": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_spline.metrics.all.r2_log_filtered",
+      "note": "baseline table, call surface_spline"
+    },
+    "0.7628": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_nearest.metrics.all.r2_log_filtered",
+      "note": "baseline table, call surface_nearest"
+    },
+    "0.7641": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_bilinear.metrics.all.r2_log_filtered",
+      "note": "baseline table, call surface_bilinear"
+    },
+    "0.7642": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_spline.metrics.all.r2_log_filtered",
+      "note": "baseline table, call surface_spline"
+    },
+    "0.7904": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=vix_level_scaled_pxfit.metrics.all.r2_log_filtered",
+      "note": "baseline table, call vix_level_scaled_pxfit"
+    },
+    "0.999809": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=vix_level_scaled_pxfit.metrics.all.r2_price",
+      "note": "baseline table, call vix_level_scaled_pxfit"
+    },
+    "0.535219": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=intrinsic_zero_vol.metrics.all.r2_price",
+      "note": "baseline table, put intrinsic_zero_vol"
+    },
+    "-34.203142": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=intrinsic_zero_vol.metrics.all.r2_log_filtered",
+      "note": "baseline table, put intrinsic_zero_vol"
+    },
+    "-2.358206": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=const_sigma.metrics.all.r2_price",
+      "note": "baseline table, put const_sigma"
+    },
+    "-0.388064": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=const_sigma.metrics.all.r2_log_filtered",
+      "note": "baseline table, put const_sigma"
+    },
+    "0.925761": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=const_sigma_pxfit.metrics.all.r2_price",
+      "note": "baseline table, put const_sigma_pxfit"
+    },
+    "-3.358130": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=const_sigma_pxfit.metrics.all.r2_log_filtered",
+      "note": "baseline table, put const_sigma_pxfit"
+    },
+    "0.996594": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=surface_spline.metrics.all.r2_price",
+      "note": "baseline table, put surface_spline"
+    },
+    "-2.518559": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=surface_spline.metrics.all.r2_log_filtered",
+      "note": "baseline table, put surface_spline"
+    },
+    "0.9986": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=intrinsic_zero_vol.metrics.all.r2_price",
+      "note": "rounded restatement of the call intrinsic_zero_vol baseline"
+    },
+    "-16.81": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=intrinsic_zero_vol.metrics.all.r2_log_filtered",
+      "note": "rounded restatement of the call intrinsic_zero_vol baseline"
+    },
+    "0.621": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma.metrics.all.r2_log_filtered",
+      "note": "rounded restatement of the call const_sigma baseline"
+    },
+    "0.640": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma_pxfit.metrics.all.r2_log_filtered",
+      "note": "rounded restatement of the call const_sigma_pxfit baseline"
+    },
+    "0.764": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_spline.metrics.all.r2_log_filtered",
+      "note": "rounded restatement of the call surface_spline baseline"
+    },
+    "0.997": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=surface_spline.metrics.all.r2_price",
+      "note": "rounded restatement of the put surface_spline baseline"
+    },
+    "-2.52": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=surface_spline.metrics.all.r2_log_filtered",
+      "note": "rounded restatement of the put surface_spline baseline"
+    },
+    "0.1933": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma.params.sigma",
+      "note": "constant sigma fitted on the training split"
+    },
+    "0.1761": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=const_sigma_pxfit.params.sigma",
+      "note": "constant sigma fitted on the training split"
+    },
+    "0.4758": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=const_sigma.params.sigma",
+      "note": "constant sigma fitted on the training split"
+    },
+    "0.2063": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=const_sigma_pxfit.params.sigma",
+      "note": "constant sigma fitted on the training split"
+    },
+    "227607": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_spline.diagnostics.n_out_of_grid_delta",
+      "note": "cubic-spline surface baseline grid-clamping diagnostic"
+    },
+    "602724": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=surface_spline.diagnostics.n_out_of_grid_delta",
+      "note": "cubic-spline surface baseline grid-clamping diagnostic"
+    },
+    "170616": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=call&baseline=surface_spline.diagnostics.n_out_of_grid_tenor",
+      "note": "cubic-spline surface baseline grid-clamping diagnostic"
+    },
+    "274497": {
+      "category": "experiment output",
+      "source_file": "results/baselines_v5.json",
+      "source": "records.option_type=put&baseline=surface_spline.diagnostics.n_out_of_grid_tenor",
+      "note": "cubic-spline surface baseline grid-clamping diagnostic"
+    },
+    "5\\times10^{-6}": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json + train_model_v3/call/results_vol_surface_v5/metrics.json",
+      "derivation": "J('results/baselines_v5.json','records.option_type=call&baseline=surface_spline.metrics.all.r2_price') - J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_price')",
+      "note": "'the model ... sits within 5e-6 of the best baseline on price-space' is a BOUND claim; the actual call gap is 5.487e-6, which is larger. KNOWN OPEN ITEM for the manuscript-editing pass",
+      "comparison": "upper_bound"
+    },
+    "3.50": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json + train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "derivation": "J('train_model_v3/put/results_vol_surface_don_v5/metrics.json','r2_log_filtered') - J('results/baselines_v5.json','records.option_type=put&baseline=surface_spline.metrics.all.r2_log_filtered')",
+      "note": "put log-space lead of architecture B over the cubic-spline baseline"
+    },
+    "3.5": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json + train_model_v3/put/results_vol_surface_don_v5/metrics.json",
+      "derivation": "J('train_model_v3/put/results_vol_surface_don_v5/metrics.json','r2_log_filtered') - J('results/baselines_v5.json','records.option_type=put&baseline=surface_spline.metrics.all.r2_log_filtered')",
+      "note": "same lead, rounded to one decimal in the conclusion"
+    },
+    "0.0014": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json",
+      "derivation": "max(J('results/baselines_v5.json','records.option_type=call&baseline=intrinsic_zero_vol.metrics.all.r2_price'),J('results/baselines_v5.json','records.option_type=call&baseline=const_sigma.metrics.all.r2_price'),J('results/baselines_v5.json','records.option_type=call&baseline=const_sigma_pxfit.metrics.all.r2_price'),J('results/baselines_v5.json','records.option_type=call&baseline=surface_spline.metrics.all.r2_price'),J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_price')) - min(J('results/baselines_v5.json','records.option_type=call&baseline=intrinsic_zero_vol.metrics.all.r2_price'),J('results/baselines_v5.json','records.option_type=call&baseline=const_sigma.metrics.all.r2_price'),J('results/baselines_v5.json','records.option_type=call&baseline=const_sigma_pxfit.metrics.all.r2_price'),J('results/baselines_v5.json','records.option_type=call&baseline=surface_spline.metrics.all.r2_price'),J('train_model_v3/call/results_vol_surface_v5/metrics.json','r2_price'))",
+      "note": "spread of the five call price-R2 values in tab:baselines-call"
+    },
+    "0.003": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json + train_model_v3/put/metrics.json",
+      "derivation": "J('results/baselines_v5.json','records.option_type=put&baseline=surface_spline.metrics.all.r2_price') - J('train_model_v3/put/results_vol_surface_don_v5/metrics.json','r2_price')",
+      "note": "put price-R2 shortfall of architecture B against the spline baseline"
+    },
+    "0.004": {
+      "category": "derived statistic",
+      "source_file": "results/baselines_v5.json + train_model_v3/put/metrics.json",
+      "derivation": "J('results/baselines_v5.json','records.option_type=put&baseline=surface_spline.metrics.all.r2_price') - J('train_model_v3/put/results_vol_surface_v5/metrics.json','r2_price')",
+      "note": "put price-R2 shortfall of architecture A against the spline baseline"
+    },
+    "578610": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.below_10_delta.n_rows",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "41.92": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.below_10_delta.pct_rows",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "99.94": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.below_10_delta.share_log_sse_pct",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "272433": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.below_10_delta.n_sqerr_log_gt10",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "0.9939": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.in_grid.r2_log",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "0.9843": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.delta_in_grid.r2_log",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "0.00203": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.below_10_delta.mean_price_true",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "0.0202": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.in_grid.mean_price_true",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "0.0886": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.above_90_delta.mean_price_true",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "72.94": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=put.masks.below_10_delta.share_price_sse_pct",
+      "note": "cubic-spline grid-boundary decomposition, put"
+    },
+    "185863": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=call.masks.below_10_delta.n_rows",
+      "note": "cubic-spline grid-boundary decomposition, call"
+    },
+    "22.68": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=call.masks.below_10_delta.pct_rows",
+      "note": "cubic-spline grid-boundary decomposition, call"
+    },
+    "99.40": {
+      "category": "experiment output",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=call.masks.below_10_delta.share_log_sse_pct",
+      "note": "cubic-spline grid-boundary decomposition, call"
+    },
+    "1.84\\times10^{-14}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_call_v5.json",
+      "source": "delta.max_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, call"
+    },
+    "1.40\\times10^{-16}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_call_v5.json",
+      "source": "delta.median_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, call"
+    },
+    "1.38\\times10^{-15}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_call_v5.json",
+      "source": "vega.max_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, call"
+    },
+    "1.43\\times10^{-14}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_put_v5.json",
+      "source": "delta.max_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, put"
+    },
+    "8.37\\times10^{-17}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_put_v5.json",
+      "source": "delta.median_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, put"
+    },
+    "2.12\\times10^{-15}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_put_v5.json",
+      "source": "vega.max_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, put"
+    },
+    "5.55\\times10^{-17}": {
+      "category": "experiment output",
+      "source_file": "results/greeks_check_call_v5.json",
+      "source": "vega.median_abs_diff",
+      "note": "autograd-vs-closed-form BS greeks check at the predicted sigma_hat, call"
+    },
+    "2\\times10^{-14}": {
+      "category": "derived statistic",
+      "source_file": "results/greeks_check_{call,put}_v5.json",
+      "derivation": "max(J('results/greeks_check_call_v5.json','delta.max_abs_diff'), J('results/greeks_check_put_v5.json','delta.max_abs_diff'))",
+      "note": "'approximately 2e-14' for delta: the larger of the two option types (1.84e-14)"
+    },
+    "2\\times10^{-15}": {
+      "category": "derived statistic",
+      "source_file": "results/greeks_check_{call,put}_v5.json",
+      "derivation": "max(J('results/greeks_check_call_v5.json','vega.max_abs_diff'), J('results/greeks_check_put_v5.json','vega.max_abs_diff'))",
+      "note": "'approximately 2e-15' for vega: the larger of the two option types (2.12e-15)"
+    },
+    "2000": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/greeks_check_call_v5.json",
+      "source": "n_sampled",
+      "note": "sampled test contracts per option type in the greeks check"
+    },
+    "0.999954": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| call \\| 50,000 \\| ([0-9.]+) \\|",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "0.995619": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| call \\| 50,000 \\| [0-9.]+ \\| ([0-9.]+) \\|",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "3.61": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| call \\| 50,000 \\|(?: [0-9.]+ \\|){4} ([0-9.]+)%",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "76.62": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| call \\| 50,000 \\|(?: [0-9.]+ \\|){4} [0-9.]+% \\| [0-9.]+% \\| ([0-9.]+)%",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "0.993179": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| put \\| 50,000 \\| ([0-9.]+) \\|",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "0.991166": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| put \\| 50,000 \\| [0-9.]+ \\| ([0-9.]+) \\|",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "8.74": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| put \\| 50,000 \\|(?: [0-9.]+ \\|){4} ([0-9.]+)%",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "54.46": {
+      "category": "experiment output",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "\\| put \\| 50,000 \\|(?: [0-9.]+ \\|){4} [0-9.]+% \\| [0-9.]+% \\| ([0-9.]+)%",
+      "note": "Figure F5 statistics table (50,000-row seeded uniform sample of the test split)"
+    },
+    "50000": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "source_regex": "max_contracts=(\\d+), seed=42",
+      "note": "fixed 50,000-row uniform subsample, seed 42, used for Figure F5"
+    },
+    "3360823": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.call.splits.train.rows",
+      "note": "Call train rows, v4 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "3297722": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.train.rows",
+      "note": "Call train rows, v5 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "754276": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.call.splits.val.rows",
+      "note": "Call val rows, v4 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "729204": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.val.rows",
+      "note": "Call val rows, v5 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "840493": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.call.splits.test.rows",
+      "note": "Call test rows, v4 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "819342": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.test.rows",
+      "note": "Call test rows, v5 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "4955592": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.call.rows",
+      "note": "Call total rows, v4 sample"
+    },
+    "4846268": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.rows",
+      "note": "Call total rows, v5 sample"
+    },
+    "5370629": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.put.splits.train.rows",
+      "note": "Put train rows, v4 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "5323327": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.put.splits.train.rows",
+      "note": "Put train rows, v5 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "1229955": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.put.splits.val.rows",
+      "note": "Put val rows, v4 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "1221643": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.put.splits.val.rows",
+      "note": "Put val rows, v5 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "1390470": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.put.splits.test.rows",
+      "note": "Put test rows, v4 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "1380379": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.put.splits.test.rows",
+      "note": "Put test rows, v5 sample (v4 = pre-quote-filter, v5 = filtered)"
+    },
+    "7991054": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v4.files.put.rows",
+      "note": "Put total rows, v4 sample"
+    },
+    "7925349": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.put.rows",
+      "note": "Put total rows, v5 sample"
+    },
+    "63101": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.train.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.train.rows')",
+      "note": "call train rows removed by the quote-quality filter"
+    },
+    "1.878": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.train.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.train.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.train.rows')",
+      "note": "call train removal rate"
+    },
+    "25072": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.val.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.val.rows')",
+      "note": "call val rows removed by the quote-quality filter"
+    },
+    "3.324": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.val.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.val.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.val.rows')",
+      "note": "call val removal rate"
+    },
+    "21151": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.test.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.test.rows')",
+      "note": "call test rows removed by the quote-quality filter"
+    },
+    "2.516": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.test.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.test.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.splits.test.rows')",
+      "note": "call test removal rate"
+    },
+    "47302": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.train.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.splits.train.rows')",
+      "note": "put train rows removed by the quote-quality filter"
+    },
+    "0.881": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.train.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.splits.train.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.train.rows')",
+      "note": "put train removal rate"
+    },
+    "8312": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.val.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.splits.val.rows')",
+      "note": "put val rows removed by the quote-quality filter"
+    },
+    "0.676": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.val.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.splits.val.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.val.rows')",
+      "note": "put val removal rate"
+    },
+    "10091": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.test.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.splits.test.rows')",
+      "note": "put test rows removed by the quote-quality filter"
+    },
+    "0.726": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.test.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.splits.test.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.splits.test.rows')",
+      "note": "put test removal rate"
+    },
+    "109324": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.rows')",
+      "note": "call total rows removed by the quote-quality filter"
+    },
+    "2.206": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.rows')",
+      "note": "call overall removal rate"
+    },
+    "65705": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.rows')",
+      "note": "put total rows removed by the quote-quality filter"
+    },
+    "0.822": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.rows')",
+      "note": "put overall removal rate"
+    },
+    "2.21": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.call.rows')",
+      "note": "call overall removal rate, rounded to two decimals in the text"
+    },
+    "0.82": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.rows') - J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.put.rows')) / J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v4.files.put.rows')",
+      "note": "put overall removal rate, rounded to two decimals in the text"
+    },
+    "2128": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.train.n_dates",
+      "note": "unique trade dates in the train split (the split is by date, not by row)"
+    },
+    "266": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.val.n_dates",
+      "note": "unique trade dates in the val split (the split is by date, not by row)"
+    },
+    "267": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.test.n_dates",
+      "note": "unique trade dates in the test split (the split is by date, not by row)"
+    },
+    "2015-02-02": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.train.first",
+      "note": "train-split first trade date"
+    },
+    "2023-07-17": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.train.last",
+      "note": "train-split last trade date"
+    },
+    "2023-07-18": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.val.first",
+      "note": "val-split first trade date"
+    },
+    "2024-08-06": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.val.last",
+      "note": "val-split last trade date"
+    },
+    "2024-08-07": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.test.first",
+      "note": "test-split first trade date"
+    },
+    "2025-08-29": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "source": "datasets.v5.files.call.splits.test.last",
+      "note": "test-split last trade date"
+    },
+    "2015": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "float(J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.train.first')[:4])",
+      "note": "start year of the sample; the manifest records the full date 2015-02-02"
+    },
+    "2025": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "float(J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.test.last')[:4])",
+      "note": "end year of the sample; the manifest records the full date 2025-08-29"
+    },
+    "13595211": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/VALIDATION_v5.json",
+      "source": "files.option_type=call.parquet_rows_all_types",
+      "note": "post-preprocessing parquet total, both option types, before the maturity cut"
+    },
+    "0.00": {
+      "category": "experiment output",
+      "source_file": "results/duplicate_inputs_v5.json",
+      "source": "results.option_type=call.keys.input_key.full_dataset.pct_rows_in_dup_groups",
+      "note": "duplicate-input rate on the key (date, log_moneyness, T, r, q). results/duplicate_inputs_v5.json extends the published test-split check (VALIDATION_v5.json duplicate_input_pct_test) to train, validation and the full file; all are 0"
+    },
+    "108105": {
+      "category": "dataset/config/provenance",
+      "source_file": "wrds_data_2020-2025/pre_process_1_data_v4.py",
+      "source_regex": "SECID\\s*=\\s*(\\d+)",
+      "note": "OptionMetrics secid for the S&P 500 index, as used by the preprocessing code"
+    },
+    "10^{-10}": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/train_vol_surface.py",
+      "derivation": "1e-10",
+      "note": "the maturity clamp inside sqrt(clamp(T_years, min=1e-10)), verbatim in every train script's bs_normalized_price and in analysis/_common"
+    },
+    "10^{-8}": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/train_vol_surface.py",
+      "derivation": "1e-8",
+      "note": "the training/evaluation price clamp log(clamp(V/K, 1e-8)); it appears verbatim in every train script's `torch.clamp(price, min=1e-8)` and in analysis/_common.CLAMP_LOG"
+    },
+    "10^{-6}": {
+      "category": "theoretical constant",
+      "source_value": 1e-06,
+      "note": "two distinct roles: the spline baseline's fixed-point tolerance and the reproduction tolerance in analysis/spline_boundary_decomposition.py (--tol 1e-6). The THIRD occurrence, the residual sigma-dependence at T=0 on L281, is a different claim and is overridden per line"
+    },
+    "766080": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "J('train_model_v3/call/results_vol_surface_v5/config.json','fno_width') * 11 * 17 * J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim') + J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim')",
+      "note": "flattening-projection parameter count for the surface, 11x17 grid branch: fno_width * grid_h * grid_w * latent_dim + latent_dim"
+    },
+    "430208": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "J('train_model_v3/call/results_vol_surface_v5/config.json','fno_width') * 21 * 5 * J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim') + J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim')",
+      "note": "flattening-projection parameter count for the SPX history, 21x5 grid branch: fno_width * grid_h * grid_w * latent_dim + latent_dim"
+    },
+    "344192": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "J('train_model_v3/call/results_vol_surface_v5/config.json','fno_width') * 21 * 4 * J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim') + J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim')",
+      "note": "flattening-projection parameter count for the VIX history, 21x4 grid branch: fno_width * grid_h * grid_w * latent_dim + latent_dim"
+    },
+    "2.2": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "(J('train_model_v3/call/results_vol_surface_v5/config.json','fno_width') * 11 * 17 * J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim') + J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim')) / (J('train_model_v3/call/results_vol_surface_v5/config.json','fno_width') * 21 * 4 * J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim') + J('train_model_v3/call/results_vol_surface_v5/config.json','latent_dim'))",
+      "note": "ratio of the largest to the smallest flattening projection (766,080 / 344,192)"
+    },
+    "0.20": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/train_vol_surface_don.py",
+      "derivation": "log1p(exp(-1.50)) + 1e-6",
+      "note": "architecture B's initial sigma_hat: softplus(sigma_bias init -1.50) + sigma_floor 1e-6, both literal in train_vol_surface_don.py"
+    },
+    "100": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "epochs_adam",
+      "note": "Adam-phase epochs"
+    },
+    "50": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "epochs_finetune",
+      "note": "fine-tuning epochs; the same literal is also the |delta|=50 column the spline baseline's fixed point is initialised at"
+    },
+    "256": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "batch_size",
+      "note": "training batch size"
+    },
+    "1.0": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "grad_clip",
+      "note": "gradient-norm clipping threshold"
+    },
+    "5": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "patience_adam",
+      "note": "early-stopping patience in each phase; the same literal is also the SPX-history grid width (21x5) and Figure F3's 5x9 grid"
+    },
+    "32": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "fno_width",
+      "note": "FNO channel width"
+    },
+    "128": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "latent_dim",
+      "note": "latent/basis dimension; head and trunk hidden width is the same 128 (config head_hidden)"
+    },
+    "11": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "grid_h",
+      "note": "surface grid maturities"
+    },
+    "17": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "grid_w",
+      "note": "surface grid delta points"
+    },
+    "42": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "seed",
+      "note": "canonical seed for all twelve core runs"
+    },
+    "4": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "modes1",
+      "note": "retained spectral modes (modes1) on the surface grid; the same literal is also the number of FNO blocks and the VIX-history grid width"
+    },
+    "8": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "modes2",
+      "note": "retained spectral modes (modes2) on the surface grid"
+    },
+    "21": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_spot_history_v5/config.json",
+      "source": "grid_h",
+      "note": "trailing trading days in the SPX/VIX history windows"
+    },
+    "6": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_spot_history_v5/config.json",
+      "source": "modes1",
+      "note": "retained modes1 for the history encoders"
+    },
+    "2": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_spot_history_v5/config.json",
+      "source": "modes2",
+      "note": "retained modes2 for the history encoders; the same literal is also the '2-D' of the 2-D FNO and the '1-D form' reshaping remark"
+    },
+    "10": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=call.grid.abs_delta_bounds.0",
+      "note": "the surface grid's lower |delta| and lower tenor (10-day) boundary, which is what most occurrences mean. The same literal is also the 80/10/10 split shares, the +-10%% band in Figure F5, the squared-log-error tail threshold, and min_finetune_epochs=10 in every run's config.json"
+    },
+    "10^{-3}": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "lr",
+      "note": "Adam-phase learning rate"
+    },
+    "10^{-5}": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "finetune_lr",
+      "note": "fine-tuning learning rate"
+    },
+    "43": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5_seed43/config.json",
+      "source": "seed",
+      "note": "replication seed"
+    },
+    "44": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5_seed44/config.json",
+      "source": "seed",
+      "note": "replication seed"
+    },
+    "80": {
+      "category": "derived statistic",
+      "source_file": "wrds_data_2020-2025/DATASET_MANIFEST.json",
+      "derivation": "100.0 * J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.train.n_dates') / (J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.train.n_dates') + J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.val.n_dates') + J('wrds_data_2020-2025/DATASET_MANIFEST.json','datasets.v5.files.call.splits.test.n_dates'))",
+      "note": "the '80' of the 80/10/10 date split: 2,128 of 2,661 unique trade dates = 79.97%"
+    },
+    "0.7": {
+      "category": "dataset/config/provenance",
+      "source_file": "analysis/baselines.py",
+      "source_regex": "damping=([0-9.]+)",
+      "note": "damping factor of the spline baseline's delta fixed-point iteration (surface_sigma default)"
+    },
+    "90": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=call.grid.abs_delta_bounds.1",
+      "note": "upper |delta| bound of the OptionMetrics standardized surface grid, as read off the grid itself; the same literal is also a Figure F2 maturity-bucket edge (90 days)"
+    },
+    "730": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/spline_boundary_decomposition_v5.json",
+      "source": "results.option_type=call.grid.day_bounds.1",
+      "note": "upper tenor bound (calendar days) of the standardized surface grid"
+    },
+    "-10": {
+      "category": "theoretical constant",
+      "source_value": -10.0,
+      "note": "the -10 end of the put side of the surface's signed delta axis (-90 to -10)"
+    },
+    "-90": {
+      "category": "theoretical constant",
+      "source_value": -90.0,
+      "note": "the -90 end of the put side of the surface's signed delta axis"
+    },
+    "24": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "24.0 * float(J('train_model_v3/call/results_vol_surface_v5/config.json','data_provenance.export_min_maturity_days'))",
+      "note": "the maturity cut, stated in hours: export_min_maturity_days = 1.0 day"
+    },
+    "6.5": {
+      "category": "derived statistic",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "float(J('train_model_v3/call/results_vol_surface_v5/config.json','data_provenance.phase1.phase1_quote_time_et').split(':')[0]) - float(J('train_model_v3/call/results_vol_surface_v5/config.json','data_provenance.phase1.phase1_am_settle_time_et').split(':')[0]) - float(J('train_model_v3/call/results_vol_surface_v5/config.json','data_provenance.phase1.phase1_am_settle_time_et').split(':')[1])/60.0",
+      "note": "hours an AM-settled contract loses: 16:00 ET quote time minus 09:30 ET SOQ"
+    },
+    "9": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "float(J('train_model_v3/call/results_vol_surface_v5/config.json','data_provenance.phase1.phase1_am_settle_time_et').split(':')[0])",
+      "note": "the 9 of the 09:30 ET AM settlement print; the same literal is also Figure F3's 5x9 log-moneyness grid"
+    },
+    "30": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "derivation": "float(J('train_model_v3/call/results_vol_surface_v5/config.json','data_provenance.phase1.phase1_am_settle_time_et').split(':')[1])",
+      "note": "the 30 of 09:30 ET; the same literal is also a Figure F2 maturity-bucket edge (7--30d, 30--90d)"
+    },
+    "365": {
+      "category": "dataset/config/provenance",
+      "source_file": "train_model_v3/call/results_vol_surface_v5/config.json",
+      "source": "data_provenance.phase1.phase1_day_count",
+      "note": "day-count convention (365) used for T_years; also a Figure F2 bucket edge"
+    },
+    "7": {
+      "category": "theoretical constant",
+      "source_value": 7.0,
+      "note": "Figure F2 maturity-bucket edge (short 7--30 days)"
+    },
+    "0": {
+      "category": "theoretical constant",
+      "source_value": 0.0,
+      "note": "the T -> 0 limit of the decoder and the max(., 0) floor of the static no-arbitrage bounds; definitional, not measured"
+    },
+    "1": {
+      "category": "theoretical constant",
+      "source_value": 1.0,
+      "note": "the 1x1-convolution skip connections, the 1-D native form of the history tensors, and the T <= 1 day maturity cut; definitional or config (see 24 hours)"
+    },
+    "3.11.15": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "Python\\s+:\\s*(\\d+\\.\\d+\\.\\d+)",
+      "note": "Python, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "2.10.0": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "PyTorch\\s+:\\s*(\\d+\\.\\d+\\.\\d+)",
+      "note": "PyTorch, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "13.0": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "torch\\.version\\.cuda\\s+:\\s*([\\d.]+)",
+      "note": "CUDA the wheel was built against, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "2.3.5": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "NumPy\\s+:\\s*(\\d+\\.\\d+\\.\\d+)",
+      "note": "NumPy, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "3.16.0": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "h5py\\s+:\\s*(\\d+\\.\\d+\\.\\d+)",
+      "note": "h5py, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "3.10.8": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "matplotlib\\s+:\\s*(\\d+\\.\\d+\\.\\d+)",
+      "note": "matplotlib, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "1.38.1": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "polars\\s+:\\s*(\\d+\\.\\d+\\.\\d+)",
+      "note": "polars, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "3060": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "NVIDIA GeForce RTX (\\d+)",
+      "note": "GPU model, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    },
+    "595.95": {
+      "category": "dataset/config/provenance",
+      "source_file": "results/environment_snapshot_*.txt",
+      "source_regex": "Driver Version:\\s*([\\d.]+)",
+      "note": "GPU driver, read from results/environment_snapshot_<date>.txt. CAVEAT: that snapshot is the AUDIT/REPRODUCTION environment. The August 2026 training environment was never captured, so the table's caption ('Environment used for all training and evaluation runs') overstates what this artifact supports; the versions themselves match the snapshot exactly"
+    }
+  },
+  "by_line": {
+    "544:0.921": {
+      "category": "experiment output",
+      "source_file": "train_model_v3/put/results_vix_history_v5/metrics.json",
+      "source": "r2_log_filtered",
+      "note": "puts' VIX-history range 0.918--0.921 (architecture A); L543's 0.921 is the call cell"
+    },
+    "281:10^{-6}": {
+      "category": "experiment output",
+      "source_file": "results/diagnostics_tail_v5.json",
+      "source": "call.degeneracy.T=0.max_price_spread_over_sigma",
+      "note": "'a residual sigma dependence of order 1e-6 in a vanishing band around the money'. results/diagnostics_tail_v5.json records 1.19e-5, an order of magnitude larger. KNOWN OPEN ITEM for the manuscript-editing pass"
+    }
+  },
+  "text_checks": [
+    {
+      "line": 811,
+      "section_or_table": "fig:f5",
+      "literal": "architecture-A/B",
+      "expected": "architecture-A",
+      "category": "unsupported",
+      "source_file": "results/fig_F5_pred_vs_market_v5.md",
+      "note": "the F5 caption says the figure shows 'IV-surface architecture-A/B models', but results/fig_F5_pred_vs_market_v5.md records a single run per option type, train_model_v3/{call,put}/results_vol_surface_v5 -- architecture A only. KNOWN OPEN ITEM for the manuscript-editing pass"
+    },
+    {
+      "line": 925,
+      "section_or_table": "Limitations",
+      "literal": "Huber loss did not improve",
+      "expected": "(no artifact)",
+      "category": "unsupported",
+      "source_file": "",
+      "status": "UNSUPPORTED",
+      "note": "the Huber-loss remark is UNSUPPORTED: no Huber-loss run, metric or log is committed anywhere in this repository (the Huber branch is commented out in train_vol_surface*.py compute_loss), so the claim that it did not improve the headline log metric rests on an unrecorded experiment"
+    }
+  ]
+}
