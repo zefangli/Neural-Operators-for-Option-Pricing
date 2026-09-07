@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated": "2026-09-07 14:34:12",
+    "generated": "2026-09-07 15:22:52",
     "script": "analysis/spline_boundary_decomposition.py",
-    "script_sha256": "48e889c6be1c1a9549a0115f81bd92769674a4836582e7dfae6fc08b623233d1",
+    "script_sha256": "73c813b6c58be8a7138dd93c9547c70841d39c83d995b4dff2c883c8bfad474a",
     "baselines_py_sha256": "5e5b7dd8d942e6d70245c10eabcbd9d6d72a37ebe7a4aa930e1230fbc8f05b2e",
     "baselines_py_marker": "analysis/baselines.py has no __version__; identity is the sha256 above plus the git HEAD",
-    "git_head": "3e77dac189012b29cec634d897ea6ae480d70d48",
-    "git_worktree_dirty": true,
+    "git_head": "6a28e8b4a05780882d54f27d670eaaa232db2bc5",
+    "git_worktree_dirty": false,
     "dataset_version": "v5",
     "device": "cpu",
     "reproduces": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\results\\baselines_v5.json",

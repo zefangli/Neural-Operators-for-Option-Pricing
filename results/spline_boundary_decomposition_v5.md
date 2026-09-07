@@ -1,7 +1,7 @@
 # Cubic-spline IV-surface baseline: grid-boundary error decomposition
 
-Generated 2026-09-07 14:34:12 - CPU only, no checkpoint loaded.
-Dataset v5, script `analysis/spline_boundary_decomposition.py`, git HEAD `3e77dac18901`.
+Generated 2026-09-07 15:22:52 - CPU only, no checkpoint loaded.
+Dataset v5, script `analysis/spline_boundary_decomposition.py`, git HEAD `6a28e8b4a057`.
 
 Rows are classified by the delta of the **converged** sigma from the damped fixed point (the same array `baselines.py` decides `n_out_of_grid_delta` on), not by the |delta|=50 initial guess. Boundaries are exclusive: exactly 10 or 90 delta, and exactly 10 or 730 days, count as in-grid. The two delta masks are mutually exclusive but either may co-occur with `tenor_out`, so the three out-of-grid masks do not partition the split -- only `{in_grid, not_in_grid}` does, and only that pair's SSE shares sum to 100%. `delta_in_grid` is the looser reading of "in-grid" -- in-grid on the delta axis alone, tenor clamping ignored; it is listed because the two readings give different R2(log) and a citation must say which it means.
 
