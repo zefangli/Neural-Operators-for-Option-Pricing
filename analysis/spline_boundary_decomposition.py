@@ -152,8 +152,8 @@ def decompose(option_type, surfaces, args, prov, expected):
         if not abs(got[key] - want) <= args.tol:
             raise SystemExit(
                 "ABORT: recomputed %s/%s %s=%.12f disagrees with %s (%.12f) by %.3g > %g.\n"
-                "  This script must reproduce the published baseline bit-for-bit before its\n"
-                "  decomposition may be cited. Do not publish these numbers."
+                "  This script must reproduce the published baseline within the configured 1e-6\n"
+                "  tolerance (--tol) before its decomposition may be cited. Do not publish these numbers."
                 % (option_type, BASELINE, key, got[key], args.baselines_json, want,
                    abs(got[key] - want), args.tol))
     print(f"[{option_type}] sanity OK: R2(price)={got['r2_price']:.6f} "

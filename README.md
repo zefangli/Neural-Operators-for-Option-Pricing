@@ -32,12 +32,12 @@ trade date:
 
 Two results this table can't show on its own:
 
-- **Per-query conditioning is decisive.** Collapsing σ̂ to one scalar per market state instead
-  of one per contract drops put R²(log, T>1 day) from 0.978 to −0.317 and put R²(price) from
+- **Per-query conditioning has the largest effect.** Collapsing σ̂ to one scalar per market state
+  instead of one per contract drops put R²(log, T>1 day) from 0.978 to −0.317 and put R²(price) from
   0.993 to −3.090; calls move the same way (0.991 → 0.800).
-- **Greeks fall out for free.** Autograd through the decoder agrees with closed-form
-  Black–Scholes at the predicted σ̂ to within ~1e-14–1e-16 absolute error — a
-  derivative-consistency check at fixed σ̂, not a claim about the total system's sensitivity.
+- **Greeks come from the same analytical decoder.** Autograd through the decoder agrees with
+  closed-form Black–Scholes at the predicted σ̂ to a maximum absolute discrepancy of ~2×10⁻¹⁴
+  (delta) and ~2×10⁻¹⁵ (vega) — a derivative-consistency check at fixed σ̂, not a claim about the total system's sensitivity.
 
 Two qualifications apply throughout: the vol-surface result is same-day cross-sectional
 reconstruction conditional on an observed surface, not forecasting, and the branch comparison

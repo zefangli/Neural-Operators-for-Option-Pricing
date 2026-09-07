@@ -32,9 +32,9 @@ Zefang Li \\
 \maketitle
 
 \begin{abstract}
-The Black--Scholes formula is exact once the implied volatility is known. However, most neural option
-pricers discard this structure and learn an opaque map straight to price. Here, we learn a
-\emph{per-contract implied volatility} $\hat\sigma$ and feed it through the closed-form
+The Black--Scholes formula is exact once the implied volatility is known. Neural networks estimate
+prices, implied volatilities, and hedges. However, how much per-contract conditioning helps remains
+unquantified. Here, we learn a \emph{per-contract implied volatility} $\hat\sigma$ and feed it through the closed-form
 Black--Scholes (BS) formula, so a plain data loss on $\log(V/K)$ back-propagates through the
 analytical pricer, with no learned surrogate. A 2-D Fourier Neural Operator encodes the market state
 from one of three inputs (implied-volatility surface, SPX price history, or VIX history), and a
@@ -56,13 +56,15 @@ input--encoder configurations, not isolated inputs.
 Pricing an option is, in principle, a map from market state and contract terms to a price. The
 common neural approach regresses that price (or an implied volatility) directly with a general
 function approximator, a line of work that begins with~\citet{Hutchinson1994Nonparametric} and is
-surveyed by~\citet{RufWang2020Review}. This throws away structure that is already known in closed
-form: under the standard Black--Scholes assumptions, the price is an explicit, differentiable function
-of one hard-to-observe quantity, the implied volatility $\sigma$, while everything else in the formula
-(moneyness, maturity, rate, dividend yield) is directly observed. However, in the architectures that
-literature covers, the learned approximator sits on the pricing map itself, so the analytical formula
-is either replaced or numerically reproduced rather than retained as an exact output layer, and the
-one genuinely unobserved quantity in it is never isolated as the network's sole target. Here, we train
+surveyed by~\citet{RufWang2020Review}. Regressing the price directly throws away structure that is
+already known in closed form: under the standard Black--Scholes assumptions, the price is an explicit,
+differentiable function of one hard-to-observe quantity, the implied volatility $\sigma$, conditional
+on moneyness, maturity, and the dataset-supplied rate and dividend-yield inputs. However, that
+literature leaves two empirical questions open about such an architecture: how much a per-contract
+$\hat\sigma$ buys relative to a market-state-only scalar $\hat\sigma$, and which of three market-state
+inputs (an implied-volatility surface, an SPX price history, or a VIX history) prices best when the
+architecture, dataset, and date split are held fixed. Neither has been quantified side by side on SPX
+options~\citep{RufWang2020Review}. Here, we train
 a network to predict only $\sigma$---more precisely, a per-contract estimate $\hat\sigma$ conditioned
 on the broader market state---and recover the price analytically through the BS formula. Because BS is
 composed of differentiable primitives ($\exp$, $\mathrm{erf}$, $\sqrt{\cdot}$), the training loss on
