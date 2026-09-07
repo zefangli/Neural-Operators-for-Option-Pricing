@@ -324,7 +324,13 @@ def _interp(surf, method):
 
 def surface_sigma_group(interp_fn, grid, surf, log_m, T, r, q, option_type, method,
                         tol=1e-6, max_iter=80, damping=0.7):
-    """Damped fixed point sigma = surface(days, delta(sigma)). Returns (sigma, converged, oob)."""
+    """Damped fixed point sigma = surface(days, delta(sigma)).
+
+    -> (sigma, converged, oob_delta, oob_tenor, delta_pct). `delta_pct` is the
+    delta of the CONVERGED sigma (the same one oob_delta is decided on), not the
+    |delta|=50 initial guess -- callers that need to know which boundary a row
+    was clamped to need exactly that array.
+    """
     f = interp_fn(grid)
     days_q = np.clip(T * 365.0, surf["days"][0], surf["days"][-1])
     d_lo, d_hi = surf["delta"][0], surf["delta"][-1]
@@ -341,16 +347,22 @@ def surface_sigma_group(interp_fn, grid, surf, log_m, T, r, q, option_type, meth
     dpct = bs_delta_pct(log_m, T, r, q, sigma, option_type)
     oob_d = (dpct < d_lo) | (dpct > d_hi)
     oob_t = (T * 365.0 < surf["days"][0]) | (T * 365.0 > surf["days"][-1])
-    return sigma, np.abs(step) < tol, oob_d, oob_t
+    return sigma, np.abs(step) < tol, oob_d, oob_t, dpct
 
 
-def surface_sigma(rows, surf, option_type, method="linear", lag=0):
-    """Per-date grouped surface lookup. `lag=1` uses the previous available trade date."""
+def surface_sigma(rows, surf, option_type, method="linear", lag=0, rowwise=None):
+    """Per-date grouped surface lookup. `lag=1` uses the previous available trade date.
+
+    `rowwise`, when a dict, is filled with the per-row arrays behind the scalar
+    diagnostics (`delta_pct`, `oob_delta`, `oob_tenor`, `converged`, `live`).
+    Purely an out-parameter: the return value and `diag` are unchanged.
+    """
     interp_fn = _interp(surf, method)
     sigma = np.full(len(rows["T"]), np.nan)
     conv = np.zeros(len(sigma), bool)
     oob_d = np.zeros(len(sigma), bool)
     oob_t = np.zeros(len(sigma), bool)
+    dpct = np.full(len(sigma), np.nan)
     missing = 0
     uniq, inv = np.unique(rows["date"], return_inverse=True)
     order = np.argsort(inv, kind="stable")
@@ -363,10 +375,10 @@ def surface_sigma(rows, surf, option_type, method="linear", lag=0):
         if j < 0:
             missing += len(sel)
             continue
-        s, c, od, ot = surface_sigma_group(
+        s, c, od, ot, dp = surface_sigma_group(
             interp_fn, surf["grids"][j], surf, rows["log_m"][sel], rows["T"][sel],
             rows["r"][sel], rows["q"][sel], option_type, method)
-        sigma[sel], conv[sel], oob_d[sel], oob_t[sel] = s, c, od, ot
+        sigma[sel], conv[sel], oob_d[sel], oob_t[sel], dpct[sel] = s, c, od, ot, dp
     live = rows["T"] > 0                      # T==0 never uses sigma
     nl = max(int(live.sum()), 1)
     diag = {"nonconvergence_rate": float((~conv & live).sum() / nl),
@@ -378,6 +390,9 @@ def surface_sigma(rows, surf, option_type, method="linear", lag=0):
             "n_live_rows": int(live.sum()),
             "n_missing_surface": int(missing),
             "clamped": "out-of-grid queries clamped to the nearest grid boundary"}
+    if rowwise is not None:
+        rowwise.update(delta_pct=dpct, oob_delta=oob_d, oob_tenor=oob_t,
+                       converged=conv, live=live)
     return sigma, diag
 
 
@@ -602,14 +617,14 @@ def self_test():
 
         # (b) flat synthetic surface -> fixed point returns it exactly
         flat = np.full((N_DAYS_AXIS, N_DELTA_AXIS), 0.25)
-        sig, conv, _, _ = surface_sigma_group(_interp(surf, "linear"), flat, surf,
+        sig, conv, *_ = surface_sigma_group(_interp(surf, "linear"), flat, surf,
                                            log_m[:200], T[:200], r[:200], q[:200], ot, "linear")
         assert conv.all() and np.abs(sig - 0.25).max() < 1e-8, "flat-surface fixed point"
 
         # (c) linear-in-delta synthetic surface vs an independent brentq solve
         a, b = 0.30, -0.0015 if ot == "call" else 0.0015
         lin = a + b * np.tile(ax, (N_DAYS_AXIS, 1))
-        sig, conv, _, _ = surface_sigma_group(_interp(surf, "linear"), lin, surf,
+        sig, conv, *_ = surface_sigma_group(_interp(surf, "linear"), lin, surf,
                                            log_m[:200], T[:200], r[:200], q[:200], ot, "linear")
         assert conv.all(), "linear-surface fixed point did not converge"
         for k in range(0, 200, 17):
