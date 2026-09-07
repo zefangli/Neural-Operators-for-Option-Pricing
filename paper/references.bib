@@ -1,7 +1,17 @@
-% All entries below were verified via web search on 2026-08-16 against publicly
-% listed bibliographic records (arXiv, journal pages, NBER, DBLP). No entry in
-% this file is fabricated; where verification was not possible a TODO-VERIFY
-% marker is left in the manuscript text instead of guessing.
+% All entries below were verified via web search on 2026-08-16 and re-verified on
+% 2026-09-07 against publicly listed bibliographic records (Crossref, publisher
+% pages, the NeurIPS proceedings, arXiv, NBER, DBLP). No entry in this file is
+% fabricated; where verification was not possible a TODO-VERIFY marker is left in
+% the manuscript text instead of guessing.
+%
+% The 2026-09-07 pass: (i) corrected the Buechner2021Factor DOI, since
+% 10.1016/j.jfineco.2021.11.004 resolves to an unrelated JFE article, and promoted
+% that entry and Cohen2020Arbitrage from working-paper/preprint records to their
+% published journal versions; (ii) completed volume/number/page/DOI fields on
+% GatherJacquier2014SSVI and Horvath2021DeepVol; (iii) added Hutchinson1994Nonparametric,
+% RufWang2020Review, Ackerer2020DeepSmoothing, and Dupire1994Smile. Dupire's page
+% range (Risk 7(1), 18--20) is the conventional citation for a pre-DOI trade
+% magazine article and could not be checked against a page image.
 
 @article{BlackScholes1973,
   author  = {Black, Fischer and Scholes, Myron},
@@ -64,6 +74,10 @@
   title   = {Arbitrage-Free {SVI} Volatility Surfaces},
   journal = {Quantitative Finance},
   year    = {2014},
+  volume  = {14},
+  number  = {1},
+  pages   = {59--71},
+  doi     = {10.1080/14697688.2013.819986},
   eprint  = {1204.0646},
   archivePrefix = {arXiv}
 }
@@ -75,6 +89,7 @@
   year    = {2021},
   volume  = {21},
   number  = {1},
+  pages   = {11--27},
   doi     = {10.1080/14697688.2020.1817974}
 }
 
@@ -88,13 +103,15 @@
   doi     = {10.1016/j.jcp.2018.10.045}
 }
 
-@techreport{Buechner2021Factor,
-  author      = {Buechner, Matthias and Kelly, Bryan T.},
-  title       = {A Factor Model for Option Returns},
-  institution = {National Bureau of Economic Research},
-  type        = {NBER Working Paper},
-  number      = {29369},
-  year        = {2021}
+@article{Buechner2021Factor,
+  author  = {B{\"u}chner, Matthias and Kelly, Bryan T.},
+  title   = {A Factor Model for Option Returns},
+  journal = {Journal of Financial Economics},
+  year    = {2022},
+  volume  = {143},
+  number  = {3},
+  pages   = {1140--1161},
+  doi     = {10.1016/j.jfineco.2021.12.007}
 }
 
 @inproceedings{Wiedemann2025OpDeepSmoothing,
@@ -143,8 +160,56 @@
 @article{Cohen2020Arbitrage,
   author  = {Cohen, Samuel N. and Reisinger, Christoph and Wang, Sheng},
   title   = {Detecting and Repairing Arbitrage in Traded Option Prices},
-  journal = {arXiv preprint},
+  journal = {Applied Mathematical Finance},
   year    = {2020},
+  volume  = {27},
+  number  = {5},
+  pages   = {345--373},
+  doi     = {10.1080/1350486X.2020.1846573},
   eprint  = {2008.09454},
   archivePrefix = {arXiv}
+}
+
+@article{Hutchinson1994Nonparametric,
+  author  = {Hutchinson, James M. and Lo, Andrew W. and Poggio, Tomaso},
+  title   = {A Nonparametric Approach to Pricing and Hedging Derivative Securities via Learning Networks},
+  journal = {The Journal of Finance},
+  year    = {1994},
+  volume  = {49},
+  number  = {3},
+  pages   = {851--889},
+  doi     = {10.1111/j.1540-6261.1994.tb00081.x}
+}
+
+@article{RufWang2020Review,
+  author  = {Ruf, Johannes and Wang, Weiguan},
+  title   = {Neural Networks for Option Pricing and Hedging: A Literature Review},
+  journal = {Journal of Computational Finance},
+  year    = {2020},
+  volume  = {24},
+  number  = {1},
+  pages   = {1--46},
+  doi     = {10.21314/JCF.2020.390},
+  eprint  = {1911.05620},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{Ackerer2020DeepSmoothing,
+  author    = {Ackerer, Damien and Tagasovska, Natasa and Vatter, Thibault},
+  title     = {Deep Smoothing of the Implied Volatility Surface},
+  booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS 2020)},
+  year      = {2020},
+  pages     = {11552--11563},
+  eprint    = {1906.05065},
+  archivePrefix = {arXiv}
+}
+
+@article{Dupire1994Smile,
+  author  = {Dupire, Bruno},
+  title   = {Pricing with a Smile},
+  journal = {Risk},
+  year    = {1994},
+  volume  = {7},
+  number  = {1},
+  pages   = {18--20}
 }

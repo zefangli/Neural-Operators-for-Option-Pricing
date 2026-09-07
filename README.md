@@ -67,13 +67,16 @@ see `wrds_data_2020-2025/README.txt` for the exact tables and build steps.
 ## Setup
 
 ```bash
-conda create -n dl_new python=3.10
+conda create -n dl_new python=3.11
 conda activate dl_new
 pip install torch polars numpy h5py matplotlib
 ```
 
 There is no pinned `requirements.txt`/`environment.yml` in this repo yet — the above is the
-dependency set the code actually imports.
+dependency set the code actually imports. Every result in the paper was produced under Python
+3.11.15 with torch 2.10.0 (built against CUDA 13.0), numpy 2.3.5, h5py 3.16.0, matplotlib 3.10.8,
+and polars 1.38.1; the full table, including GPU and driver versions, is in the reproducibility and
+environment appendix of [`paper/main.tex`](paper/main.tex).
 
 ## Quickstart
 
