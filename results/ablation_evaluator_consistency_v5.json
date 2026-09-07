@@ -1,0 +1,2176 @@
+{
+  "meta": {
+    "generated": "2026-09-07 19:11:39",
+    "script": "analysis/ablation_evaluator_consistency.py",
+    "script_sha256": "771ff7e98c00b10be11444927838f3d34694f8f204e1587f96189a3a987abb49",
+    "git_head": "394bec038d662c9e60355a582af729dc46ac6a19",
+    "git_worktree_dirty": false,
+    "device": {
+      "torch": "2.10.0+cu130",
+      "torch_version_cuda": "13.0",
+      "cudnn": 91200,
+      "cuda_available": true,
+      "python": "3.11.15 | packaged by conda-forge | (main, Mar  5 2026, 16:36:00) [MSC v.1944 64 bit (AMD64)]",
+      "numpy": "2.3.5",
+      "nvidia_smi": "Mon Sep  7 19:11:39 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.95                 Driver Version: 595.95         CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 3060      WDDM  |   00000000:01:00.0  On |                  N/A |\n| 31%   42C    P3             26W /  170W |    1730MiB /  12288MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            3524    C+G   ...em32\\ApplicationFrameHost.exe      N/A      |\n|    0   N/A  N/A            5088    C+G   C:\\Windows\\explorer.exe               N/A      |\n|    0   N/A  N/A            5732    C+G   ...ice\\root\\Office16\\WINWORD.EXE      N/A      |\n|    0   N/A  N/A           10544      C   ...conda3\\envs\\dl_new\\python.exe      N/A      |\n|    0   N/A  N/A           11960    C+G   ...acted\\runtime\\WeChatAppEx.exe      N/A      |\n|    0   N/A  N/A           12424    C+G   ...4__8wekyb3d8bbwe\\Video.UI.exe      N/A      |\n|    0   N/A  N/A           13528    C+G   ...2txyewy\\CrossDeviceResume.exe      N/A      |\n|    0   N/A  N/A           14712    C+G   ...\\slack\\app-4.51.191\\slack.exe      N/A      |\n|    0   N/A  N/A           15428    C+G   ...\\slack\\app-4.51.191\\slack.exe      N/A      |\n|    0   N/A  N/A           15684    C+G   ..._cw5n1h2txyewy\\SearchHost.exe      N/A      |\n|    0   N/A  N/A           15696    C+G   ...y\\StartMenuExperienceHost.exe      N/A      |\n|    0   N/A  N/A           17028    C+G   ...4__w2gh52qy24etm\\Nahimic3.exe      N/A      |\n|    0   N/A  N/A           17096    C+G   ...0.4129.107\\msedgewebview2.exe      N/A      |\n|    0   N/A  N/A           18920    C+G   ...8bbwe\\PhoneExperienceHost.exe      N/A      |\n|    0   N/A  N/A           18936    C+G   ...5n1h2txyewy\\TextInputHost.exe      N/A      |\n|    0   N/A  N/A           19676    C+G   ...ows\\System32\\NahimicSvc64.exe      N/A      |\n|    0   N/A  N/A           20924    C+G   ...icrosoft.AAD.BrokerPlugin.exe      N/A      |\n|    0   N/A  N/A           22288    C+G   ..._pzs8sxrjxfjjc\\app\\claude.exe      N/A      |\n|    0   N/A  N/A           23160    C+G   ...lus\\logioptionsplus_agent.exe      N/A      |\n|    0   N/A  N/A           24112    C+G   ...2p2nqsd0c76g0\\app\\ChatGPT.exe      N/A      |\n|    0   N/A  N/A           24256    C+G   ...yb3d8bbwe\\WindowsTerminal.exe      N/A      |\n|    0   N/A  N/A           28812    C+G   ...xyewy\\ShellExperienceHost.exe      N/A      |\n|    0   N/A  N/A           28888    C+G   ...indows\\System32\\ShellHost.exe      N/A      |\n|    0   N/A  N/A           33472    C+G   ..._pzs8sxrjxfjjc\\app\\claude.exe      N/A      |\n|    0   N/A  N/A           40212    C+G   ...s\\Mozilla Firefox\\firefox.exe      N/A      |\n|    0   N/A  N/A           40256    C+G   ...s\\Mozilla Firefox\\firefox.exe      N/A      |\n+-----------------------------------------------------------------------------------------+",
+      "gpu_name": "NVIDIA GeForce RTX 3060",
+      "gpu_capability": "8.6",
+      "gpu_total_memory_gib": 12.0
+    },
+    "checkpoint_verification": [
+      {
+        "checkpoint": "train_model_v3\\call\\results_vol_surface_v5\\best_model.pth",
+        "expected_sha256": "82e4f7b101ffc2e6b1280ea5cbf4fff0a3c7729ae79ce8ea121a84e3810b45f7",
+        "observed_sha256": "82e4f7b101ffc2e6b1280ea5cbf4fff0a3c7729ae79ce8ea121a84e3810b45f7",
+        "match": true
+      },
+      {
+        "checkpoint": "train_model_v3\\call\\results_vol_surface_scalarsigma_v5\\best_model.pth",
+        "expected_sha256": "960fae1f4f14b120b2923cad948ff4024f665f2bba5846a6321bbad3bcd60145",
+        "observed_sha256": "960fae1f4f14b120b2923cad948ff4024f665f2bba5846a6321bbad3bcd60145",
+        "match": true
+      },
+      {
+        "checkpoint": "train_model_v3\\put\\results_vol_surface_v5\\best_model.pth",
+        "expected_sha256": "9c87fa602de6dcf59a96892f6f5d13b36ea5233f7b2a398ff4ed481d24573837",
+        "observed_sha256": "9c87fa602de6dcf59a96892f6f5d13b36ea5233f7b2a398ff4ed481d24573837",
+        "match": true
+      },
+      {
+        "checkpoint": "train_model_v3\\put\\results_vol_surface_scalarsigma_v5\\best_model.pth",
+        "expected_sha256": "ef4510e40d5a506782d25de0f76a9b75b1b5a02f36c9d29c949a8920dbc14b36",
+        "observed_sha256": "ef4510e40d5a506782d25de0f76a9b75b1b5a02f36c9d29c949a8920dbc14b36",
+        "match": true
+      }
+    ],
+    "canonical_evaluator": "analysis/eval_ablation.py, CPU, EVAL_BATCH_SIZE 4096 -- path `cpu_bs4096` here. results/ablation_scalar_sigma_v5.* is NOT modified by this script.",
+    "subsample": {
+      "n": 100000,
+      "seed": 42,
+      "note": "full per-row arrays are ~50 MB and are not committed; the npz holds a fixed-seed subsample of sigma_hat and log-price per path, indexed by *_subsample_index"
+    },
+    "divergence_threshold": 0.1,
+    "clamp_log": -18.420680743952367,
+    "max_contracts": null
+  },
+  "results": [
+    {
+      "option_type": "call",
+      "model_variant": "scalar_sigma",
+      "results_dir": "train_model_v3/call/results_vol_surface_scalarsigma_v5",
+      "checkpoint": "train_model_v3\\call\\results_vol_surface_scalarsigma_v5\\best_model.pth",
+      "checkpoint_sha256": "960fae1f4f14b120b2923cad948ff4024f665f2bba5846a6321bbad3bcd60145",
+      "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_call_v5.h5",
+      "h5_sha256_from_config": "ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153",
+      "train_script": "train_model_v3\\call\\train_vol_surface_scalarsigma.py",
+      "train_script_sha256": "d74833304ff8645908164adfb29369967fcd018193380301e7ee16486216e2a3",
+      "n_test": 819342,
+      "config_batch_size": 256,
+      "use_stable_log_in_config": false,
+      "training_tail_reference": {
+        "r2_log": 0.800342,
+        "rmse_log": 1.047691,
+        "r2_price": 0.999825
+      },
+      "paths": {
+        "cpu_bs512": {
+          "device": "cpu",
+          "batch_size": 512,
+          "pipeline": "analysis/_common.model_predict_logv",
+          "seconds": 149.0181303024292,
+          "metrics_as_produced": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090269626,
+            "r2_log_filtered": 0.8001062241338373,
+            "r2_log_full": 0.8001062241338373,
+            "rmse_log": 1.0483097438390763,
+            "rmse_price": 0.005962257411116079,
+            "mae_price": 0.0027832414937211474,
+            "mse_log": 1.0989533190279497,
+            "mse_log_filtered": 1.0989533190279497,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16702,
+            "tail_sse_share": 0.6296432698787678,
+            "clamp_hit_count": 7306
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090364551,
+            "r2_log_filtered": 0.7984908112927842,
+            "r2_log_full": 0.7984908112927842,
+            "rmse_log": 1.052537102645194,
+            "rmse_price": 0.005962257249033171,
+            "mae_price": 0.0027832418762709604,
+            "mse_log": 1.1078343524447396,
+            "mse_log_filtered": 1.1078343524447396,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16697,
+            "tail_sse_share": 0.6325555547131859,
+            "clamp_hit_count": 8036
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090364462,
+            "r2_log_filtered": -6.034411440756631,
+            "r2_log_full": -6.034411440756631,
+            "rmse_log": 6.218761052247367,
+            "rmse_price": 0.0059622572491852014,
+            "mae_price": 0.0027832419637390344,
+            "mse_log": 38.67298902494878,
+            "mse_log_filtered": 38.67298902494878,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16697,
+            "tail_sse_share": 0.9894741112759313,
+            "clamp_hit_count": 8036
+          },
+          "sigma_summary": {
+            "min": 0.10986512154340744,
+            "median": 0.1437404900789261,
+            "max": 0.4032420814037323,
+            "mean": 0.15767215192317963
+          },
+          "n_at_clamp_floor": 7306
+        },
+        "cpu_bs4096": {
+          "device": "cpu",
+          "batch_size": 4096,
+          "pipeline": "analysis/_common.model_predict_logv",
+          "seconds": 153.0713815689087,
+          "metrics_as_produced": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090272592,
+            "r2_log_filtered": 0.8001026403145495,
+            "r2_log_full": 0.8001026403145495,
+            "rmse_log": 1.048319141169794,
+            "rmse_price": 0.005962257406052012,
+            "mae_price": 0.0027832414987924107,
+            "mse_log": 1.0989730217429745,
+            "mse_log_filtered": 1.0989730217429745,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16702,
+            "tail_sse_share": 0.6296497087688627,
+            "clamp_hit_count": 7307
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090364005,
+            "r2_log_filtered": 0.7984908112533533,
+            "r2_log_full": 0.7984908112533533,
+            "rmse_log": 1.052537102748173,
+            "rmse_price": 0.0059622572499644965,
+            "mae_price": 0.0027832418766767005,
+            "mse_log": 1.107834352661518,
+            "mse_log_filtered": 1.107834352661518,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16697,
+            "tail_sse_share": 0.6325555547331448,
+            "clamp_hit_count": 8036
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090363916,
+            "r2_log_filtered": -6.034411445050831,
+            "r2_log_full": -6.034411445050831,
+            "rmse_log": 6.218761054145508,
+            "rmse_price": 0.005962257250116528,
+            "mae_price": 0.002783241964144775,
+            "mse_log": 38.67298904855695,
+            "mse_log_filtered": 38.67298904855695,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16697,
+            "tail_sse_share": 0.9894741112808689,
+            "clamp_hit_count": 8036
+          },
+          "sigma_summary": {
+            "min": 0.10986509919166565,
+            "median": 0.1437404900789261,
+            "max": 0.4032420814037323,
+            "mean": 0.15767215192317963
+          },
+          "n_at_clamp_floor": 7307
+        },
+        "gpu_bs512": {
+          "device": "cuda",
+          "batch_size": 512,
+          "pipeline": "train script H5BranchDataset/make_loader",
+          "seconds": 29.84123468399048,
+          "metrics_as_produced": {
+            "n_test": 819342,
+            "r2_price": 0.9998254091315942,
+            "r2_log_filtered": 0.800341955085289,
+            "r2_log_full": 0.800341955085289,
+            "rmse_log": 1.047691435562699,
+            "rmse_price": 0.005962255624538386,
+            "mae_price": 0.0027832417599819807,
+            "mse_log": 1.0976573441514288,
+            "mse_log_filtered": 1.0976573441514288,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16685,
+            "tail_sse_share": 0.6290428908237038,
+            "clamp_hit_count": 7298
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 819342,
+            "r2_price": 0.999825409052465,
+            "r2_log_filtered": 0.7984908126450855,
+            "r2_log_full": 0.7984908126450855,
+            "rmse_log": 1.052537099113476,
+            "rmse_price": 0.005962256975665174,
+            "mae_price": 0.002783241975500248,
+            "mse_log": 1.1078343450102108,
+            "mse_log_filtered": 1.1078343450102108,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16697,
+            "tail_sse_share": 0.6325554617284056,
+            "clamp_hit_count": 8036
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 819342,
+            "r2_price": 0.9998254090524561,
+            "r2_log_filtered": -6.034406931863065,
+            "r2_log_full": -6.034406931863065,
+            "rmse_log": 6.218759059206696,
+            "rmse_price": 0.005962256975817204,
+            "mae_price": 0.002783242062968305,
+            "mse_log": 38.672964236465354,
+            "mse_log_filtered": 38.672964236465354,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 16697,
+            "tail_sse_share": 0.9894741019360537,
+            "clamp_hit_count": 8036
+          },
+          "sigma_summary": {
+            "min": 0.10986506938934326,
+            "median": 0.14374051988124847,
+            "max": 0.4032420814037323,
+            "mean": 0.15767218172550201
+          },
+          "n_at_clamp_floor": 7297
+        }
+      },
+      "pairwise": {
+        "cpu_bs512__vs__cpu_bs4096": {
+          "sigma_hat": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 805611,
+            "max": 7.450580596923828e-08,
+            "mean": 4.13675623262641e-10,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 1.4901161193847656e-08,
+            "p99_9": 4.470348358154297e-08,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 813228,
+            "max": 1.1879005432128906,
+            "mean": 1.7386086983648844e-06,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 0.0,
+            "p99_9": 1.7642974853515625e-05,
+            "n_gt_1e-6": 5342,
+            "n_gt_1e-3": 35,
+            "n_gt_0.1": 1,
+            "n_gt_1": 1
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 805818,
+            "max": 7.371239945541674e-06,
+            "mean": 6.302517375947381e-09,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 1.6204250759432715e-07,
+            "p99_9": 1.1758530842015336e-06,
+            "n_gt_1e-6": 1126,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 805698,
+            "max": 3.62302901635303e-05,
+            "mean": 7.397211483619708e-09,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 1.6561584058827263e-07,
+            "p99_9": 1.284158223376088e-06,
+            "n_gt_1e-6": 1248,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 1,
+            "pct_rows": 0.0001220491565182793,
+            "log_moneyness_min_med_max": [
+              -0.06207319721579552,
+              -0.06207319721579552,
+              -0.06207319721579552
+            ],
+            "T_days_min_med_max": [
+              4.0000001061707735,
+              4.0000001061707735,
+              4.0000001061707735
+            ],
+            "target_log_price_min_med_max": [
+              -11.10796070098877,
+              -11.10796070098877,
+              -11.10796070098877
+            ],
+            "n_target_below_clamp": 0,
+            "n_a_at_clamp": 0,
+            "n_b_at_clamp": 1,
+            "n_clamp_state_flipped": 1,
+            "max_abs_delta": 1.1879005432128906,
+            "sum_sq_delta_contribution": 1.4111077005654806
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": 3.5838192877779562e-06,
+            "rmse_log": -9.397330717808572e-06,
+            "r2_price": -2.9665159217984183e-13,
+            "r2_log_filtered": 3.5838192877779562e-06
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": 3.9430902987191985e-11,
+            "rmse_log": -1.0297895869371132e-10,
+            "r2_price": 5.46229728115577e-14,
+            "r2_log_filtered": 3.9430902987191985e-11
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": 4.2942005507029535e-09,
+            "rmse_log": -1.8981411997742725e-09,
+            "r2_price": 5.46229728115577e-14,
+            "r2_log_filtered": 4.2942005507029535e-09
+          }
+        },
+        "cpu_bs512__vs__gpu_bs512": {
+          "sigma_hat": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 160948,
+            "max": 1.1920928955078125e-07,
+            "mean": 3.011331566817501e-08,
+            "p50": 2.9802322387695312e-08,
+            "p90": 5.960464477539063e-08,
+            "p99": 1.043081283569336e-07,
+            "p99_9": 1.1920928955078125e-07,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 268889,
+            "max": 1.3790607452392578,
+            "mean": 0.0023442928344446718,
+            "p50": 1.6689300537109375e-06,
+            "p90": 1.33514404296875e-05,
+            "p99": 0.00407712936401361,
+            "p99_9": 0.8546590690612921,
+            "n_gt_1e-6": 470911,
+            "n_gt_1e-3": 11846,
+            "n_gt_0.1": 3267,
+            "n_gt_1": 509
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 172400,
+            "max": 2.0670520019194782e-05,
+            "mean": 4.44077013150079e-07,
+            "p50": 1.8635566867430953e-07,
+            "p90": 1.1166472889456725e-06,
+            "p99": 3.961718761988906e-06,
+            "p99_9": 8.59857351554542e-06,
+            "n_gt_1e-6": 95300,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 165888,
+            "max": 0.0013282648883432557,
+            "mean": 5.54994981719462e-07,
+            "p50": 1.9277769514047804e-07,
+            "p90": 1.1837270450953951e-06,
+            "p99": 5.463754705719005e-06,
+            "p99_9": 2.092878523621134e-05,
+            "n_gt_1e-6": 101827,
+            "n_gt_1e-3": 2,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 3267,
+            "pct_rows": 0.39873459434521846,
+            "log_moneyness_min_med_max": [
+              -0.7991319894790649,
+              -0.08752899616956711,
+              -0.030589403584599495
+            ],
+            "T_days_min_med_max": [
+              1.7291666311211884,
+              6.7291664239019156,
+              490.7291656732559
+            ],
+            "target_log_price_min_med_max": [
+              -13.081541061401367,
+              -11.264464378356934,
+              -9.107643127441406
+            ],
+            "n_target_below_clamp": 0,
+            "n_a_at_clamp": 590,
+            "n_b_at_clamp": 587,
+            "n_clamp_state_flipped": 1177,
+            "max_abs_delta": 1.3790607452392578,
+            "sum_sq_delta_contribution": 1411.4883109455732
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": -0.0002357309514517958,
+            "rmse_log": 0.0006183082763773218,
+            "r2_price": -1.0463163668816833e-10,
+            "r2_log_filtered": -0.0002357309514517958
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": -1.3523012709626414e-09,
+            "rmse_log": 3.5317180291372097e-09,
+            "r2_price": -1.6009860104304607e-11,
+            "r2_log_filtered": -1.3523012709626414e-09
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": -4.50889356606865e-06,
+            "rmse_log": 1.9930406711665682e-06,
+            "r2_price": -1.6009860104304607e-11,
+            "r2_log_filtered": -4.50889356606865e-06
+          }
+        },
+        "cpu_bs4096__vs__gpu_bs512": {
+          "sigma_hat": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 160789,
+            "max": 1.1920928955078125e-07,
+            "mean": 3.009481975202016e-08,
+            "p50": 2.9802322387695312e-08,
+            "p90": 5.960464477539063e-08,
+            "p99": 1.043081283569336e-07,
+            "p99_9": 1.1920928955078125e-07,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 268900,
+            "max": 1.3790607452392578,
+            "mean": 0.0023457494307989493,
+            "p50": 1.6689300537109375e-06,
+            "p90": 1.33514404296875e-05,
+            "p99": 0.004078474044799774,
+            "p99_9": 0.8549810371399356,
+            "n_gt_1e-6": 470939,
+            "n_gt_1e-3": 11853,
+            "n_gt_0.1": 3268,
+            "n_gt_1": 510
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 172227,
+            "max": 2.0670520019194782e-05,
+            "mean": 4.437073402394886e-07,
+            "p50": 1.86325654238928e-07,
+            "p90": 1.1155309946886407e-06,
+            "p99": 3.951560877517576e-06,
+            "p99_9": 8.56801437006646e-06,
+            "n_gt_1e-6": 95171,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 165723,
+            "max": 0.0013282648883432557,
+            "mean": 5.545764606331382e-07,
+            "p50": 1.927467598861199e-07,
+            "p90": 1.1826202037212852e-06,
+            "p99": 5.452807447010589e-06,
+            "p99_9": 2.0905232751016523e-05,
+            "n_gt_1e-6": 101701,
+            "n_gt_1e-3": 2,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 3268,
+            "pct_rows": 0.3988566435017368,
+            "log_moneyness_min_med_max": [
+              -0.7991319894790649,
+              -0.08752657100558281,
+              -0.030589403584599495
+            ],
+            "T_days_min_med_max": [
+              1.7291666311211884,
+              6.7291664239019156,
+              490.7291656732559
+            ],
+            "target_log_price_min_med_max": [
+              -13.081541061401367,
+              -11.264464378356934,
+              -9.107643127441406
+            ],
+            "n_target_below_clamp": 0,
+            "n_a_at_clamp": 591,
+            "n_b_at_clamp": 587,
+            "n_clamp_state_flipped": 1178,
+            "max_abs_delta": 1.3790607452392578,
+            "sum_sq_delta_contribution": 1413.0276799904896
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": -0.00023931477073957375,
+            "rmse_log": 0.0006277056070951303,
+            "r2_price": -1.0433498509598849e-10,
+            "r2_log_filtered": -0.00023931477073957375
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": -1.3917321739498334e-09,
+            "rmse_log": 3.634696987830921e-09,
+            "r2_price": -1.6064483077116165e-11,
+            "r2_log_filtered": -1.3917321739498334e-09
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": -4.513187766619353e-06,
+            "rmse_log": 1.9949388123663425e-06,
+            "r2_price": -1.6064483077116165e-11,
+            "r2_log_filtered": -4.513187766619353e-06
+          }
+        }
+      },
+      "decode_isolation": {
+        "cpu_bs512": {
+          "float32_native_vs_float64_naive": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 1.3104778626890123,
+            "mean": 0.0018795212620513226,
+            "p50": 1.5096940240155732e-06,
+            "p90": 1.667048471745148e-05,
+            "p99": 0.009561504049695425,
+            "p99_9": 0.5818886583048084,
+            "n_gt_1e-6": 501114,
+            "n_gt_1e-3": 16819,
+            "n_gt_0.1": 3347,
+            "n_gt_1": 86
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 2466.730178304751,
+            "mean": 0.15838293649201365,
+            "p50": 1.5574003144891435e-06,
+            "p90": 1.9767275568671762e-05,
+            "p99": 0.4810139315487304,
+            "p99_9": 29.533475356806786,
+            "n_gt_1e-6": 508116,
+            "n_gt_1e-3": 23822,
+            "n_gt_0.1": 10379,
+            "n_gt_1": 7303
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 42013,
+            "max": 2466.7301785605546,
+            "mean": 0.15650341960491262,
+            "p50": 4.440892098500626e-15,
+            "p90": 5.5067062021407764e-14,
+            "p99": 2.0411289014531595e-09,
+            "p99_9": 29.533475612610278,
+            "n_gt_1e-6": 8036,
+            "n_gt_1e-3": 8035,
+            "n_gt_0.1": 7936,
+            "n_gt_1": 7087
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 0.0016154128410530433,
+            "rmse_log": -0.004227358806117687,
+            "r2_price": -9.492517882847551e-12,
+            "r2_log_filtered": 0.0016154128410530433
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 6.834517664890468,
+            "rmse_log": -5.170451308408291,
+            "r2_price": -9.48363609865055e-12,
+            "r2_log_filtered": 6.834517664890468
+          }
+        },
+        "cpu_bs4096": {
+          "float32_native_vs_float64_naive": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 1.3104778626890123,
+            "mean": 0.0018802177171321167,
+            "p50": 1.5097487735538095e-06,
+            "p90": 1.6675856972625528e-05,
+            "p99": 0.009561504049695425,
+            "p99_9": 0.5819814891884285,
+            "n_gt_1e-6": 501096,
+            "n_gt_1e-3": 16823,
+            "n_gt_0.1": 3347,
+            "n_gt_1": 86
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 2466.730178304751,
+            "mean": 0.15838363325618623,
+            "p50": 1.5575435272641158e-06,
+            "p90": 1.9764611399430987e-05,
+            "p99": 0.48117375620010866,
+            "p99_9": 29.533475356806786,
+            "n_gt_1e-6": 508098,
+            "n_gt_1e-3": 23826,
+            "n_gt_0.1": 10379,
+            "n_gt_1": 7303
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 42031,
+            "max": 2466.7301785605546,
+            "mean": 0.15650341991400044,
+            "p50": 4.440892098500626e-15,
+            "p90": 5.5067062021407764e-14,
+            "p99": 2.0411289014531595e-09,
+            "p99_9": 29.533475612610278,
+            "n_gt_1e-6": 8036,
+            "n_gt_1e-3": 8035,
+            "n_gt_0.1": 7936,
+            "n_gt_1": 7087
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 0.0016118290611961683,
+            "rmse_log": -0.004217961578378837,
+            "r2_price": -9.141243317856151e-12,
+            "r2_log_filtered": 0.0016118290611961683
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 6.834514085365381,
+            "rmse_log": -5.170441912975714,
+            "r2_price": -9.13236153365915e-12,
+            "r2_log_filtered": 6.834514085365381
+          }
+        },
+        "gpu_bs512": {
+          "float32_native_vs_float64_naive": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 1.2219712560373281,
+            "mean": 0.0018888113834508841,
+            "p50": 1.7790426782848812e-06,
+            "p90": 1.8090415445293223e-05,
+            "p99": 0.009591420064959043,
+            "p99_9": 0.5912683840852113,
+            "n_gt_1e-6": 536935,
+            "n_gt_1e-3": 16765,
+            "n_gt_0.1": 3340,
+            "n_gt_1": 81
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 2466.7291540966744,
+            "mean": 0.15839218906649116,
+            "p50": 1.8339727638760905e-06,
+            "p90": 2.1444797191083613e-05,
+            "p99": 0.48758530492702296,
+            "p99_9": 29.53346809742681,
+            "n_gt_1e-6": 543919,
+            "n_gt_1e-3": 23750,
+            "n_gt_0.1": 10361,
+            "n_gt_1": 7309
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 42233,
+            "max": 2466.729154352478,
+            "mean": 0.15650338204658404,
+            "p50": 4.440892098500626e-15,
+            "p90": 5.5067062021407764e-14,
+            "p99": 1.9197455003449524e-09,
+            "p99_9": 29.5334683532303,
+            "n_gt_1e-6": 8036,
+            "n_gt_1e-3": 8035,
+            "n_gt_0.1": 7936,
+            "n_gt_1": 7087
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 0.001851142440203568,
+            "rmse_log": -0.00484566355077698,
+            "r2_price": 7.912925870101617e-11,
+            "r2_log_filtered": 0.001851142440203568
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 6.834748886948354,
+            "rmse_log": -5.171067623643997,
+            "r2_price": 7.913814048521317e-11,
+            "r2_log_filtered": 6.834748886948354
+          }
+        }
+      }
+    },
+    {
+      "option_type": "put",
+      "model_variant": "scalar_sigma",
+      "results_dir": "train_model_v3/put/results_vol_surface_scalarsigma_v5",
+      "checkpoint": "train_model_v3\\put\\results_vol_surface_scalarsigma_v5\\best_model.pth",
+      "checkpoint_sha256": "ef4510e40d5a506782d25de0f76a9b75b1b5a02f36c9d29c949a8920dbc14b36",
+      "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_put_v5.h5",
+      "h5_sha256_from_config": "46f3ee9d03d3423c6330c2b35a4d09893b0f538bdc046bc1018ebab79861c756",
+      "train_script": "train_model_v3\\put\\train_vol_surface_scalarsigma.py",
+      "train_script_sha256": "10ef7e093040fccad31f04885ea5a9b397b4d2d440f9ded2d683028271754c85",
+      "n_test": 1380379,
+      "config_batch_size": 256,
+      "use_stable_log_in_config": false,
+      "training_tail_reference": {
+        "r2_log": -0.313834,
+        "rmse_log": 2.267795,
+        "r2_price": -3.09019
+      },
+      "paths": {
+        "cpu_bs512": {
+          "device": "cpu",
+          "batch_size": 512,
+          "pipeline": "analysis/_common.model_predict_logv",
+          "seconds": 257.7442717552185,
+          "metrics_as_produced": {
+            "n_test": 1380379,
+            "r2_price": -3.090190434676834,
+            "r2_log_filtered": -0.31687125705771235,
+            "r2_log_full": -0.31687125705771235,
+            "rmse_log": 2.2704147113847215,
+            "rmse_price": 0.04508026270802656,
+            "mae_price": 0.030807899660325013,
+            "mse_log": 5.1547829616721685,
+            "mse_log_filtered": 5.1547829616721685,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100744,
+            "tail_sse_share": 0.522769514637829,
+            "clamp_hit_count": 26894
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 1380379,
+            "r2_price": -3.090190313901644,
+            "r2_log_filtered": -0.3279382782630915,
+            "r2_log_full": -0.3279382782630915,
+            "rmse_log": 2.279935063837812,
+            "rmse_price": 0.0450802620424613,
+            "mae_price": 0.03080789904916553,
+            "mse_log": 5.198103895317129,
+            "mse_log_filtered": 5.198103895317129,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100751,
+            "tail_sse_share": 0.5267573753244429,
+            "clamp_hit_count": 29534
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 1380379,
+            "r2_price": -3.0901903139623874,
+            "r2_log_filtered": -32.77521903752271,
+            "r2_log_full": -32.77521903752271,
+            "rmse_log": 11.498273111977843,
+            "rmse_price": 0.04508026204279604,
+            "mae_price": 0.030807899242452856,
+            "mse_log": 132.21028455763263,
+            "mse_log_filtered": 132.21028455763263,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100751,
+            "tail_sse_share": 0.981393547869691,
+            "clamp_hit_count": 29534
+          },
+          "sigma_summary": {
+            "min": 0.3841877579689026,
+            "median": 0.45822322368621826,
+            "max": 0.9462540149688721,
+            "mean": 0.49104321002960205
+          },
+          "n_at_clamp_floor": 26893
+        },
+        "cpu_bs4096": {
+          "device": "cpu",
+          "batch_size": 4096,
+          "pipeline": "analysis/_common.model_predict_logv",
+          "seconds": 261.10750102996826,
+          "metrics_as_produced": {
+            "n_test": 1380379,
+            "r2_price": -3.0901904313264055,
+            "r2_log_filtered": -0.3168712644166485,
+            "r2_log_full": -0.3168712644166485,
+            "rmse_log": 2.270414717728484,
+            "rmse_price": 0.0450802626895631,
+            "mae_price": 0.030807899652700966,
+            "mse_log": 5.154782990478112,
+            "mse_log_filtered": 5.154782990478112,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100744,
+            "tail_sse_share": 0.5227695210504214,
+            "clamp_hit_count": 26894
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 1380379,
+            "r2_price": -3.0901903110675253,
+            "r2_log_filtered": -0.3279382782062774,
+            "r2_log_full": -0.3279382782062774,
+            "rmse_log": 2.2799350637890403,
+            "rmse_price": 0.0450802620268431,
+            "mae_price": 0.03080789904284839,
+            "mse_log": 5.198103895094736,
+            "mse_log_filtered": 5.198103895094736,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100751,
+            "tail_sse_share": 0.5267573753200984,
+            "clamp_hit_count": 29534
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 1380379,
+            "r2_price": -3.0901903111282687,
+            "r2_log_filtered": -32.77521911472837,
+            "r2_log_full": -32.77521911472837,
+            "rmse_log": 11.498273125119605,
+            "rmse_price": 0.04508026202717784,
+            "mae_price": 0.03080789923613572,
+            "mse_log": 132.21028485984777,
+            "mse_log_filtered": 132.21028485984777,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100751,
+            "tail_sse_share": 0.9813935479128484,
+            "clamp_hit_count": 29534
+          },
+          "sigma_summary": {
+            "min": 0.3841877579689026,
+            "median": 0.45822322368621826,
+            "max": 0.9462540149688721,
+            "mean": 0.49104321002960205
+          },
+          "n_at_clamp_floor": 26893
+        },
+        "gpu_bs512": {
+          "device": "cuda",
+          "batch_size": 512,
+          "pipeline": "train script H5BranchDataset/make_loader",
+          "seconds": 46.335968255996704,
+          "metrics_as_produced": {
+            "n_test": 1380379,
+            "r2_price": -3.090190101153789,
+            "r2_log_filtered": -0.3138336252014533,
+            "r2_log_full": -0.3138336252014533,
+            "rmse_log": 2.2677946125092068,
+            "rmse_price": 0.045080260870055074,
+            "mae_price": 0.03080789748223008,
+            "mse_log": 5.142892404525783,
+            "mse_log_filtered": 5.142892404525783,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100738,
+            "tail_sse_share": 0.5216644178107198,
+            "clamp_hit_count": 26629
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 1380379,
+            "r2_price": -3.090190455004471,
+            "r2_log_filtered": -0.32793828256992597,
+            "r2_log_full": -0.32793828256992597,
+            "rmse_log": 2.279935067535011,
+            "rmse_price": 0.04508026282004766,
+            "mae_price": 0.03080789912716932,
+            "mse_log": 5.198103912175874,
+            "mse_log_filtered": 5.198103912175874,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100751,
+            "tail_sse_share": 0.5267573822585072,
+            "clamp_hit_count": 29534
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 1380379,
+            "r2_price": -3.0901904550652137,
+            "r2_log_filtered": -32.77521898358497,
+            "r2_log_full": -32.77521898358497,
+            "rmse_log": 11.498273102796691,
+            "rmse_price": 0.0450802628203824,
+            "mae_price": 0.03080789932045665,
+            "mse_log": 132.21028434649784,
+            "mse_log_filtered": 132.21028434649784,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 100751,
+            "tail_sse_share": 0.981393548052258,
+            "clamp_hit_count": 29534
+          },
+          "sigma_summary": {
+            "min": 0.384187787771225,
+            "median": 0.45822322368621826,
+            "max": 0.9462542533874512,
+            "mean": 0.49104321002960205
+          },
+          "n_at_clamp_floor": 26628
+        }
+      },
+      "pairwise": {
+        "cpu_bs512__vs__cpu_bs4096": {
+          "sigma_hat": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 1375158,
+            "max": 1.1920928955078125e-07,
+            "mean": 2.007865942654636e-10,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 0.0,
+            "p99_9": 5.960464477539063e-08,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 1378373,
+            "max": 0.008744239807128906,
+            "mean": 2.1625968419860045e-08,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 0.0,
+            "p99_9": 4.76837158203125e-07,
+            "n_gt_1e-6": 830,
+            "n_gt_1e-3": 4,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 1375263,
+            "max": 3.838855963778087e-06,
+            "mean": 9.119379463559305e-10,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 0.0,
+            "p99_9": 2.207641470590855e-07,
+            "n_gt_1e-6": 223,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 1375158,
+            "max": 0.00015876039446993673,
+            "mean": 1.349598575624672e-09,
+            "p50": 0.0,
+            "p90": 0.0,
+            "p99": 0.0,
+            "p99_9": 2.3394584079297075e-07,
+            "n_gt_1e-6": 328,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": 7.35893612713312e-09,
+            "rmse_log": -6.343762404270592e-09,
+            "r2_price": -3.3504283791785383e-09,
+            "r2_log_filtered": 7.35893612713312e-09
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": -5.681410897295791e-11,
+            "rmse_log": 4.8771653382573277e-11,
+            "r2_price": -2.8341187174873994e-09,
+            "r2_log_filtered": -5.681410897295791e-11
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": 7.720566230773329e-08,
+            "rmse_log": -1.314176145683632e-08,
+            "r2_price": -2.8341187174873994e-09,
+            "r2_log_filtered": 7.720566230773329e-08
+          }
+        },
+        "cpu_bs512__vs__gpu_bs512": {
+          "sigma_hat": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 416318,
+            "max": 3.5762786865234375e-07,
+            "mean": 4.651525874544319e-08,
+            "p50": 2.9802322387695312e-08,
+            "p90": 1.1920928955078125e-07,
+            "p99": 1.7881393432617188e-07,
+            "p99_9": 3.5762786865234375e-07,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 469958,
+            "max": 4.149083137512207,
+            "mean": 0.004240643312595538,
+            "p50": 7.152557373046875e-07,
+            "p90": 6.198883056640625e-06,
+            "p99": 0.03295057296752879,
+            "p99_9": 1.1488803405762145,
+            "n_gt_1e-6": 498576,
+            "n_gt_1e-3": 30011,
+            "n_gt_0.1": 8921,
+            "n_gt_1": 2181
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 436345,
+            "max": 1.4135372662593682e-05,
+            "mean": 2.586488061895909e-07,
+            "p50": 1.1994798398973217e-07,
+            "p90": 6.075101479652287e-07,
+            "p99": 2.5329008723673494e-06,
+            "p99_9": 5.3826816255871115e-06,
+            "n_gt_1e-6": 72363,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 416340,
+            "max": 0.0008158701371030475,
+            "mean": 3.5002950658350223e-07,
+            "p50": 1.2569798357731088e-07,
+            "p90": 6.902271504571898e-07,
+            "p99": 4.209095869356342e-06,
+            "p99_9": 1.2645764022892319e-05,
+            "n_gt_1e-6": 92367,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 8921,
+            "pct_rows": 0.6462717847779487,
+            "log_moneyness_min_med_max": [
+              0.10477444529533386,
+              0.43017998337745667,
+              3.400987386703491
+            ],
+            "T_days_min_med_max": [
+              1.7291666311211884,
+              14.729167316108942,
+              840.7291793823242
+            ],
+            "target_log_price_min_med_max": [
+              -12.292250633239746,
+              -9.585033416748047,
+              -6.214608192443848
+            ],
+            "n_target_below_clamp": 0,
+            "n_a_at_clamp": 1423,
+            "n_b_at_clamp": 1150,
+            "n_clamp_state_flipped": 2573,
+            "max_abs_delta": 4.149083137512207,
+            "sum_sq_delta_contribution": 5476.7732693718135
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": -0.0030376318562590487,
+            "rmse_log": 0.0026200988755147314,
+            "r2_price": -3.3352304473766026e-07,
+            "r2_log_filtered": -0.0030376318562590487
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": 4.306834444633978e-09,
+            "rmse_log": -3.6971989914036385e-09,
+            "r2_price": 1.411028272002568e-07,
+            "r2_log_filtered": 4.306834444633978e-09
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": -5.3937739608045376e-08,
+            "rmse_log": 9.181151838788537e-09,
+            "r2_price": 1.4110282631207838e-07,
+            "r2_log_filtered": -5.3937739608045376e-08
+          }
+        },
+        "cpu_bs4096__vs__gpu_bs512": {
+          "sigma_hat": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 415912,
+            "max": 3.5762786865234375e-07,
+            "mean": 4.6595573383149374e-08,
+            "p50": 2.9802322387695312e-08,
+            "p90": 1.1920928955078125e-07,
+            "p99": 1.7881393432617188e-07,
+            "p99_9": 3.5762786865234375e-07,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 469832,
+            "max": 4.149083137512207,
+            "mean": 0.0042406469416944835,
+            "p50": 7.152557373046875e-07,
+            "p90": 6.198883056640625e-06,
+            "p99": 0.03295057296752879,
+            "p99_9": 1.1488803405762145,
+            "n_gt_1e-6": 498665,
+            "n_gt_1e-3": 30012,
+            "n_gt_0.1": 8921,
+            "n_gt_1": 2181
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 435940,
+            "max": 1.4135372662593682e-05,
+            "mean": 2.5898168978205286e-07,
+            "p50": 1.201551866891748e-07,
+            "p90": 6.082598913437208e-07,
+            "p99": 2.5357845628093383e-06,
+            "p99_9": 5.385544807165369e-06,
+            "n_gt_1e-6": 72474,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 415934,
+            "max": 0.0008158701371030475,
+            "mean": 3.5035109043094023e-07,
+            "p50": 1.259089952299064e-07,
+            "p90": 6.91070499314605e-07,
+            "p99": 4.2149434110427795e-06,
+            "p99_9": 1.2652422720699563e-05,
+            "n_gt_1e-6": 92479,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 8921,
+            "pct_rows": 0.6462717847779487,
+            "log_moneyness_min_med_max": [
+              0.10477444529533386,
+              0.43017998337745667,
+              3.400987386703491
+            ],
+            "T_days_min_med_max": [
+              1.7291666311211884,
+              14.729167316108942,
+              840.7291793823242
+            ],
+            "target_log_price_min_med_max": [
+              -12.292250633239746,
+              -9.585033416748047,
+              -6.214608192443848
+            ],
+            "n_target_below_clamp": 0,
+            "n_a_at_clamp": 1423,
+            "n_b_at_clamp": 1150,
+            "n_clamp_state_flipped": 2573,
+            "max_abs_delta": 4.149083137512207,
+            "sum_sq_delta_contribution": 5476.7732693718135
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": -0.003037639215195176,
+            "rmse_log": 0.0026201052192771357,
+            "r2_price": -3.301726163584817e-07,
+            "r2_log_filtered": -0.003037639215195176
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": 4.363648553606936e-09,
+            "rmse_log": -3.745970644786212e-09,
+            "r2_price": 1.439369459177442e-07,
+            "r2_log_filtered": 4.363648553606936e-09
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": -1.3114340191577867e-07,
+            "rmse_log": 2.2322913295624858e-08,
+            "r2_price": 1.4393694502956578e-07,
+            "r2_log_filtered": -1.3114340191577867e-07
+          }
+        }
+      },
+      "decode_isolation": {
+        "cpu_bs512": {
+          "float32_native_vs_float64_naive": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 3.4705224335359723,
+            "mean": 0.005987984244868291,
+            "p50": 6.056685113442484e-07,
+            "p90": 1.3160102653664275e-05,
+            "p99": 0.08987099773422196,
+            "p99_9": 1.0908555753427485,
+            "n_gt_1e-6": 507867,
+            "n_gt_1e-3": 45482,
+            "n_gt_0.1": 13285,
+            "n_gt_1": 2954
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 7254.606319911553,
+            "mean": 0.29607973654618913,
+            "p50": 6.479756766708533e-07,
+            "p90": 2.5735520201308716e-05,
+            "p99": 7.306915795132115,
+            "p99_9": 36.04102720054605,
+            "n_gt_1e-6": 533200,
+            "n_gt_1e-3": 70816,
+            "n_gt_0.1": 38611,
+            "n_gt_1": 28106
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 121658,
+            "max": 7254.606320167357,
+            "mean": 0.2900917616993986,
+            "p50": 1.7763568394002505e-15,
+            "p90": 5.1514348342607263e-14,
+            "p99": 7.306916050935607,
+            "p99_9": 36.04102745634954,
+            "n_gt_1e-6": 29532,
+            "n_gt_1e-3": 29531,
+            "n_gt_0.1": 29234,
+            "n_gt_1": 26503
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 0.011067021205379168,
+            "rmse_log": -0.009520352453090464,
+            "r2_price": -1.207751898490983e-07,
+            "r2_log_filtered": 0.011067021205379168
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 32.458347780465,
+            "rmse_log": -9.22785840059312,
+            "r2_price": -1.2071444643879659e-07,
+            "r2_log_filtered": 32.458347780465
+          }
+        },
+        "cpu_bs4096": {
+          "float32_native_vs_float64_naive": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 3.4705224335359723,
+            "mean": 0.005987983704742096,
+            "p50": 6.056263197606881e-07,
+            "p90": 1.3159895408421104e-05,
+            "p99": 0.08987099773422196,
+            "p99_9": 1.0908555753427485,
+            "n_gt_1e-6": 507824,
+            "n_gt_1e-3": 45481,
+            "n_gt_0.1": 13285,
+            "n_gt_1": 2954
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 7254.606319911553,
+            "mean": 0.29607973615762073,
+            "p50": 6.478964431622103e-07,
+            "p90": 2.573380151495996e-05,
+            "p99": 7.306915795132115,
+            "p99_9": 36.04102720054605,
+            "n_gt_1e-6": 533157,
+            "n_gt_1e-3": 70815,
+            "n_gt_0.1": 38611,
+            "n_gt_1": 28106
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 121670,
+            "max": 7254.606320167357,
+            "mean": 0.29009176185094826,
+            "p50": 1.7763568394002505e-15,
+            "p90": 5.1514348342607263e-14,
+            "p99": 7.306916050935607,
+            "p99_9": 36.04102745634954,
+            "n_gt_1e-6": 29532,
+            "n_gt_1e-3": 29531,
+            "n_gt_0.1": 29234,
+            "n_gt_1": 26503
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 0.011067013789628932,
+            "rmse_log": -0.009520346060556406,
+            "r2_price": -1.2025888018740716e-07,
+            "r2_log_filtered": 0.011067013789628932
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 32.458347850311725,
+            "rmse_log": -9.227858407391121,
+            "r2_price": -1.2019813677710545e-07,
+            "r2_log_filtered": 32.458347850311725
+          }
+        },
+        "gpu_bs512": {
+          "float32_native_vs_float64_naive": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 3.4705224335359723,
+            "mean": 0.006031109762768345,
+            "p50": 7.03067223106757e-07,
+            "p90": 1.4542486817425975e-05,
+            "p99": 0.09349839505795596,
+            "p99_9": 1.0910303304391844,
+            "n_gt_1e-6": 556768,
+            "n_gt_1e-3": 46182,
+            "n_gt_0.1": 13453,
+            "n_gt_1": 2949
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 7254.606319911553,
+            "mean": 0.29612286957092904,
+            "p50": 7.50788089476373e-07,
+            "p90": 2.7922580108352683e-05,
+            "p99": 7.306921001959668,
+            "p99_9": 36.041029598406716,
+            "n_gt_1e-6": 582044,
+            "n_gt_1e-3": 71458,
+            "n_gt_0.1": 38742,
+            "n_gt_1": 28127
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 121423,
+            "max": 7254.606320167357,
+            "mean": 0.2900917691848898,
+            "p50": 1.7763568394002505e-15,
+            "p90": 5.240252676230739e-14,
+            "p99": 7.30692125776316,
+            "p99_9": 36.04102985421021,
+            "n_gt_1e-6": 29532,
+            "n_gt_1e-3": 29531,
+            "n_gt_0.1": 29234,
+            "n_gt_1": 26503
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 0.014104657368472662,
+            "rmse_log": -0.012140455025804187,
+            "r2_price": 3.5385068208881876e-07,
+            "r2_log_filtered": 0.014104657368472662
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 32.46138535838352,
+            "rmse_log": -9.230478490287485,
+            "r2_price": 3.5391142461094205e-07,
+            "r2_log_filtered": 32.46138535838352
+          }
+        }
+      }
+    },
+    {
+      "option_type": "call",
+      "model_variant": "per_query",
+      "results_dir": "train_model_v3/call/results_vol_surface_v5",
+      "checkpoint": "train_model_v3\\call\\results_vol_surface_v5\\best_model.pth",
+      "checkpoint_sha256": "82e4f7b101ffc2e6b1280ea5cbf4fff0a3c7729ae79ce8ea121a84e3810b45f7",
+      "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_call_v5.h5",
+      "h5_sha256_from_config": "ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153",
+      "train_script": "train_model_v3\\call\\train_vol_surface.py",
+      "train_script_sha256": "02916ad9766581995b8434c74a3acfabb99e77a41944772d5e56d21003f7ca71",
+      "n_test": 819342,
+      "config_batch_size": 256,
+      "use_stable_log_in_config": false,
+      "training_tail_reference": null,
+      "paths": {
+        "cpu_bs4096": {
+          "device": "cpu",
+          "batch_size": 4096,
+          "pipeline": "analysis/_common.model_predict_logv",
+          "seconds": 154.5807008743286,
+          "metrics_as_produced": {
+            "n_test": 819342,
+            "r2_price": 0.9999769212649592,
+            "r2_log_filtered": 0.9910439390352741,
+            "r2_log_full": 0.9910439390352741,
+            "rmse_log": 0.22189550632769936,
+            "rmse_price": 0.0021677332043217746,
+            "mae_price": 0.0006407988604024085,
+            "mse_log": 0.04923761572842606,
+            "mse_log_filtered": 0.04923761572842606,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 50,
+            "tail_sse_share": 0.015548843721855778,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 819342,
+            "r2_price": 0.9999769212821887,
+            "r2_log_filtered": 0.9910439733618895,
+            "r2_log_full": 0.9910439733618895,
+            "rmse_log": 0.2218950810889106,
+            "rmse_price": 0.002167732395153922,
+            "mae_price": 0.00064079899825999,
+            "mse_log": 0.049237427011454206,
+            "mse_log_filtered": 0.049237427011454206,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 50,
+            "tail_sse_share": 0.01554895722995678,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 819342,
+            "r2_price": 0.9999769212821887,
+            "r2_log_filtered": 0.9910439733618894,
+            "r2_log_full": 0.9910439733618894,
+            "rmse_log": 0.2218950810889127,
+            "rmse_price": 0.0021677323951539156,
+            "mae_price": 0.0006407989982599897,
+            "mse_log": 0.04923742701145514,
+            "mse_log_filtered": 0.04923742701145514,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 50,
+            "tail_sse_share": 0.015548957229956492,
+            "clamp_hit_count": 0
+          },
+          "sigma_summary": {
+            "min": 2.41325903894583e-14,
+            "median": 0.13940855860710144,
+            "max": 2.878206729888916,
+            "mean": 0.15396365523338318
+          },
+          "n_at_clamp_floor": 0
+        },
+        "gpu_bs512": {
+          "device": "cuda",
+          "batch_size": 512,
+          "pipeline": "train script H5BranchDataset/make_loader",
+          "seconds": 27.302865028381348,
+          "metrics_as_produced": {
+            "n_test": 819342,
+            "r2_price": 0.9999769213698454,
+            "r2_log_filtered": 0.9910440589792642,
+            "r2_log_full": 0.9910440589792642,
+            "rmse_log": 0.22189402045563816,
+            "rmse_price": 0.0021677282784531176,
+            "mae_price": 0.0006407988831980342,
+            "mse_log": 0.04923695631396717,
+            "mse_log_filtered": 0.04923695631396717,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 50,
+            "tail_sse_share": 0.01554884120848018,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 819342,
+            "r2_price": 0.9999769212813133,
+            "r2_log_filtered": 0.9910439712051385,
+            "r2_log_full": 0.9910439712051385,
+            "rmse_log": 0.221895107806809,
+            "rmse_price": 0.0021677324362674552,
+            "mae_price": 0.0006407989857711511,
+            "mse_log": 0.04923743886859538,
+            "mse_log_filtered": 0.04923743886859538,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 50,
+            "tail_sse_share": 0.015548962057213,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 819342,
+            "r2_price": 0.9999769212813133,
+            "r2_log_filtered": 0.9910439712051385,
+            "r2_log_full": 0.9910439712051385,
+            "rmse_log": 0.22189510780680866,
+            "rmse_price": 0.002167732436267449,
+            "mae_price": 0.0006407989857711506,
+            "mse_log": 0.04923743886859523,
+            "mse_log_filtered": 0.04923743886859523,
+            "n_keep_filtered": 819342,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 50,
+            "tail_sse_share": 0.015548962057213072,
+            "clamp_hit_count": 0
+          },
+          "sigma_summary": {
+            "min": 2.4131900904639236e-14,
+            "median": 0.13940849900245667,
+            "max": 2.878206491470337,
+            "mean": 0.15396365523338318
+          },
+          "n_at_clamp_floor": 0
+        }
+      },
+      "pairwise": {
+        "cpu_bs4096__vs__gpu_bs512": {
+          "sigma_hat": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 110814,
+            "max": 4.231929779052734e-06,
+            "mean": 5.795694001189046e-08,
+            "p50": 2.9802322387695312e-08,
+            "p90": 1.1920928955078125e-07,
+            "p99": 4.023313522338867e-07,
+            "p99_9": 1.0132789611816406e-06,
+            "n_gt_1e-6": 846,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 244914,
+            "max": 0.017812728881835938,
+            "mean": 4.6427126723973344e-05,
+            "p50": 1.9073486328125e-06,
+            "p90": 2.3365020751953125e-05,
+            "p99": 0.0015430450439453125,
+            "p99_9": 0.0032835006713867188,
+            "n_gt_1e-6": 496653,
+            "n_gt_1e-3": 11616,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 119603,
+            "max": 1.9453319289652882e-05,
+            "mean": 6.258576236485741e-07,
+            "p50": 3.4651993008338877e-07,
+            "p90": 1.539294749974829e-06,
+            "p99": 4.319664673415601e-06,
+            "p99_9": 7.408474296973163e-06,
+            "n_gt_1e-6": 150978,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 119629,
+            "max": 1.945331908181913e-05,
+            "mean": 6.258576238275238e-07,
+            "p50": 3.465199367447269e-07,
+            "p90": 1.5392947479320184e-06,
+            "p99": 4.319663387555294e-06,
+            "p99_9": 7.4084724553494214e-06,
+            "n_gt_1e-6": 150978,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": -1.1994399007342338e-07,
+            "rmse_log": 1.485872061196547e-06,
+            "r2_price": -1.0488621082771488e-10,
+            "r2_log_filtered": -1.1994399007342338e-07
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": 2.1567510000153334e-09,
+            "rmse_log": -2.67178983937022e-08,
+            "r2_price": 8.754108549169359e-13,
+            "r2_log_filtered": 2.1567510000153334e-09
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": 2.156750888993031e-09,
+            "rmse_log": -2.6717895951211545e-08,
+            "r2_price": 8.754108549169359e-13,
+            "r2_log_filtered": 2.156750888993031e-09
+          }
+        }
+      },
+      "decode_isolation": {
+        "cpu_bs4096": {
+          "float32_native_vs_float64_naive": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.012044011294973345,
+            "mean": 3.8952783172823735e-05,
+            "p50": 1.8152856346986823e-06,
+            "p90": 4.48770165093038e-05,
+            "p99": 0.0009153612376925393,
+            "p99_9": 0.002142249755716961,
+            "n_gt_1e-6": 528602,
+            "n_gt_1e-3": 7015,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.012044011304606528,
+            "mean": 3.895278317250538e-05,
+            "p50": 1.815285640471842e-06,
+            "p90": 4.4877016517652674e-05,
+            "p99": 0.0009153612352877429,
+            "p99_9": 0.002142249757012401,
+            "n_gt_1e-6": 528602,
+            "n_gt_1e-3": 7015,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 40142,
+            "max": 2.1962875962344697e-11,
+            "mean": 7.703551291883313e-14,
+            "p50": 4.884981308350689e-15,
+            "p90": 1.0302869668521453e-13,
+            "p99": 1.7337242752546445e-12,
+            "p99_9": 3.996197150968508e-12,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": -3.43266154390065e-08,
+            "rmse_log": 4.252387887648812e-07,
+            "r2_price": -1.7229551119157804e-11,
+            "r2_log_filtered": -3.43266154390065e-08
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": -3.43266153279842e-08,
+            "rmse_log": 4.2523878665545745e-07,
+            "r2_price": -1.7229551119157804e-11,
+            "r2_log_filtered": -3.43266153279842e-08
+          }
+        },
+        "gpu_bs512": {
+          "float32_native_vs_float64_naive": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.01205724273220632,
+            "mean": 4.0087847793490796e-05,
+            "p50": 2.129238432457825e-06,
+            "p90": 4.767088028287958e-05,
+            "p99": 0.0009298097676382421,
+            "p99_9": 0.002201038922020755,
+            "n_gt_1e-6": 560850,
+            "n_gt_1e-3": 7267,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.012057242710243443,
+            "mean": 4.00878477934682e-05,
+            "p50": 2.1292384351223603e-06,
+            "p90": 4.76708803496706e-05,
+            "p99": 0.0009298097688227346,
+            "p99_9": 0.0022010389237113546,
+            "n_gt_1e-6": 560850,
+            "n_gt_1e-3": 7267,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 819342,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 40369,
+            "max": 2.1962875962344697e-11,
+            "mean": 7.709751004052275e-14,
+            "p50": 4.884981308350689e-15,
+            "p90": 1.0302869668521453e-13,
+            "p99": 1.730171561575844e-12,
+            "p99_9": 4.027000954920368e-12,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": 8.777412563443221e-08,
+            "rmse_log": -1.087351170825368e-06,
+            "r2_price": 8.853207056347401e-11,
+            "r2_log_filtered": 8.777412563443221e-08
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": 8.777412563443221e-08,
+            "rmse_log": -1.0873511704923011e-06,
+            "r2_price": 8.853207056347401e-11,
+            "r2_log_filtered": 8.777412563443221e-08
+          }
+        }
+      }
+    },
+    {
+      "option_type": "put",
+      "model_variant": "per_query",
+      "results_dir": "train_model_v3/put/results_vol_surface_v5",
+      "checkpoint": "train_model_v3\\put\\results_vol_surface_v5\\best_model.pth",
+      "checkpoint_sha256": "9c87fa602de6dcf59a96892f6f5d13b36ea5233f7b2a398ff4ed481d24573837",
+      "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_put_v5.h5",
+      "h5_sha256_from_config": "46f3ee9d03d3423c6330c2b35a4d09893b0f538bdc046bc1018ebab79861c756",
+      "train_script": "train_model_v3\\put\\train_vol_surface.py",
+      "train_script_sha256": "211e6f8daefeac5b92ffea35349db9410a34b51a5b929b7ea45018a96fdbf6e5",
+      "n_test": 1380379,
+      "config_batch_size": 256,
+      "use_stable_log_in_config": false,
+      "training_tail_reference": null,
+      "paths": {
+        "cpu_bs4096": {
+          "device": "cpu",
+          "batch_size": 4096,
+          "pipeline": "analysis/_common.model_predict_logv",
+          "seconds": 258.18299436569214,
+          "metrics_as_produced": {
+            "n_test": 1380379,
+            "r2_price": 0.9925532331266903,
+            "r2_log_filtered": 0.9778994701678049,
+            "r2_log_full": 0.9778994701678049,
+            "rmse_log": 0.29412698803348,
+            "rmse_price": 0.0019235281790404252,
+            "mae_price": 0.0008229159637386826,
+            "mse_log": 0.08651068508964686,
+            "mse_log_filtered": 0.08651068508964686,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 144,
+            "tail_sse_share": 0.018773287415502507,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 1380379,
+            "r2_price": 0.9925532326474692,
+            "r2_log_filtered": 0.9778995078658506,
+            "r2_log_full": 0.9778995078658506,
+            "rmse_log": 0.29412673717937227,
+            "rmse_price": 0.0019235282409327346,
+            "mae_price": 0.0008229160280720714,
+            "mse_log": 0.08651053752378352,
+            "mse_log_filtered": 0.08651053752378352,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 144,
+            "tail_sse_share": 0.018773354479867485,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 1380379,
+            "r2_price": 0.9925532326474692,
+            "r2_log_filtered": 0.9778995078658506,
+            "r2_log_full": 0.9778995078658506,
+            "rmse_log": 0.29412673717937243,
+            "rmse_price": 0.0019235282409327337,
+            "mae_price": 0.0008229160280720701,
+            "mse_log": 0.08651053752378361,
+            "mse_log_filtered": 0.08651053752378361,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 144,
+            "tail_sse_share": 0.018773354479867537,
+            "clamp_hit_count": 0
+          },
+          "sigma_summary": {
+            "min": 5.242081505067156e-16,
+            "median": 0.21202214062213898,
+            "max": 13.234203338623047,
+            "mean": 0.2636556327342987
+          },
+          "n_at_clamp_floor": 0
+        },
+        "gpu_bs512": {
+          "device": "cuda",
+          "batch_size": 512,
+          "pipeline": "train script H5BranchDataset/make_loader",
+          "seconds": 48.15510320663452,
+          "metrics_as_produced": {
+            "n_test": 1380379,
+            "r2_price": 0.9925532350167826,
+            "r2_log_filtered": 0.9778981077296053,
+            "r2_log_full": 0.9778981077296053,
+            "rmse_log": 0.2941360539624704,
+            "rmse_price": 0.0019235279349313877,
+            "mae_price": 0.0008229162803227989,
+            "mse_log": 0.0865160182406133,
+            "mse_log_filtered": 0.0865160182406133,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 144,
+            "tail_sse_share": 0.01877209530935882,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_naive": {
+            "n_test": 1380379,
+            "r2_price": 0.9925532322329608,
+            "r2_log_filtered": 0.9778995157069041,
+            "r2_log_full": 0.9778995157069041,
+            "rmse_log": 0.29412668500262223,
+            "rmse_price": 0.001923528294467281,
+            "mae_price": 0.0008229159931102802,
+            "mse_log": 0.08651050683063177,
+            "mse_log_filtered": 0.08651050683063177,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 144,
+            "tail_sse_share": 0.01877334766185597,
+            "clamp_hit_count": 0
+          },
+          "metrics_sigma_redecoded_float64_stable": {
+            "n_test": 1380379,
+            "r2_price": 0.9925532322329608,
+            "r2_log_filtered": 0.9778995157069041,
+            "r2_log_full": 0.9778995157069041,
+            "rmse_log": 0.2941266850026224,
+            "rmse_price": 0.0019235282944672799,
+            "mae_price": 0.0008229159931102791,
+            "mse_log": 0.08651050683063186,
+            "mse_log_filtered": 0.08651050683063186,
+            "n_keep_filtered": 1380379,
+            "n_near_expiry_dropped": 0,
+            "n_tail_sqerr_gt10": 144,
+            "tail_sse_share": 0.018773347661855996,
+            "clamp_hit_count": 0
+          },
+          "sigma_summary": {
+            "min": 5.242081505067156e-16,
+            "median": 0.21202217042446136,
+            "max": 13.234201431274414,
+            "mean": 0.2636556327342987
+          },
+          "n_at_clamp_floor": 0
+        }
+      },
+      "pairwise": {
+        "cpu_bs4096__vs__gpu_bs512": {
+          "sigma_hat": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 314484,
+            "max": 3.814697265625e-06,
+            "mean": 3.599651163743014e-08,
+            "p50": 2.9802322387695312e-08,
+            "p90": 7.450580596923828e-08,
+            "p99": 1.7881393432617188e-07,
+            "p99_9": 3.5762786865234375e-07,
+            "n_gt_1e-6": 17,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_as_produced": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 397278,
+            "max": 0.02057361602783203,
+            "mean": 4.97597760582452e-05,
+            "p50": 2.384185791015625e-06,
+            "p90": 4.0531158447265625e-05,
+            "p99": 0.0012807846069335938,
+            "p99_9": 0.0032901763916015625,
+            "n_gt_1e-6": 862845,
+            "n_gt_1e-3": 18298,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_naive_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 320507,
+            "max": 8.969655862500758e-06,
+            "mean": 5.099865590943111e-07,
+            "p50": 3.136661419489428e-07,
+            "p90": 1.2493737596486196e-06,
+            "p99": 2.9928070631157765e-06,
+            "p99_9": 4.738171201420729e-06,
+            "n_gt_1e-6": 216721,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "log_price_float64_stable_redecode": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 320479,
+            "max": 8.969657155688537e-06,
+            "mean": 5.099865597625243e-07,
+            "p50": 3.136661099745197e-07,
+            "p90": 1.2493738738683642e-06,
+            "p99": 2.9928104823540027e-06,
+            "p99_9": 4.738170352716512e-06,
+            "n_gt_1e-6": 216721,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "divergent_rows_as_produced": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "divergent_rows_float64_stable": {
+            "threshold": 0.1,
+            "n_rows": 0,
+            "pct_rows": 0.0
+          },
+          "metric_delta_as_produced": {
+            "r2_log_full": 1.362438199592475e-06,
+            "rmse_log": -9.065928990414918e-06,
+            "r2_price": -1.890092304890345e-09,
+            "r2_log_filtered": 1.362438199592475e-06
+          },
+          "metric_delta_float64_naive": {
+            "r2_log_full": -7.841053584201063e-09,
+            "rmse_log": 5.217675003166278e-08,
+            "r2_price": 4.1450842758194995e-10,
+            "r2_log_filtered": -7.841053584201063e-09
+          },
+          "metric_delta_float64_stable": {
+            "r2_log_full": -7.841053584201063e-09,
+            "rmse_log": 5.217675003166278e-08,
+            "r2_price": 4.1450842758194995e-10,
+            "r2_log_filtered": -7.841053584201063e-09
+          }
+        }
+      },
+      "decode_isolation": {
+        "cpu_bs4096": {
+          "float32_native_vs_float64_naive": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.011513445659744548,
+            "mean": 3.9762287155940705e-05,
+            "p50": 2.732634888147345e-06,
+            "p90": 6.387122310407279e-05,
+            "p99": 0.0007861537834095945,
+            "p99_9": 0.0020363816968915023,
+            "n_gt_1e-6": 998089,
+            "n_gt_1e-3": 8965,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.011513445630573216,
+            "mean": 3.976228715548838e-05,
+            "p50": 2.732634900581843e-06,
+            "p90": 6.38712232122529e-05,
+            "p99": 0.0007861537832906142,
+            "p99_9": 0.0020363816967125877,
+            "n_gt_1e-6": 998089,
+            "n_gt_1e-3": 8965,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 51807,
+            "max": 2.917133201663091e-11,
+            "mean": 7.789687970347982e-14,
+            "p50": 7.993605777301127e-15,
+            "p90": 1.2612133559741778e-13,
+            "p99": 1.4779288903810084e-12,
+            "p99_9": 3.866457376489419e-12,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": -3.769804568509727e-08,
+            "rmse_log": 2.508541077084203e-07,
+            "r2_price": 4.792211072413011e-10,
+            "r2_log_filtered": -3.769804568509727e-08
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": -3.769804568509727e-08,
+            "rmse_log": 2.5085410754188686e-07,
+            "r2_price": 4.792211072413011e-10,
+            "r2_log_filtered": -3.769804568509727e-08
+          }
+        },
+        "gpu_bs512": {
+          "float32_native_vs_float64_naive": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.01024996580816051,
+            "mean": 4.255227021104647e-05,
+            "p50": 3.089427683455881e-06,
+            "p90": 7.098403531635707e-05,
+            "p99": 0.0008283501052865808,
+            "p99_9": 0.002138947090974826,
+            "n_gt_1e-6": 1037631,
+            "n_gt_1e-3": 9958,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float32_native_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 0,
+            "max": 0.010249965803414085,
+            "mean": 4.2552270211344634e-05,
+            "p50": 3.089427695890379e-06,
+            "p90": 7.09840353579238e-05,
+            "p99": 0.0008283501057602642,
+            "p99_9": 0.0021389470895156093,
+            "n_gt_1e-6": 1037631,
+            "n_gt_1e-3": 9958,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "float64_naive_vs_float64_stable": {
+            "n": 1380379,
+            "n_nonfinite": 0,
+            "n_exactly_equal": 52017,
+            "max": 2.256328457406198e-11,
+            "mean": 7.775445628701186e-14,
+            "p50": 7.993605777301127e-15,
+            "p90": 1.2612133559741778e-13,
+            "p99": 1.4708234630234074e-12,
+            "p99_9": 3.835154416265141e-12,
+            "n_gt_1e-6": 0,
+            "n_gt_1e-3": 0,
+            "n_gt_0.1": 0,
+            "n_gt_1": 0
+          },
+          "metric_delta_native_minus_float64_naive": {
+            "r2_log_full": -1.4079772988617734e-06,
+            "rmse_log": 9.368959848155e-06,
+            "r2_price": 2.783821839713596e-09,
+            "r2_log_filtered": -1.4079772988617734e-06
+          },
+          "metric_delta_native_minus_float64_stable": {
+            "r2_log_full": -1.4079772988617734e-06,
+            "rmse_log": 9.368959847988467e-06,
+            "r2_price": 2.783821839713596e-09,
+            "r2_log_filtered": -1.4079772988617734e-06
+          }
+        }
+      }
+    }
+  ],
+  "conclusion": "**Conclusion: no implementation error was found -- the discrepancy is a device / float32-precision path difference on rows the model prices at the 1e-8 clamp floor.** Batch size alone is not the cause: holding the device fixed and moving from batch 512 to batch 4096 on the CPU changes R2(log) by 3.6e-06. Changing the DEVICE changes it by 0.00304, which is the size of the published discrepancy. The model output is not what differs -- sigma_hat agrees between CPU and GPU to 3.58e-07 in the worst row and 1.79e-07 at the 99th percentile, i.e. to float32 rounding. What differs is the decoder. For calls, 3,268 of 819,342 test rows (0.3989%) decode to a log-price that differs by more than 0.1 between the canonical CPU evaluator and the GPU training path, by up to 1.38; 1,178 of them sit on the 1e-8 clamp on one path and off it on the other, and the per-path clamp-hit count itself differs (7,306 vs 7,307 vs 7,297). Those rows are deep out-of-the-money and short-dated (median maturity 6.7 days, median log-moneyness -0.088) -- exactly where M e^{-qT} N(d1) - e^{-rT} N(d2) is a difference of two nearly equal float32 numbers. For puts, 8,921 of 1,380,379 test rows (0.6463%) decode to a log-price that differs by more than 0.1 between the canonical CPU evaluator and the GPU training path, by up to 4.15; 2,573 of them sit on the 1e-8 clamp on one path and off it on the other, and the per-path clamp-hit count itself differs (26,893 vs 26,893 vs 26,628). Those rows are deep out-of-the-money and short-dated (median maturity 14.7 days, median log-moneyness 0.430) -- exactly where M e^{-qT} N(d1) - e^{-rT} N(d2) is a difference of two nearly equal float32 numbers. Holding each path's own float32 sigma_hat fixed and re-decoding it in float64 with the same formula collapses the R2(log) difference from 0.00304 to 4.36e-09, so essentially all of the gap is float32 arithmetic in the decoder rather than a different prediction. R2(price) never differs by more than 3.34e-07 on any comparison, because a row worth 1e-8 contributes nothing in price space. The per-query checkpoints, run through the same two paths as a positive control, move by at most 1.4e-06 in R2(log) -- 2230x smaller -- and hit the clamp floor on 0 rows, which is the whole difference: the per-query model does not price contracts at zero. The float64 `log_ndtr` decoder is reported alongside the other two but it is **not** a drop-in replacement here: it has no 1e-8 floor, so wherever the scalar-sigma model prices a contract far below 1e-8 it returns the true (very negative) log-price instead of -18.42, and the log-space metric moves accordingly. That is the floor being removed, not a defect in either evaluator, and it is why the stable-decoder R2(log) row must not be read as \"the correct number\". The practical consequence: the scalar-sigma log-space metrics are reproducible across devices only to about 3e-03 in R2, so the six-decimal figures in results/ablation_scalar_sigma_v5.* should be read as ~3e-03-precise; the price-space figures, which agree to 3e-07, carry their printed precision. The CPU evaluator at batch 4096 remains canonical and nothing in results/ablation_scalar_sigma_v5.* was changed."
+}

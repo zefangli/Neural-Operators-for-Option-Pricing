@@ -1,0 +1,359 @@
+{
+  "meta": {
+    "generated": "2026-09-07 18:47:47",
+    "script": "analysis/duplicate_inputs_all_splits.py",
+    "script_sha256": "a9c9bd0bbedb5b9ac206f6120ea723f74964a688f33e33304fb76bcaae29ed7b",
+    "git_head": "394bec038d662c9e60355a582af729dc46ac6a19",
+    "git_worktree_dirty": false,
+    "dataset_version": "v5",
+    "device": "cpu",
+    "keys": {
+      "input_key": [
+        "date",
+        "log_moneyness",
+        "T_years",
+        "r",
+        "q"
+      ],
+      "query_key": [
+        "log_moneyness",
+        "T_years",
+        "r",
+        "q"
+      ]
+    },
+    "float_precision": "exact float32 bits as stored in trunk_y; no rounding, no tolerance. validate_v4.py upcasts the same columns to float64, which is exact for float32 input, so the grouping is bit-identical.",
+    "extends": "wrds_data_2020-2025/validate_v4.py section 8 and analysis/data_quality.py duplicate_report, both of which compute the rate on split_id == 2 only",
+    "query_key_caveat": "a query_key collision across dates is NOT an input duplicate for a market-state-conditioned model: the branch tensor differs, so the model sees different inputs. It is reported as a diagnostic only."
+  },
+  "results": [
+    {
+      "option_type": "call",
+      "provenance": {
+        "dataset_version": "v5",
+        "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_call_v5.h5",
+        "schema_version": "v4",
+        "selector": "v5",
+        "expected_sha256": "ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153",
+        "quote_filter": "static_bounds_midpoint",
+        "quote_filter_tolerance": 0.0,
+        "dataset_status": "canonical for training",
+        "is_canonical_version": true,
+        "observed_sha256": "ecf94de2996e3212ac791f944f847142e7a809c640b24cbd5989e8bdba801153",
+        "sha256_verified": true
+      },
+      "n_rows_total": 4846268,
+      "rows_by_split": {
+        "train": 3297722,
+        "val": 729204,
+        "test": 819342
+      },
+      "keys": {
+        "input_key": {
+          "key": [
+            "date",
+            "log_moneyness",
+            "T_years",
+            "r",
+            "q"
+          ],
+          "by_split": {
+            "train": {
+              "n_rows": 3297722,
+              "n_groups": 3297722,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 3297722
+              }
+            },
+            "val": {
+              "n_rows": 729204,
+              "n_groups": 729204,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 729204
+              }
+            },
+            "test": {
+              "n_rows": 819342,
+              "n_groups": 819342,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 819342
+              }
+            }
+          },
+          "full_dataset": {
+            "n_rows": 4846268,
+            "n_groups": 4846268,
+            "n_dup_groups": 0,
+            "n_rows_in_dup_groups": 0,
+            "pct_rows_in_dup_groups": 0.0,
+            "max_group_size": 1,
+            "group_size_histogram": {
+              "1": 4846268
+            }
+          },
+          "cross_split": {
+            "n_rows": 4846268,
+            "n_groups": 4846268,
+            "n_groups_spanning_splits": 0,
+            "n_rows_in_spanning_groups": 0,
+            "pct_rows_in_spanning_groups": 0.0,
+            "n_groups_by_split_pair": {
+              "train_val": 0,
+              "train_test": 0,
+              "val_test": 0
+            }
+          }
+        },
+        "query_key": {
+          "key": [
+            "log_moneyness",
+            "T_years",
+            "r",
+            "q"
+          ],
+          "by_split": {
+            "train": {
+              "n_rows": 3297722,
+              "n_groups": 3297722,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 3297722
+              }
+            },
+            "val": {
+              "n_rows": 729204,
+              "n_groups": 729204,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 729204
+              }
+            },
+            "test": {
+              "n_rows": 819342,
+              "n_groups": 819342,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 819342
+              }
+            }
+          },
+          "full_dataset": {
+            "n_rows": 4846268,
+            "n_groups": 4846268,
+            "n_dup_groups": 0,
+            "n_rows_in_dup_groups": 0,
+            "pct_rows_in_dup_groups": 0.0,
+            "max_group_size": 1,
+            "group_size_histogram": {
+              "1": 4846268
+            }
+          },
+          "cross_split": {
+            "n_rows": 4846268,
+            "n_groups": 4846268,
+            "n_groups_spanning_splits": 0,
+            "n_rows_in_spanning_groups": 0,
+            "pct_rows_in_spanning_groups": 0.0,
+            "n_groups_by_split_pair": {
+              "train_val": 0,
+              "train_test": 0,
+              "val_test": 0
+            }
+          }
+        }
+      },
+      "reproduces_validation": {
+        "source": "wrds_data_2020-2025/VALIDATION_v5.json duplicate_input_pct_test",
+        "expected_pct": 0.0,
+        "recomputed_pct": 0.0,
+        "abs_diff": 0.0,
+        "tolerance_pct": 1e-09
+      }
+    },
+    {
+      "option_type": "put",
+      "provenance": {
+        "dataset_version": "v5",
+        "h5_path": "C:\\Users\\iamlz\\Documents\\__LZF_FILEs__\\DL_optionPricing\\wrds_data_2020-2025\\deeponet_tensors_put_v5.h5",
+        "schema_version": "v4",
+        "selector": "v5",
+        "expected_sha256": "46f3ee9d03d3423c6330c2b35a4d09893b0f538bdc046bc1018ebab79861c756",
+        "quote_filter": "static_bounds_midpoint",
+        "quote_filter_tolerance": 0.0,
+        "dataset_status": "canonical for training",
+        "is_canonical_version": true,
+        "observed_sha256": "46f3ee9d03d3423c6330c2b35a4d09893b0f538bdc046bc1018ebab79861c756",
+        "sha256_verified": true
+      },
+      "n_rows_total": 7925349,
+      "rows_by_split": {
+        "train": 5323327,
+        "val": 1221643,
+        "test": 1380379
+      },
+      "keys": {
+        "input_key": {
+          "key": [
+            "date",
+            "log_moneyness",
+            "T_years",
+            "r",
+            "q"
+          ],
+          "by_split": {
+            "train": {
+              "n_rows": 5323327,
+              "n_groups": 5323327,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 5323327
+              }
+            },
+            "val": {
+              "n_rows": 1221643,
+              "n_groups": 1221643,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 1221643
+              }
+            },
+            "test": {
+              "n_rows": 1380379,
+              "n_groups": 1380379,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 1380379
+              }
+            }
+          },
+          "full_dataset": {
+            "n_rows": 7925349,
+            "n_groups": 7925349,
+            "n_dup_groups": 0,
+            "n_rows_in_dup_groups": 0,
+            "pct_rows_in_dup_groups": 0.0,
+            "max_group_size": 1,
+            "group_size_histogram": {
+              "1": 7925349
+            }
+          },
+          "cross_split": {
+            "n_rows": 7925349,
+            "n_groups": 7925349,
+            "n_groups_spanning_splits": 0,
+            "n_rows_in_spanning_groups": 0,
+            "pct_rows_in_spanning_groups": 0.0,
+            "n_groups_by_split_pair": {
+              "train_val": 0,
+              "train_test": 0,
+              "val_test": 0
+            }
+          }
+        },
+        "query_key": {
+          "key": [
+            "log_moneyness",
+            "T_years",
+            "r",
+            "q"
+          ],
+          "by_split": {
+            "train": {
+              "n_rows": 5323327,
+              "n_groups": 5323327,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 5323327
+              }
+            },
+            "val": {
+              "n_rows": 1221643,
+              "n_groups": 1221643,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 1221643
+              }
+            },
+            "test": {
+              "n_rows": 1380379,
+              "n_groups": 1380379,
+              "n_dup_groups": 0,
+              "n_rows_in_dup_groups": 0,
+              "pct_rows_in_dup_groups": 0.0,
+              "max_group_size": 1,
+              "group_size_histogram": {
+                "1": 1380379
+              }
+            }
+          },
+          "full_dataset": {
+            "n_rows": 7925349,
+            "n_groups": 7925349,
+            "n_dup_groups": 0,
+            "n_rows_in_dup_groups": 0,
+            "pct_rows_in_dup_groups": 0.0,
+            "max_group_size": 1,
+            "group_size_histogram": {
+              "1": 7925349
+            }
+          },
+          "cross_split": {
+            "n_rows": 7925349,
+            "n_groups": 7925349,
+            "n_groups_spanning_splits": 0,
+            "n_rows_in_spanning_groups": 0,
+            "pct_rows_in_spanning_groups": 0.0,
+            "n_groups_by_split_pair": {
+              "train_val": 0,
+              "train_test": 0,
+              "val_test": 0
+            }
+          }
+        }
+      },
+      "reproduces_validation": {
+        "source": "wrds_data_2020-2025/VALIDATION_v5.json duplicate_input_pct_test",
+        "expected_pct": 0.0,
+        "recomputed_pct": 0.0,
+        "abs_diff": 0.0,
+        "tolerance_pct": 1e-09
+      }
+    }
+  ]
+}
