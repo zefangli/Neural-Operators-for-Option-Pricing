@@ -36,3 +36,44 @@ plan_phase2_v2.md
 plan_phase2_v3.md
 pub_plan.md
 report.md
+
+# --- pre-publication cleanup (2026-09) ---------------------------------------
+# Superseded VVIX-era run artifacts (the two .md provenance notes stay tracked)
+train_model_v3/_vix_is_vvix_LEGACY/*_results_*/
+
+# Non-v5 runs: trained on the v3 dataset, superseded by the *_v5 directories
+train_model_v3/call/results_vol_surface/
+train_model_v3/call/results_vol_surface_don/
+train_model_v3/call/results_spot_history/
+train_model_v3/call/results_spot_history_don/
+train_model_v3/put/results_vol_surface/
+train_model_v3/put/results_vol_surface_don/
+train_model_v3/put/results_spot_history/
+train_model_v3/put/results_spot_history_don/
+
+# Smoke-build reports (the .h5 they describe are already ignored)
+wrds_data_2020-2025/smoke_v4/
+wrds_data_2020-2025/smoke_v5/
+
+# Superseded analysis outputs (v3 / VVIX / v4 samples; no manuscript number uses them)
+results/baselines_vvix_legacy.json
+results/baselines_vix.json
+results/baselines_v4.json
+results/data_quality.json
+results/data_quality_v4.json
+results/diagnostics_tail.json
+results/diagnostics_tail_v4.json
+results/quote_quality_v4.json
+
+# Internal process checklist (dead links to untracked planning docs)
+results/MANUSCRIPT_READINESS_INVENTORY.md
+
+# Orphaned v3 helper script
+wrds_data_2020-2025/pre_process_3_print_dataset.py
+
+# Job launchers / orchestration scratch
+train_model_v3/*.ps1
+
+# Manuscript source kept local; only the compiled PDF is published
+paper/*
+!paper/*.pdf

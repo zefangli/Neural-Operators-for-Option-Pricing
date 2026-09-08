@@ -97,10 +97,14 @@ Every `train_*.py` script under `train_model_v3/{call,put}/` is self-contained a
 same pattern for the other branches (`train_spot_history.py`, `train_vix_history.py`) and the
 DeepONet head variant (`*_don.py`).
 
-## Status
+## Status and license
 
-Research code accompanying a manuscript in preparation. Not currently licensed for reuse —
-open an issue or contact the author if you'd like to use any of this.
+Research code accompanying a manuscript in preparation.
+
+The code in this repository is released under the MIT License ([`LICENSE`](LICENSE)). That
+covers the code only. The manuscript text and figures are not licensed for reuse, and the SPX
+options data is licensed from OptionMetrics through WRDS and is not redistributed here — see
+`wrds_data_2020-2025/README.txt` for how to obtain it under your own subscription.
 
 ## Citation
 
