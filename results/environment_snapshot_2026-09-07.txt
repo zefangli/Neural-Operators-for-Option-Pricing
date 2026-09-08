@@ -1,6 +1,6 @@
 ENVIRONMENT SNAPSHOT -- AUDIT / REPRODUCTION MACHINE
 ====================================================
-Captured: 2026-09-07 19:17:37 -0400
+Captured: 2026-09-07 20:30:05 -0400
 By      : analysis/snapshot_environment.py
 
 WHAT THIS IS. The Python/CUDA/driver environment in which this repository's
@@ -28,7 +28,7 @@ torch.cuda.is_available: True
 CUDA device 0          : NVIDIA GeForce RTX 3060 (cc 8.6, 12.0 GiB)
 
 nvidia-smi:
-Mon Sep  7 19:17:39 2026       
+Mon Sep  7 20:30:07 2026
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 595.95                 Driver Version: 595.95         CUDA Version: 13.2     |
 +-----------------------------------------+------------------------+----------------------+
@@ -37,7 +37,7 @@ Mon Sep  7 19:17:39 2026
 |                                         |                        |               MIG M. |
 |=========================================+========================+======================|
 |   0  NVIDIA GeForce RTX 3060      WDDM  |   00000000:01:00.0  On |                  N/A |
-| 30%   35C    P8              7W /  170W |    1591MiB /  12288MiB |      0%      Default |
+| 30%   31C    P8              7W /  170W |    1685MiB /  12288MiB |      2%      Default |
 |                                         |                        |                  N/A |
 +-----------------------------------------+------------------------+----------------------+
 
@@ -61,6 +61,7 @@ Mon Sep  7 19:17:39 2026
 |    0   N/A  N/A           18920    C+G   ...8bbwe\PhoneExperienceHost.exe      N/A      |
 |    0   N/A  N/A           18936    C+G   ...5n1h2txyewy\TextInputHost.exe      N/A      |
 |    0   N/A  N/A           19676    C+G   ...ows\System32\NahimicSvc64.exe      N/A      |
+|    0   N/A  N/A           19880    C+G   ...ffice\root\Office16\EXCEL.EXE      N/A      |
 |    0   N/A  N/A           20924    C+G   ...icrosoft.AAD.BrokerPlugin.exe      N/A      |
 |    0   N/A  N/A           22288    C+G   ..._pzs8sxrjxfjjc\app\claude.exe      N/A      |
 |    0   N/A  N/A           23160    C+G   ...lus\logioptionsplus_agent.exe      N/A      |
