@@ -9,8 +9,10 @@ An **automated consistency guardrail**. Every numeric literal printed in
 resolved to an artifact in this repository (or to an explicit derivation over
 artifacts), and compared against the printed digits *at the printed precision*.
 Rounding is accepted, truncation is not; a literal written as a bound is checked
-as a bound. The script exits non-zero if any row is MISMATCH or UNMAPPED, so a
-manuscript number that no artifact supports fails the run.
+as a bound. The script exits non-zero if any row is MISMATCH, UNMAPPED or
+UNSUPPORTED, so a manuscript number that no artifact supports fails the run, and
+also if any `by_line` override in the map matched no occurrence, so an override
+cannot silently stop applying when manuscript lines shift.
 
 Current run: **488 rows**, 68 DERIVED, 208 EXACT, 212 ROUNDED-OK.
 
@@ -39,10 +41,12 @@ semantic source is not individually established.
 
 These are left global deliberately: they are theoretical constants and
 config/provenance values -- grid dimensions, seeds, split shares, tolerances,
-batch sizes, dataset dates and row counts -- where every occurrence is the same
-fixed quantity by construction. Every repeated form whose category is
-*experiment output* or *derived statistic*, where two occurrences plausibly
-could mean different quantities, carries a `by_line` review note instead.
+batch sizes, dataset dates and row counts. Each such occurrence has its value
+checked against the form's mapped source; what the occurrence means in its own
+sentence is not established by this run and remains unverified. Every repeated
+form whose category is *experiment output* or *derived statistic*, where two
+occurrences plausibly could mean different quantities, carries a `by_line`
+review note instead.
 
 | literal form | global rows | lines |
 | --- | --- | --- |
