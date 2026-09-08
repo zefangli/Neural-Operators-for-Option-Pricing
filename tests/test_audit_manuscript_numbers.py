@@ -6,7 +6,8 @@ is the extraction of every LaTeX numeric form the manuscript actually uses, the
 rounding policy (half-even and half-up accepted, truncation rejected), the
 exponent-aware comparison that makes `$10^{-6}$` a claim about 1e-6 rather than
 about zero, the bound-claim mode, and the status/category assignment including
-the non-zero exit on MISMATCH / UNMAPPED.
+the non-zero exit on MISMATCH / UNMAPPED / UNSUPPORTED and on a `by_line`
+override that no longer matches any occurrence.
 
 Run: pytest tests/test_audit_manuscript_numbers.py
 """
@@ -227,7 +228,8 @@ def test_end_to_end_on_a_synthetic_tex_and_fixture(tmp_path, monkeypatch):
     monkeypatch.setattr(A, "PROJECT_ROOT", tmp_path)
     A._JSON.clear(), A._CSV.clear(), A._TEXT.clear()
     tex, mp = _fixture(tmp_path)
-    rows, _skipped = A.audit(tex, mp)
+    rows, _skipped, stale = A.audit(tex, mp)
+    assert stale == []
     by = {r["literal"]: r for r in rows}
 
     assert by["0.999977"]["status"] == "ROUNDED-OK"
@@ -282,7 +284,7 @@ def _scope_case(tmp_path, override):
         "by_line": {"3:0.5": override},
         "text_checks": [],
     }), encoding="utf-8")
-    rows, _ = A.audit(tex, mp)
+    rows, _, _stale = A.audit(tex, mp)
     return {r["line"]: r for r in rows}
 
 
@@ -324,3 +326,44 @@ def test_main_exits_zero_when_everything_resolves(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["x", "--tex", str(tex), "--map", str(mp),
                                       "--out", str(tmp_path / "o.csv")])
     assert A.main() == 0
+
+
+def test_main_exits_nonzero_on_an_unsupported_literal(tmp_path, monkeypatch, capsys):
+    """The docstring promises UNSUPPORTED fails the run: a number the map itself
+    admits nothing in the repository backs must not exit 0."""
+    monkeypatch.setattr(A, "PROJECT_ROOT", tmp_path)
+    tex = tmp_path / "u.tex"
+    tex.write_text("\\section{S}\nan unbacked 0.42 appears here.\n", encoding="utf-8")
+    mp = tmp_path / "u_map.json"
+    mp.write_text(json.dumps({
+        "literals": {"0.42": {"category": "unsupported",
+                              "note": "no artifact in this repository backs this"}},
+        "by_line": {}, "text_checks": []}), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["x", "--tex", str(tex), "--map", str(mp),
+                                      "--out", str(tmp_path / "o.csv")])
+    assert A.main() == 1
+    assert "1 UNSUPPORTED" in capsys.readouterr().out
+
+
+def test_a_by_line_override_that_no_longer_matches_fails_the_run(tmp_path, monkeypatch,
+                                                                 capsys):
+    """A by_line key is `<line>:<literal>`. Insert one line above the occurrence and
+    the override stops applying; it must FAIL, not silently fall back to global."""
+    monkeypatch.setattr(A, "PROJECT_ROOT", tmp_path)
+    tex, mp = tmp_path / "s.tex", tmp_path / "s_map.json"
+    body = "\\section{S}\nprose with no numbers\nthe metric is 0.5 here\n"
+    mp.write_text(json.dumps({
+        "literals": {"0.5": {"category": "experiment output", "source_value": 0.5}},
+        "by_line": {"3:0.5": "reviewed: this occurrence names the price-head metric"},
+        "text_checks": []}), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["x", "--tex", str(tex), "--map", str(mp),
+                                      "--out", str(tmp_path / "o.csv")])
+
+    tex.write_text(body, encoding="utf-8")
+    assert A.main() == 0                        # the override lands on line 3
+    capsys.readouterr()
+
+    tex.write_text("% a line inserted above\n" + body, encoding="utf-8")
+    assert A.main() == 1                        # the occurrence moved to line 4
+    out = capsys.readouterr().out
+    assert "3:0.5" in out and "STALE by_line OVERRIDES (1)" in out
