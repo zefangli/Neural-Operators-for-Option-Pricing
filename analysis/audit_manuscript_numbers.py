@@ -1,21 +1,41 @@
 #!/usr/bin/env python
 """
-Provenance audit for every numeric literal printed in paper/main.tex.
+Automated consistency guardrail for the numeric literals printed in paper/main.tex.
 
-One maintained script, replacing the throwaway scripts of the pre-submission
-audit. It extracts each numeric literal from the manuscript, resolves it to the
-artifact (or the explicit derivation over artifacts) it is supposed to come
-from, re-reads that artifact, and checks the printed digits at the printed
-precision.
+WHAT IT IS. One maintained script, replacing the throwaway scripts of the
+pre-submission audit. It extracts each numeric literal from the manuscript,
+looks up the artifact (or the explicit derivation over artifacts) that literal
+is mapped to, re-reads that artifact, and checks that the printed digits agree
+with it at the printed precision.
 
     python analysis/audit_manuscript_numbers.py
     python analysis/audit_manuscript_numbers.py --dump-unmapped   # map maintenance
     python analysis/audit_manuscript_numbers.py --tex x.tex --map m.json --out o.csv
 
-Writes results/manuscript_number_provenance.csv and prints a summary by
-category and status. **Exits non-zero if any MISMATCH or UNMAPPED row exists.**
-That is the point: a manuscript number no artifact supports must break
-something.
+Writes results/manuscript_number_provenance.csv plus a short
+results/manuscript_number_provenance.md, and prints a summary by category and
+status. **Exits non-zero if any MISMATCH or UNMAPPED row exists.** That is the
+point: a manuscript number no artifact supports must break something.
+
+WHAT IT IS NOT. Passing is not a proof that every occurrence has the correct
+SEMANTIC source. The check is value equality against a mapped artifact, and the
+map is keyed by the literal form: one entry in `literals` covers every
+occurrence of that form unless a `by_line` override exists for the occurrence.
+So a repeated form -- `0.991044` in three places, `10` in eighteen -- is
+verified against one source for all of them, and a second occurrence that
+happened to mean something else with the same digits would still pass. The
+`mapping_scope` column records which case a row is in: `line` where a `by_line`
+override established this occurrence individually, `global` where the form's
+single `literals` entry was applied. The summary reports how many `global` rows
+belong to forms that occur on more than one line, and lists those forms; those
+are exactly the rows whose semantics rest on the form-level mapping rather than
+on a per-occurrence one.
+
+BY_LINE OVERRIDES take two shapes. A full entry (a JSON object, with its own
+category/source/derivation) is used when the occurrence has a DIFFERENT source
+from the form's global entry. A plain string is a review note: the global entry
+still supplies the source, and the note records what the occurrence was
+confirmed to name. Both count as `line` scope.
 
 CATEGORIES (exactly six; assigned in analysis/manuscript_number_map.json):
     experiment output           a metric or count an evaluator / training run wrote
@@ -53,10 +73,9 @@ source of 1.19e-5 fails. A map entry may set `"comparison": "upper_bound"` for
 a sentence that states a BOUND ("sits within 5e-6"): the source must be less
 than or equal to the printed value, and rounding does not rescue it.
 
-KNOWN OPEN ITEMS. At the time of writing, the manuscript still contains three
-numbers/statements a following editing pass is expected to fix, plus one remark
-with no artifact behind it. They are FLAGGED here, never suppressed, and the
-non-zero exit they cause is the expected state until the manuscript is fixed.
+OPEN ITEMS are never suppressed. A number no artifact supports is reported as
+MISMATCH / UNMAPPED / UNSUPPORTED and the non-zero exit it causes is the
+expected state until the manuscript or the map is fixed.
 """
 
 from __future__ import annotations
@@ -421,6 +440,7 @@ def run_text_checks(checks, tex_path):
             ("source_file", chk.get("source_file", "")),
             ("source_key_or_derivation", chk.get("note", "")),
             ("source_value", chk.get("expected", "")),
+            ("mapping_scope", "line"),          # text checks are keyed by line
             ("status", chk.get("status", "MISMATCH") if present else "EXACT"),
             ("context", (lines[ln - 1].strip() if 0 < ln <= len(lines) else "")[:200]),
         ]))
@@ -435,7 +455,15 @@ def audit(tex_path, map_path):
     rows, n_skipped = extract(tex_path)
     out = []
     for r in rows:
-        entry = overrides.get("%d:%s" % (r["line"], r["norm"])) or entries.get(r["norm"])
+        override = overrides.get("%d:%s" % (r["line"], r["norm"]))
+        review_note = None
+        if isinstance(override, str):
+            # A by_line string is a review note; the global entry keeps the source.
+            override, review_note = None, override
+        entry = override or entries.get(r["norm"])
+        if review_note and entry is not None:
+            entry = dict(entry, note="%s  [by-line review: %s]"
+                         % (entry.get("note", "").strip(), review_note))
         cat, status, src_file, src_key, src_val = classify(r, entry)
         out.append(OrderedDict([
             ("line", r["line"]), ("section_or_table", r["section_or_table"]),
@@ -443,11 +471,31 @@ def audit(tex_path, map_path):
             ("value", r["value"] if isinstance(r["value"], str) else repr(r["value"])),
             ("category", cat), ("source_file", src_file),
             ("source_key_or_derivation", src_key), ("source_value", src_val),
+            ("mapping_scope",
+             "line" if (override is not None or review_note is not None) else "global"),
             ("status", status), ("context", r["context"][:200]),
         ]))
     out += run_text_checks(the_map.get("text_checks", []), tex_path)
     out.sort(key=lambda r: (r["line"], r["literal"]))
     return out, n_skipped
+
+
+def repeated_global_forms(rows):
+    """-> ([(form, n_global_rows, [lines])], n_global_rows_total).
+
+    Literal forms that appear on more than one line AND still have at least one
+    `global`-scoped row. Those rows are checked for VALUE against the form's one
+    mapped source; nothing establishes that the occurrence means that source.
+    """
+    lines_of, globals_of = {}, {}
+    for r in rows:
+        form = normalise(r["literal"])
+        lines_of.setdefault(form, set()).add(r["line"])
+        if r.get("mapping_scope") == "global":
+            globals_of.setdefault(form, []).append(r["line"])
+    out = [(f, len(ls), sorted(set(ls)))
+           for f, ls in sorted(globals_of.items()) if len(lines_of[f]) > 1]
+    return out, sum(n for _f, n, _l in out)
 
 
 def summarise(rows, n_skipped):
@@ -461,6 +509,16 @@ def summarise(rows, n_skipped):
     print("\nBY STATUS")
     for k, v in sorted(by_status.items(), key=lambda kv: -kv[1]):
         print("  %-28s %5d" % (k, v))
+    forms, n_global = repeated_global_forms(rows)
+    print("\nMAPPING SCOPE")
+    for k, v in sorted(Counter(r.get("mapping_scope", "") for r in rows).items()):
+        print("  %-28s %5d" % (k, v))
+    print("  %d row(s) in %d repeated literal form(s) are global-scoped: their value is\n"
+          "  checked, their per-occurrence semantic source is not individually established."
+          % (n_global, len(forms)))
+    for form, n, lines in forms:
+        print("    %-22s x%-3d lines %s" % (form, n, lines[:12]))
+
     bad = [r for r in rows if r["status"] in ("MISMATCH", "UNMAPPED", "UNSUPPORTED")]
     if bad:
         print("\nFLAGGED ROWS (%d)" % len(bad))
@@ -470,6 +528,72 @@ def summarise(rows, n_skipped):
                      str(r["source_value"])[:24]))
             print("        %s" % (r["source_key_or_derivation"] or r["context"])[:150])
     return by_cat, by_status
+
+
+MD_TEMPLATE = """\
+# What `manuscript_number_provenance.csv` is, and what it is not
+
+Generated by `analysis/audit_manuscript_numbers.py`. Do not edit by hand.
+
+## What it is
+
+An **automated consistency guardrail**. Every numeric literal printed in
+`paper/main.tex` is extracted, looked up in `analysis/manuscript_number_map.json`,
+resolved to an artifact in this repository (or to an explicit derivation over
+artifacts), and compared against the printed digits *at the printed precision*.
+Rounding is accepted, truncation is not; a literal written as a bound is checked
+as a bound. The script exits non-zero if any row is MISMATCH or UNMAPPED, so a
+manuscript number that no artifact supports fails the run.
+
+Current run: **{n_rows} rows**, {status_line}.
+
+## What it is not
+
+It is **not** by itself a complete independent proof that every occurrence has
+the correct semantic source. Two limits are structural:
+
+1. The map is keyed by the **literal form**, not by the occurrence. One entry in
+   `literals` covers every occurrence of that form unless a `by_line` override
+   exists. A repeated form is therefore verified against a single source for all
+   of its occurrences, and a second occurrence that happened to mean something
+   else with the same digits would still pass.
+2. Agreement with an artifact says nothing about whether the artifact itself is
+   right, or whether the sentence around the number reads it correctly.
+
+The `mapping_scope` column separates the two cases: `line` where a `by_line`
+override established this occurrence individually, `global` where the form's one
+`literals` entry was applied.
+
+## Global-scoped repeated forms in this run
+
+**{n_global} row(s) across {n_forms} literal form(s)** are `global`-scoped and
+occur on more than one line. Their values are checked; their per-occurrence
+semantic source is not individually established.
+
+These are left global deliberately: they are theoretical constants and
+config/provenance values -- grid dimensions, seeds, split shares, tolerances,
+batch sizes, dataset dates and row counts -- where every occurrence is the same
+fixed quantity by construction. Every repeated form whose category is
+*experiment output* or *derived statistic*, where two occurrences plausibly
+could mean different quantities, carries a `by_line` review note instead.
+
+{form_table}
+"""
+
+
+def write_markdown(path, rows, by_status):
+    forms, n_global = repeated_global_forms(rows)
+    if forms:
+        table = ["| literal form | global rows | lines |", "| --- | --- | --- |"]
+        table += ["| `%s` | %d | %s |" % (f, n, ", ".join(str(x) for x in lines))
+                  for f, n, lines in forms]
+    else:
+        table = ["_None: every repeated form is covered by a `by_line` override._"]
+    path.write_text(MD_TEMPLATE.format(
+        n_rows=len(rows), n_global=n_global, n_forms=len(forms),
+        status_line=", ".join("%d %s" % (v, k) for k, v in sorted(by_status.items())),
+        form_table="\n".join(table)), encoding="utf-8")
+    return path
 
 
 def main():
@@ -504,6 +628,7 @@ def main():
         w.writerows(rows)
     print("wrote %s" % args.out)
     _cat, by_status = summarise(rows, n_skipped)
+    print("wrote %s" % write_markdown(args.out.with_suffix(".md"), rows, by_status))
     n_bad = by_status["MISMATCH"] + by_status["UNMAPPED"]
     if n_bad:
         print("\nEXIT 1: %d MISMATCH + %d UNMAPPED. Intended behaviour -- a manuscript "

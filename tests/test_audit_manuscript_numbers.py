@@ -255,8 +255,61 @@ def test_main_exits_nonzero_when_anything_is_unmapped_or_mismatched(tmp_path, mo
     assert out.exists()
     header = out.read_text(encoding="utf-8").splitlines()[0]
     for col in ("line", "section_or_table", "literal", "value", "category",
-                "source_file", "source_key_or_derivation", "source_value", "status"):
+                "source_file", "source_key_or_derivation", "source_value",
+                "mapping_scope", "status"):
         assert col in header
+    assert out.with_suffix(".md").exists()          # the companion caveat page
+
+
+# ----------------------------------------------------------- mapping scope
+
+SCOPE_TEX = """\
+\\section{S}
+the metric is 0.5 here
+and 0.5 again over there
+and 0.75 only once
+"""
+
+
+def _scope_case(tmp_path, override):
+    tex = tmp_path / "scope.tex"
+    tex.write_text(SCOPE_TEX, encoding="utf-8")
+    mp = tmp_path / "scope_map.json"
+    mp.write_text(json.dumps({
+        "literals": {"0.5": {"category": "experiment output", "source_value": 0.5,
+                             "note": "the global note"},
+                     "0.75": {"category": "experiment output", "source_value": 0.75}},
+        "by_line": {"3:0.5": override},
+        "text_checks": [],
+    }), encoding="utf-8")
+    rows, _ = A.audit(tex, mp)
+    return {r["line"]: r for r in rows}
+
+
+def test_mapping_scope_is_line_for_a_by_line_entry_and_global_otherwise(tmp_path):
+    by_line = _scope_case(tmp_path, {"category": "experiment output",
+                                     "source_value": 0.5, "note": "its own source"})
+    assert by_line[2]["mapping_scope"] == "global"
+    assert by_line[3]["mapping_scope"] == "line"
+    assert by_line[4]["mapping_scope"] == "global"
+    assert "its own source" in by_line[3]["source_key_or_derivation"]
+
+
+def test_a_by_line_string_is_a_review_note_that_keeps_the_global_source(tmp_path):
+    """The cheap override: the form's own entry still resolves the value, and the
+    string records what THIS occurrence was confirmed to name."""
+    by_line = _scope_case(tmp_path, "reviewed: the second occurrence, same metric")
+    assert by_line[3]["mapping_scope"] == "line"
+    assert by_line[3]["status"] == "EXACT"          # global entry supplied the source
+    key = by_line[3]["source_key_or_derivation"]
+    assert "the global note" in key and "reviewed: the second occurrence" in key
+
+
+def test_repeated_global_forms_reports_only_multi_line_forms_with_global_rows(tmp_path):
+    rows = list(_scope_case(tmp_path, "reviewed").values())
+    forms, n_global = A.repeated_global_forms(rows)
+    assert forms == [("0.5", 1, [2])]               # 0.75 occurs once: not reported
+    assert n_global == 1
 
 
 def test_main_exits_zero_when_everything_resolves(tmp_path, monkeypatch):

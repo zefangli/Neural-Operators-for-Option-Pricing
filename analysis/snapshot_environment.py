@@ -105,7 +105,9 @@ def snapshot():
             "Machine / processor    : %s / %s" % (platform.machine(), platform.processor()),
             "", "--- pip list --format=freeze ----------------------------------------",
             _run([sys.executable, "-m", "pip", "list", "--format=freeze"]), ""]
-    return "\n".join(out)
+    # rstrip every line: captured subprocess output (nvidia-smi) pads with spaces,
+    # which shows up as trailing whitespace in the committed file.
+    return "\n".join(ln.rstrip() for ln in "\n".join(out).split("\n"))
 
 
 def main():

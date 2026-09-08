@@ -636,10 +636,11 @@ Section~\ref{sec:ablation-method}.
 \small
 \caption{Per-query vs.\ scalar-$\hat\sigma$ ablation, IV-surface branch, architecture A, seed 42. The
 scalar-$\hat\sigma$ row is a restricted control, not a candidate model. The per-query rows repeat the
-canonical Table~\ref{tab:t1} values; the separate ablation evaluator reproduces them to the fifth
-decimal, returning 0.221896, 0.977899, and 0.294127 for the three cells where the two scripts differ.
-All figures come from the independent CPU ablation evaluator in float32 at batch size 4096 over the
-full test split.}
+canonical Table~\ref{tab:t1} values; the separate ablation evaluator returns 0.221896, 0.977899, and
+0.294127 for the three cells where the two scripts differ. The scalar-control rows come from the
+independent CPU ablation evaluator in float32 at batch size 4096 over the full test split. As a
+cross-check, that evaluator reproduces the per-query results to the fifth decimal, with the three
+displayed rounding differences noted above.}
 \label{tab:ablation}
 \begin{tabular}{llrrr}
 \toprule
@@ -1017,9 +1018,10 @@ A controlled re-evaluation of the same scalar-$\hat\sigma$ checkpoints on CPU (b
 GPU (batch 512, the training-time path) reproduces $R^2(\text{price})$ to within $4\times10^{-7}$ but
 $R^2(\log)$ only to about $3\times10^{-3}$ across device paths, and decoding the same float32
 $\hat\sigma$ in float64 moves $R^2(\log)$ further, to 0.798 for calls and $-0.328$ for puts, because
-float32 cancellation in $\log(\mathrm{clamp}(V/K, 10^{-8}))$ on the rows the scalar model prices at
-the floor differs between device paths and precisions; the per-query models, which never reach the
-floor, agree to $10^{-6}$ under every path and precision
+cancellation in the float32 Black--Scholes decoder, before the $10^{-8}$ price clamp and logarithm,
+moves near-zero predictions on and off the clamp floor across device paths and precisions; the
+per-query models, which never reach the floor, differ by at most $1.5\times10^{-6}$ in $R^2(\log)$
+across the evaluated paths and precisions
 (\texttt{results/ablation\_evaluator\_consistency\_v5.json}). The scalar-$\hat\sigma$ log-space metrics
 are therefore stable only to about $10^{-2}$ in $R^2(\log)$ for puts and $2\times10^{-3}$ for calls,
 which is why the prose reports them to two decimals; Table~\ref{tab:ablation} keeps the canonical
@@ -1027,18 +1029,18 @@ float32 CPU evaluator's digits. No implementation error was found.
 
 \section{Reproducibility and environment}
 \label{app:repro}
-Table~\ref{tab:env} lists the direct package dependencies and their installed versions on the audit
-and reproduction machine, captured on 2026-09-07 by \texttt{analysis/snapshot\_environment.py}
-(\texttt{results/environment\_snapshot\_2026-09-07.txt}), which is the environment every evaluation
-number reported in this paper was produced in. The August 2026 training environment was not
-snapshotted and cannot be reconstructed from this table, so no version listed here should be read as
-the version a model was trained under.
+Table~\ref{tab:env} records the environment captured on 2026-09-07 by
+\texttt{analysis/snapshot\_environment.py}
+(\texttt{results/environment\_snapshot\_2026-09-07.txt}) and used for the publication-audit
+diagnostics described above. The August 2026 training environment was not snapshotted, and this table
+should not be interpreted as reconstructing either the training environment or every earlier
+evaluation run.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Audit and reproduction environment, captured 2026-09-07, in which the evaluation numbers
-reported in this paper were produced. It is not the training environment.}
+\caption{Environment captured 2026-09-07 and used for the publication-audit diagnostics. It is
+neither the training environment nor necessarily that of every earlier evaluation run.}
 \label{tab:env}
 \begin{tabular}{ll}
 \toprule
